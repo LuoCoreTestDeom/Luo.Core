@@ -8,4 +8,5 @@ https://www.cnblogs.com/jackyfei/p/12145569.html
 
 #### ViewModel 命名
 请求VO以Input/Form/Query结尾,如下图的Colorlnput.cs
+
 响应VO以Output/List/Result结尾,如下图的ColorOutput.cs
