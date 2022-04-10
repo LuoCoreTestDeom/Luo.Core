@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.Api", "Luo.Core.Api\Luo.Core.Api.csproj", "{F8EC54C4-395E-4EF5-ABF5-CA887DF69F43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.Api", "Luo.Core.Api\Luo.Core.Api.csproj", "{F8EC54C4-395E-4EF5-ABF5-CA887DF69F43}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1-展示层(Presentation)", "1-展示层(Presentation)", "{A6538087-0123-426D-A48C-2DE96C628777}"
 EndProject
@@ -15,23 +15,28 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-基础设施层(Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5-模型数据层(ModelData)", "5-模型数据层(ModelData)", "{25C7FDC4-1AD7-4EF7-805D-38042EC7DBF8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.Models", "Luo.Core.Models\Luo.Core.Models.csproj", "{B8472608-A9FE-4E3D-B7FC-918CBC06BC24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.Models", "Luo.Core.Models\Luo.Core.Models.csproj", "{B8472608-A9FE-4E3D-B7FC-918CBC06BC24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.Repository", "Luo.Core.Repository\Luo.Core.Repository.csproj", "{6EA1B64A-F777-4886-BE13-363B39F4BDFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.Repository", "Luo.Core.Repository\Luo.Core.Repository.csproj", "{6EA1B64A-F777-4886-BE13-363B39F4BDFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.IRepository", "Luo.Core.IRepository\Luo.Core.IRepository.csproj", "{90CE0023-ECC1-49A7-AC31-5A77900B0539}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.IRepository", "Luo.Core.IRepository\Luo.Core.IRepository.csproj", "{90CE0023-ECC1-49A7-AC31-5A77900B0539}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.Services", "Luo.Core.Services\Luo.Core.Services.csproj", "{6C464030-418A-4F6E-A976-0F6072A9C9C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.Services", "Luo.Core.Services\Luo.Core.Services.csproj", "{6C464030-418A-4F6E-A976-0F6072A9C9C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.IServices", "Luo.Core.IServices\Luo.Core.IServices.csproj", "{FD4C7F8B-CF11-4C5D-AAF9-99A0E8A998E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.IServices", "Luo.Core.IServices\Luo.Core.IServices.csproj", "{FD4C7F8B-CF11-4C5D-AAF9-99A0E8A998E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.Utility", "Luo.Core.Utility\Luo.Core.Utility.csproj", "{32F7086F-6199-4C0C-966F-C8A7DA8AC71B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.Utility", "Luo.Core.Utility\Luo.Core.Utility.csproj", "{32F7086F-6199-4C0C-966F-C8A7DA8AC71B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.DatabaseEntity", "Luo.Core.DatabaseEntity\Luo.Core.DatabaseEntity.csproj", "{EFA0B028-0B39-4BD0-B590-421AEEF7832F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.DatabaseEntity", "Luo.Core.DatabaseEntity\Luo.Core.DatabaseEntity.csproj", "{EFA0B028-0B39-4BD0-B590-421AEEF7832F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.DatabaseFactory", "Luo.Core.DatabaseFactory\Luo.Core.DatabaseFactory.csproj", "{B20871EA-E8A1-4416-AE57-4592BC55A1E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.DatabaseFactory", "Luo.Core.DatabaseFactory\Luo.Core.DatabaseFactory.csproj", "{B20871EA-E8A1-4416-AE57-4592BC55A1E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.Common", "Luo.Core.Common\Luo.Core.Common.csproj", "{2A5E5530-FDF0-4826-9BF3-B274C6F9A027}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.Common", "Luo.Core.Common\Luo.Core.Common.csproj", "{2A5E5530-FDF0-4826-9BF3-B274C6F9A027}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{950440DB-9EC2-48B5-A504-DA04F4E9FCE0}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
