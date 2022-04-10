@@ -38,6 +38,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlSugar", "SqlSugar\SqlSugar.csproj", "{43394879-27DB-499A-8B36-120A2EBA3F4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +86,10 @@ Global
 		{2A5E5530-FDF0-4826-9BF3-B274C6F9A027}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A5E5530-FDF0-4826-9BF3-B274C6F9A027}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A5E5530-FDF0-4826-9BF3-B274C6F9A027}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43394879-27DB-499A-8B36-120A2EBA3F4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43394879-27DB-499A-8B36-120A2EBA3F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43394879-27DB-499A-8B36-120A2EBA3F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43394879-27DB-499A-8B36-120A2EBA3F4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +105,7 @@ Global
 		{EFA0B028-0B39-4BD0-B590-421AEEF7832F} = {25C7FDC4-1AD7-4EF7-805D-38042EC7DBF8}
 		{B20871EA-E8A1-4416-AE57-4592BC55A1E0} = {F12C2A14-A21E-4636-9FB7-716D53151FEE}
 		{2A5E5530-FDF0-4826-9BF3-B274C6F9A027} = {F12C2A14-A21E-4636-9FB7-716D53151FEE}
+		{43394879-27DB-499A-8B36-120A2EBA3F4D} = {F12C2A14-A21E-4636-9FB7-716D53151FEE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C5C35DD9-1130-49FF-87A4-38A0AF1C1785}
