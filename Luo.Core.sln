@@ -40,7 +40,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlSugar", "SqlSugar\SqlSugar.csproj", "{43394879-27DB-499A-8B36-120A2EBA3F4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.EnumModels", "Luo.Core.EnumModels\Luo.Core.EnumModels.csproj", "{D5DD7F03-A7B5-4E49-980F-A40594CBCC2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.EnumModels", "Luo.Core.EnumModels\Luo.Core.EnumModels.csproj", "{D5DD7F03-A7B5-4E49-980F-A40594CBCC2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.LayuiAdmin", "Luo.Core.LayuiAdmin\Luo.Core.LayuiAdmin.csproj", "{BA750598-2C42-4FAF-905D-F6727B0985DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,6 +98,10 @@ Global
 		{D5DD7F03-A7B5-4E49-980F-A40594CBCC2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5DD7F03-A7B5-4E49-980F-A40594CBCC2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5DD7F03-A7B5-4E49-980F-A40594CBCC2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA750598-2C42-4FAF-905D-F6727B0985DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA750598-2C42-4FAF-905D-F6727B0985DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA750598-2C42-4FAF-905D-F6727B0985DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA750598-2C42-4FAF-905D-F6727B0985DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +119,7 @@ Global
 		{2A5E5530-FDF0-4826-9BF3-B274C6F9A027} = {F12C2A14-A21E-4636-9FB7-716D53151FEE}
 		{43394879-27DB-499A-8B36-120A2EBA3F4D} = {F12C2A14-A21E-4636-9FB7-716D53151FEE}
 		{D5DD7F03-A7B5-4E49-980F-A40594CBCC2B} = {25C7FDC4-1AD7-4EF7-805D-38042EC7DBF8}
+		{BA750598-2C42-4FAF-905D-F6727B0985DC} = {A6538087-0123-426D-A48C-2DE96C628777}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C5C35DD9-1130-49FF-87A4-38A0AF1C1785}
