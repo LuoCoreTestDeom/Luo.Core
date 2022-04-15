@@ -10,4 +10,10 @@
     <None Remove="Views\Shared\_Layout.cshtml~RF3e3e0a22.TMP" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\lib\layui\font\iconfont.svg" />
+    <None Include="wwwroot\lib\layui\font\iconfont.woff2" />
+    <None Include="wwwroot\lib\layui\layui.js" />
+  </ItemGroup>
+
 </Project>
