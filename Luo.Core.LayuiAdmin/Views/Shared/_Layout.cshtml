@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
 <head>
     <meta charset="utf-8" />
     <meta name="renderer" content="webkit">
@@ -12,6 +12,10 @@
 </head>
 <body>
 
+    <!--初始化加载层-->
+    <div class="layuimini-loader">
+        <div class="layuimini-loader-inner"></div>
+    </div>
     @RenderBody()
     <script src="~/lib/layui/layui.js" asp-append-version="true"></script>
     <script>
@@ -19,8 +23,12 @@
             base: '../layui_extend/' //静态资源所在路径
         }).extend({
             index: 'index' //主入口模块
-        }).use('index');
+        }).use('index', function ()
+        {
+            layui.admin.deleteLoader(1);
+        });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
+   
 </body>
 </html>

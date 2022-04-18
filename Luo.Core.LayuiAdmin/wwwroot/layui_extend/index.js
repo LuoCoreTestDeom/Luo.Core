@@ -2,13 +2,14 @@
     setter: 'config' //配置模块
     , admin: 'admin' //核心模块
     , view: 'view' //视图渲染模块
+    , common: 'common'//加载公共模块
 }).define(['setter', 'admin'], function (exports) {
     var setter = layui.setter
         , element = layui.element
         , admin = layui.admin
         , tabsPage = admin.tabsPage
         , view = layui.view
-
+        , common = layui.common
         //打开标签页
         , openTabsPage = function (url, text) {
             //遍历页签选项卡
@@ -80,9 +81,6 @@
     });
 
     view().autoRender();
-
-    //加载公共模块
-    layui.use('common');
 
     //对外输出
     exports('index', {

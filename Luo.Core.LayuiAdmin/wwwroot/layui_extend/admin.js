@@ -328,8 +328,12 @@ layui.define('view', function(exports){
         document.msExitFullscreen();  
       }
     }
-    
-    //……
+   //初始化加载时间
+     ,deleteLoader: function (loadingTime) {
+          setTimeout(function () {
+              $('.layuimini-loader').fadeOut();
+          }, loadingTime * 1000)
+      }
   };
   
   //事件
