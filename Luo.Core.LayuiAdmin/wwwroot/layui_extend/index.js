@@ -1,4 +1,6 @@
-﻿layui.extend({
+﻿/*主入口*/
+
+layui.extend({
     setter: 'config' //配置模块
     , admin: 'admin' //核心模块
     , view: 'view' //视图渲染模块

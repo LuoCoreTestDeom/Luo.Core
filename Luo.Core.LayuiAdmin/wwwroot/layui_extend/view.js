@@ -1,4 +1,4 @@
- 
+/*视图模块*/
 layui.define(['laytpl', 'layer'], function(exports){
   var $ = layui.jquery
   ,laytpl = layui.laytpl

@@ -1,4 +1,4 @@
- 
+/*iframe版核心模块*/
 layui.define('view', function(exports){
   var $ = layui.jquery
   ,laytpl = layui.laytpl
