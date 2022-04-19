@@ -1,5 +1,5 @@
 /*iframe版核心模块*/
-layui.define('view', function(exports){
+layui.define(['view', 'setter'], function(exports){
   var $ = layui.jquery
   ,laytpl = layui.laytpl
   ,element = layui.element
@@ -178,7 +178,8 @@ layui.define('view', function(exports){
     }
     
     //主题设置
-    ,theme: function(options){
+      , theme: function (options) {
+      //TODO 查询在哪里调用了
       var theme = setter.theme
       ,local = layui.data(setter.tableName)
       ,id = 'LAY_layadmin_theme'
@@ -215,7 +216,7 @@ layui.define('view', function(exports){
         ,'{{# } }}'
       ].join('')).render(options = $.extend({}, local.theme, options))
       ,styleElem = document.getElementById(id);
-      
+          debugger;
       //添加主题样式
       if('styleSheet' in style){
         style.setAttribute('type', 'text/css');

@@ -43,10 +43,8 @@ html{background-color: #f2f2f2; color: #666;}
 .layuimini-main {
     margin: 10px 10px 10px 10px;
 }
-.layui-side-menu .layui-side-scroll .layui-nav-child dd.layui-this a {
-    background-color: #2e9fff !important;
-    z-index: 999999;
-}
+
+
 /* 重置布局结构 */
 .layui-layout-admin .layui-header {
     position: fixed;

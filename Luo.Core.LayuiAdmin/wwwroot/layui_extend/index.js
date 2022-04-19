@@ -1,17 +1,12 @@
 ﻿/*主入口*/
 
-layui.extend({
-    setter: 'config' //配置模块
-    , admin: 'admin' //核心模块
-    , view: 'view' //视图渲染模块
-    , common: 'common'//加载公共模块
-}).define(['setter', 'admin'], function (exports) {
+layui.define(['setter', 'admin', 'view'], function (exports) {
+    debugger;
     var setter = layui.setter
         , element = layui.element
         , admin = layui.admin
         , tabsPage = admin.tabsPage
         , view = layui.view
-        , common = layui.common
         //打开标签页
         , openTabsPage = function (url, text) {
             //遍历页签选项卡
@@ -72,9 +67,11 @@ layui.extend({
 
     //将模块根路径设置为 controller 目录
     layui.config({
-        base: setter.base + 'modules/'
+        base: setter.base + 'modules/',
+        version: "202101151212"
     });
-
+ 
+ 
     //扩展 lib 目录下的其它模块
     layui.each(setter.extend, function (index, item) {
         var mods = {};

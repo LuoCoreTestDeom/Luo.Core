@@ -1,5 +1,6 @@
 ﻿/*版全局配置*/
 layui.define(['laytpl', 'layer', 'element', 'util'], function (exports) {
+    debugger;
     exports('setter', {
         container: 'LAY_app' //容器ID
         , base: layui.cache.base //记录静态资源所在路径
@@ -40,8 +41,9 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function (exports) {
         , theme: {
             //内置主题配色方案
             color: [{
-                main: '#20222A' //主题色
-                , selected: '#009688' //选中色
+                main: '#03131B' //主题色
+                , logo: '#cffff'//'#c36b00e8'
+                , selected: '#2e9fff' //选中色
                 , alias: 'default' //默认别名
             }, {
                 main: '#03152A'
@@ -78,7 +80,7 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function (exports) {
             }, {
                 main: '#24262F'
                 , logo: '#3A3D49'
-                , selected: '#009688'
+                , selected: '#2e9fff'
                 , alias: 'classic-black' //经典黑
             }, {
                 logo: '#226A62'

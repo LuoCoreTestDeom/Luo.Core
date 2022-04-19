@@ -18,17 +18,15 @@
     </div>
     @RenderBody()
     <script src="~/lib/layui/layui.js" asp-append-version="true"></script>
-    <script>
-        layui.config({
-            base: '../layui_extend/' //静态资源所在路径
-        }).extend({
-            index: 'index' //主入口模块
-        }).use('index', function ()
-        {
-            layui.admin.deleteLoader(1);
-        });
-    </script>
+
+
+
+    <script src="~/layui_extend/config.js" asp-append-version="true"></script>
+    <script src="~/layui_extend/view.js" asp-append-version="true"></script>
+    <script src="~/layui_extend/admin.js" asp-append-version="true"></script>
+    <script src="~/layui_extend/index.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-   
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
 </body>
 </html>
