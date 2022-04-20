@@ -1,7 +1,7 @@
 ﻿/*主入口*/
 
 layui.define(['setter', 'admin', 'view'], function (exports) {
-    debugger;
+
     var setter = layui.setter
         , element = layui.element
         , admin = layui.admin

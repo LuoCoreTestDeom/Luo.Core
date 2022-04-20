@@ -1,6 +1,6 @@
 ﻿/*版全局配置*/
 layui.define(['laytpl', 'layer', 'element', 'util'], function (exports) {
-    debugger;
+
     exports('setter', {
         container: 'LAY_app' //容器ID
         , base: layui.cache.base //记录静态资源所在路径
@@ -42,7 +42,7 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function (exports) {
             //内置主题配色方案
             color: [{
                 main: '#03131B' //主题色
-                , logo: '#cffff'//'#c36b00e8'
+                , logo: '#c36b00e8'//'#c36b00e8'
                 , selected: '#2e9fff' //选中色
                 , alias: 'default' //默认别名
             }, {
