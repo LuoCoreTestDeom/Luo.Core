@@ -184,10 +184,9 @@ layui.define(['view', 'setter'], function (exports) {
                 const theme = setter.theme;
                 const local = layui.data(setter.tableName);
                 /*判断文件的颜色类型 和本地存储的类型是否一样，不一样就使用文件的 start*/
-                const fileColor=  theme.color.find(x => x.alias === local.theme.color.alias)
-                if (JSON.stringify(fileColor) != JSON.stringify(local.theme.color)) {
-                    local.theme.color = fileColor;
-                    options = local.theme;
+                const fileColor = theme.color.find(x => x.alias === options.color.alias)
+                if (JSON.stringify(fileColor) != JSON.stringify(options.color)) {
+                    options.color = fileColor;
                 }
                 /*判断文件的颜色类型 和本地存储的类型是否一样，不一样就使用文件的 end*/
                

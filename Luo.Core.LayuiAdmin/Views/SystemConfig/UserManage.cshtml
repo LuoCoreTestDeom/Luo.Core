@@ -69,19 +69,15 @@
             table.render({
                 elem: '#currentTableId',
                 toolbar: '#toolbarDemo',
+                defaultToolbar: ['filter'],
+                cellMinWidth: 80,
                 loading:false,
-                defaultToolbar: ['filter', 'exports', 'print', {
-                    title: '提示',
-                    layEvent: 'LAYTABLE_TIPS',
-                    icon: 'layui-icon-tips'
-                }],
                 cols: [[
-                    { type: "checkbox", width: 50 },
-                    { field: 'id', width: 80, title: 'ID', sort: true },
-                    { field: 'username', width: 80, title: '用户名' },
-                    { field: 'sex', width: 80, title: '性别', sort: true },
-                    { field: 'city', width: 80, title: '城市' },
-                    { title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center" }
+                    { type: "checkbox", width: '5%' },
+                    { field: 'id', width:'20%', title: 'ID', sort: true },
+                    { field: 'username', width: '30%', title: '用户名' },
+                    { field: 'sex', width: '5%', title: '性别', sort: true },
+                    { title: '操作', minWidth: '40%', toolbar: '#currentTableBar', align: "center" }
                 ]],
                 limits: [10, 15, 20, 25, 50, 100],
                 limit: 15,
