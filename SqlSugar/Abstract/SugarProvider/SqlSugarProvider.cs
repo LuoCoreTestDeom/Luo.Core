@@ -5,8 +5,8 @@ using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 namespace SqlSugar
 {
     ///<summary>
@@ -17,8 +17,8 @@ namespace SqlSugar
     /// </summary>
     public partial class SqlSugarProvider : ISqlSugarClient
     {
-
         #region Constructor
+
         public SqlSugarProvider(ConnectionConfig config)
         {
             this.Context = this;
@@ -27,9 +27,11 @@ namespace SqlSugar
             Check.ArgumentNullException(config, "config is null");
             CheckDbDependency(config);
         }
-        #endregion
 
-        #region  ADO Methods
+        #endregion Constructor
+
+        #region ADO Methods
+
         /// <summary>
         ///Datathis.operation
         /// </summary>
@@ -47,19 +49,23 @@ namespace SqlSugar
                 return this._Ado;
             }
         }
-        #endregion
+
+        #endregion ADO Methods
 
         #region Aop Log Methods
-        public virtual AopProvider Aop { get { return new AopProvider(this); } }
-        #endregion
+        public virtual AopProvider Aop
+        { get { return new AopProvider(this); } }
+        #endregion Aop Log Methods
 
         #region Util Methods
+
         [Obsolete("Use SqlSugarClient.Utilities")]
         public virtual IContextMethods RewritableMethods
         {
             get { return this.Context.Utilities; }
             set { this.Context.Utilities = value; }
         }
+
         public virtual IContextMethods Utilities
         {
             get
@@ -73,9 +79,11 @@ namespace SqlSugar
             }
             set { ContextRewritableMethods = value; }
         }
-        #endregion
+
+        #endregion Util Methods
 
         #region Queryable
+
         /// <summary>
         /// Get datebase time
         /// </summary>
@@ -85,16 +93,17 @@ namespace SqlSugar
             var sqlBuilder = InstanceFactory.GetSqlbuilder(this.Context.CurrentConnectionConfig);
             return this.Ado.GetDateTime(sqlBuilder.FullSqlDateNow);
         }
+
         /// <summary>
         /// Lambda Query operation
         /// </summary>
         public virtual ISugarQueryable<T> Queryable<T>()
         {
-
             InitMappingInfo<T>();
             var result = this.CreateQueryable<T>();
             return result;
         }
+
         /// <summary>
         /// Lambda Query operation
         /// </summary>
@@ -105,6 +114,7 @@ namespace SqlSugar
             queryable.SqlBuilder.QueryBuilder.TableShortName = shortName;
             return queryable;
         }
+
         /// <summary>
         /// Lambda Query operation
         /// </summary>
@@ -115,6 +125,7 @@ namespace SqlSugar
             queryable.SqlBuilder.QueryBuilder.TableShortName = shortName;
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2> Queryable<T, T2>(Expression<Func<T, T2, object[]>> joinExpression)
         {
             InitMappingInfo<T, T2>();
@@ -123,6 +134,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2> Queryable<T, T2>(Expression<Func<T, T2, JoinQueryInfos>> joinExpression)
         {
             InitMappingInfo<T, T2>();
@@ -131,6 +143,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3> Queryable<T, T2, T3>(Expression<Func<T, T2, T3, object[]>> joinExpression)
         {
             InitMappingInfo<T, T2, T3>();
@@ -139,6 +152,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3> Queryable<T, T2, T3>(Expression<Func<T, T2, T3, JoinQueryInfos>> joinExpression)
         {
             InitMappingInfo<T, T2, T3>();
@@ -147,6 +161,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4> Queryable<T, T2, T3, T4>(Expression<Func<T, T2, T3, T4, object[]>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4>();
@@ -155,6 +170,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4> Queryable<T, T2, T3, T4>(Expression<Func<T, T2, T3, T4, JoinQueryInfos>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4>();
@@ -163,6 +179,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5> Queryable<T, T2, T3, T4, T5>(Expression<Func<T, T2, T3, T4, T5, object[]>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5>();
@@ -171,6 +188,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5> Queryable<T, T2, T3, T4, T5>(Expression<Func<T, T2, T3, T4, T5, JoinQueryInfos>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5>();
@@ -179,6 +197,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6> Queryable<T, T2, T3, T4, T5, T6>(Expression<Func<T, T2, T3, T4, T5, T6, object[]>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6>();
@@ -187,6 +206,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6> Queryable<T, T2, T3, T4, T5, T6>(Expression<Func<T, T2, T3, T4, T5, T6, JoinQueryInfos>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6>();
@@ -195,6 +215,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7> Queryable<T, T2, T3, T4, T5, T6, T7>(Expression<Func<T, T2, T3, T4, T5, T6, T7, object[]>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7>();
@@ -203,6 +224,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7> Queryable<T, T2, T3, T4, T5, T6, T7>(Expression<Func<T, T2, T3, T4, T5, T6, T7, JoinQueryInfos>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7>();
@@ -211,6 +233,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8> Queryable<T, T2, T3, T4, T5, T6, T7, T8>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, object[]>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8>();
@@ -219,6 +242,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8> Queryable<T, T2, T3, T4, T5, T6, T7, T8>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, JoinQueryInfos>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8>();
@@ -227,7 +251,9 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
-        #region  9-12
+
+        #region 9-12
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8, T9> Queryable<T, T2, T3, T4, T5, T6, T7, T8, T9>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, object[]>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8, T9>();
@@ -236,6 +262,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8, T9> Queryable<T, T2, T3, T4, T5, T6, T7, T8, T9>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, JoinQueryInfos>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8, T9>();
@@ -244,6 +271,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10> Queryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, object[]>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
@@ -252,6 +280,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10> Queryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, JoinQueryInfos>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
@@ -260,6 +289,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Queryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, object[]>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
@@ -268,6 +298,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Queryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, JoinQueryInfos>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
@@ -276,6 +307,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Queryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, object[]>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
@@ -284,6 +316,7 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Queryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, JoinQueryInfos>> joinExpression)
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
@@ -292,7 +325,9 @@ namespace SqlSugar
             this.CreateQueryJoin(joinExpression, types, queryable);
             return queryable;
         }
-        #endregion
+
+        #endregion 9-12
+
         public virtual ISugarQueryable<T, T2> Queryable<T, T2>(Expression<Func<T, T2, bool>> joinExpression) where T : class, new()
         {
             InitMappingInfo<T, T2>();
@@ -302,6 +337,7 @@ namespace SqlSugar
             queryable.Where(joinExpression);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3> Queryable<T, T2, T3>(Expression<Func<T, T2, T3, bool>> joinExpression) where T : class, new()
         {
             InitMappingInfo<T, T2, T3>();
@@ -311,6 +347,7 @@ namespace SqlSugar
             queryable.Where(joinExpression);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4> Queryable<T, T2, T3, T4>(Expression<Func<T, T2, T3, T4, bool>> joinExpression) where T : class, new()
         {
             InitMappingInfo<T, T2, T3, T4>();
@@ -320,6 +357,7 @@ namespace SqlSugar
             queryable.Where(joinExpression);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5> Queryable<T, T2, T3, T4, T5>(Expression<Func<T, T2, T3, T4, T5, bool>> joinExpression) where T : class, new()
         {
             InitMappingInfo<T, T2, T3, T4, T5>();
@@ -329,6 +367,7 @@ namespace SqlSugar
             queryable.Where(joinExpression);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6> Queryable<T, T2, T3, T4, T5, T6>(Expression<Func<T, T2, T3, T4, T5, T6, bool>> joinExpression) where T : class, new()
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6>();
@@ -338,6 +377,7 @@ namespace SqlSugar
             queryable.Where(joinExpression);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7> Queryable<T, T2, T3, T4, T5, T6, T7>(Expression<Func<T, T2, T3, T4, T5, T6, T7, bool>> joinExpression) where T : class, new()
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7>();
@@ -347,6 +387,7 @@ namespace SqlSugar
             queryable.Where(joinExpression);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8> Queryable<T, T2, T3, T4, T5, T6, T7, T8>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, bool>> joinExpression) where T : class, new()
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8>();
@@ -358,6 +399,7 @@ namespace SqlSugar
         }
 
         #region 9-12
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8, T9> Queryable<T, T2, T3, T4, T5, T6, T7, T8, T9>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, bool>> joinExpression) where T : class, new()
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8, T9>();
@@ -367,6 +409,7 @@ namespace SqlSugar
             queryable.Where(joinExpression);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10> Queryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, bool>> joinExpression) where T : class, new()
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8, T9, T10>();
@@ -376,6 +419,7 @@ namespace SqlSugar
             queryable.Where(joinExpression);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> Queryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, bool>> joinExpression) where T : class, new()
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>();
@@ -385,6 +429,7 @@ namespace SqlSugar
             queryable.Where(joinExpression);
             return queryable;
         }
+
         public virtual ISugarQueryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> Queryable<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, bool>> joinExpression) where T : class, new()
         {
             InitMappingInfo<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>();
@@ -394,6 +439,7 @@ namespace SqlSugar
             queryable.Where(joinExpression);
             return queryable;
         }
+
         public virtual ISugarQueryable<T> Queryable<T>(ISugarQueryable<T> queryable) where T : class, new()
         {
             var sqlobj = queryable.ToSql();
@@ -401,11 +447,13 @@ namespace SqlSugar
             result.QueryBuilder.IsSqlQuery = false;
             return result;
         }
+
         public virtual ISugarQueryable<T, T2> Queryable<T, T2>(
      ISugarQueryable<T> joinQueryable1, ISugarQueryable<T2> joinQueryable2, Expression<Func<T, T2, bool>> joinExpression) where T : class, new() where T2 : class, new()
         {
             return Queryable(joinQueryable1, joinQueryable2, JoinType.Inner, joinExpression);
         }
+
         public virtual ISugarQueryable<T, T2> Queryable<T, T2>(
              ISugarQueryable<T> joinQueryable1, ISugarQueryable<T2> joinQueryable2, JoinType joinType, Expression<Func<T, T2, bool>> joinExpression) where T : class, new() where T2 : class, new()
         {
@@ -447,11 +495,10 @@ namespace SqlSugar
             return queryable;
         }
 
-
-        public virtual ISugarQueryable<T, T2 ,T3> Queryable<T, T2 ,T3>(
+        public virtual ISugarQueryable<T, T2, T3> Queryable<T, T2, T3>(
                 ISugarQueryable<T> joinQueryable1, ISugarQueryable<T2> joinQueryable2, ISugarQueryable<T3> joinQueryable3,
-                JoinType joinType1, Expression<Func<T, T2, T3, bool>> joinExpression1 ,
-                JoinType joinType2 , Expression<Func<T, T2, T3,bool>> joinExpression2
+                JoinType joinType1, Expression<Func<T, T2, T3, bool>> joinExpression1,
+                JoinType joinType2, Expression<Func<T, T2, T3, bool>> joinExpression2
             ) where T : class, new() where T2 : class, new() where T3 : class, new()
         {
             Check.Exception(joinQueryable1.QueryBuilder.Take != null || joinQueryable1.QueryBuilder.Skip != null || joinQueryable1.QueryBuilder.OrderByValue.HasValue(), "joinQueryable1 Cannot have 'Skip' 'ToPageList' 'Take' Or 'OrderBy'");
@@ -461,9 +508,9 @@ namespace SqlSugar
             var sqlBuilder = InstanceFactory.GetSqlbuilder(this.Context.CurrentConnectionConfig);
 
             sqlBuilder.Context = this;
-            InitMappingInfo<T, T2,T3>();
+            InitMappingInfo<T, T2, T3>();
             var types = new Type[] { typeof(T2) };
-            var queryable = InstanceFactory.GetQueryable<T, T2,T3>(this.CurrentConnectionConfig);
+            var queryable = InstanceFactory.GetQueryable<T, T2, T3>(this.CurrentConnectionConfig);
             queryable.Context = this.Context;
             queryable.SqlBuilder = sqlBuilder;
             queryable.QueryBuilder = InstanceFactory.GetQueryBuilder(this.CurrentConnectionConfig);
@@ -489,7 +536,6 @@ namespace SqlSugar
             queryable.QueryBuilder.Parameters.AddRange(sqlObj2.Value);
             var exp = queryable.QueryBuilder.GetExpressionValue(joinExpression1, ResolveExpressType.WhereMultiple);
             queryable.QueryBuilder.JoinQueryInfos.Add(new JoinQueryInfo() { JoinIndex = 0, JoinType = joinType1, JoinWhere = exp.GetResultString(), TableName = sqlBuilder.GetPackTable(sql2, shortName2) });
-
 
             //join table 2
             var shortName3 = joinExpression1.Parameters[2].Name;
@@ -502,11 +548,11 @@ namespace SqlSugar
             return queryable;
         }
 
-        public virtual ISugarQueryable<T, T2, T3,T4> Queryable<T, T2, T3,T4>(
+        public virtual ISugarQueryable<T, T2, T3, T4> Queryable<T, T2, T3, T4>(
               ISugarQueryable<T> joinQueryable1, ISugarQueryable<T2> joinQueryable2, ISugarQueryable<T3> joinQueryable3, ISugarQueryable<T4> joinQueryable4,
               JoinType joinType1, Expression<Func<T, T2, T3, T4, bool>> joinExpression1,
               JoinType joinType2, Expression<Func<T, T2, T3, T4, bool>> joinExpression2,
-               JoinType joinType3, Expression<Func<T, T2, T3,T4, bool>> joinExpression3
+               JoinType joinType3, Expression<Func<T, T2, T3, T4, bool>> joinExpression3
           ) where T : class, new() where T2 : class, new() where T3 : class, new() where T4 : class, new()
         {
             Check.Exception(joinQueryable1.QueryBuilder.Take != null || joinQueryable1.QueryBuilder.Skip != null || joinQueryable1.QueryBuilder.OrderByValue.HasValue(), "joinQueryable1 Cannot have 'Skip' 'ToPageList' 'Take' Or 'OrderBy'");
@@ -516,9 +562,9 @@ namespace SqlSugar
             var sqlBuilder = InstanceFactory.GetSqlbuilder(this.Context.CurrentConnectionConfig);
 
             sqlBuilder.Context = this;
-            InitMappingInfo<T, T2, T3,T4>();
+            InitMappingInfo<T, T2, T3, T4>();
             var types = new Type[] { typeof(T2) };
-            var queryable = InstanceFactory.GetQueryable<T, T2, T3,T4>(this.CurrentConnectionConfig);
+            var queryable = InstanceFactory.GetQueryable<T, T2, T3, T4>(this.CurrentConnectionConfig);
             queryable.Context = this.Context;
             queryable.SqlBuilder = sqlBuilder;
             queryable.QueryBuilder = InstanceFactory.GetQueryBuilder(this.CurrentConnectionConfig);
@@ -544,7 +590,6 @@ namespace SqlSugar
             queryable.QueryBuilder.Parameters.AddRange(sqlObj2.Value);
             var exp = queryable.QueryBuilder.GetExpressionValue(joinExpression1, ResolveExpressType.WhereMultiple);
             queryable.QueryBuilder.JoinQueryInfos.Add(new JoinQueryInfo() { JoinIndex = 0, JoinType = joinType1, JoinWhere = exp.GetResultString(), TableName = sqlBuilder.GetPackTable(sql2, shortName2) });
-
 
             //join table 2
             var shortName3 = joinExpression1.Parameters[2].Name;
@@ -566,14 +611,15 @@ namespace SqlSugar
 
             return queryable;
         }
-        #endregion
+
+        #endregion 9-12
 
         public virtual ISugarQueryable<T> UnionAll<T>(params ISugarQueryable<T>[] queryables) where T : class, new()
         {
             return _UnionAll(queryables);
         }
 
-        internal ISugarQueryable<T> _UnionAll<T>(ISugarQueryable<T>[] queryables) 
+        internal ISugarQueryable<T> _UnionAll<T>(ISugarQueryable<T>[] queryables)
         {
             var sqlBuilder = InstanceFactory.GetSqlbuilder(this.Context.CurrentConnectionConfig);
             Check.Exception(queryables.IsNullOrEmpty(), "UnionAll.queryables is null ");
@@ -609,6 +655,7 @@ namespace SqlSugar
             Check.Exception(queryables.IsNullOrEmpty(), "UnionAll.queryables is null ");
             return UnionAll(queryables.ToArray());
         }
+
         public virtual ISugarQueryable<T> Union<T>(params ISugarQueryable<T>[] queryables) where T : class, new()
         {
             var sqlBuilder = InstanceFactory.GetSqlbuilder(this.Context.CurrentConnectionConfig);
@@ -640,31 +687,37 @@ namespace SqlSugar
                 return resulut.Select<T>(sqlBuilder.SqlSelectAll);
             }
         }
+
         public virtual ISugarQueryable<T> Union<T>(List<ISugarQueryable<T>> queryables) where T : class, new()
         {
             Check.Exception(queryables.IsNullOrEmpty(), "Union.queryables is null ");
             return Union(queryables.ToArray());
         }
-        #endregion
+
+        #endregion Queryable
 
         #region SqlQueryable
+
         public ISugarQueryable<T> SqlQueryable<T>(string sql) where T : class, new()
         {
             var sqlBuilder = InstanceFactory.GetSqlbuilder(this.Context.CurrentConnectionConfig);
-            var result= this.Context.Queryable<T>().AS(sqlBuilder.GetPackTable(sql, sqlBuilder.GetDefaultShortName())).With(SqlWith.Null).Select(sqlBuilder.GetDefaultShortName() + ".*");
+            var result = this.Context.Queryable<T>().AS(sqlBuilder.GetPackTable(sql, sqlBuilder.GetDefaultShortName())).With(SqlWith.Null).Select(sqlBuilder.GetDefaultShortName() + ".*");
             result.QueryBuilder.IsSqlQuery = true;
             result.QueryBuilder.OldSql = sql;
             return result;
         }
-        #endregion
+
+        #endregion SqlQueryable
 
         #region Insertable
+
         public virtual IInsertable<T> Insertable<T>(T[] insertObjs) where T : class, new()
         {
             InitMappingInfo<T>();
             InsertableProvider<T> result = this.CreateInsertable(insertObjs);
             return result;
         }
+
         public virtual IInsertable<T> Insertable<T>(List<T> insertObjs) where T : class, new()
         {
             if (insertObjs == null || insertObjs.IsNullOrEmpty())
@@ -674,10 +727,12 @@ namespace SqlSugar
             }
             return this.Context.Insertable(insertObjs.ToArray());
         }
+
         public virtual IInsertable<T> Insertable<T>(T insertObj) where T : class, new()
         {
             return this.Context.Insertable(new T[] { insertObj });
         }
+
         public virtual IInsertable<T> Insertable<T>(Dictionary<string, object> columnDictionary) where T : class, new()
         {
             InitMappingInfo<T>();
@@ -686,6 +741,7 @@ namespace SqlSugar
             var columns = columnDictionary.Select(it => it.Key).ToList();
             return this.Context.Insertable(insertObject).InsertColumns(columns.ToArray()); ;
         }
+
         public virtual IInsertable<T> Insertable<T>(dynamic insertDynamicObject) where T : class, new()
         {
             InitMappingInfo<T>();
@@ -701,54 +757,65 @@ namespace SqlSugar
                 return this.Context.Insertable(insertObject).InsertColumns(columns.ToArray());
             }
         }
-        #endregion
+
+        #endregion Insertable
 
         #region Deleteable
+
         public virtual IDeleteable<T> Deleteable<T>() where T : class, new()
         {
             InitMappingInfo<T>();
             DeleteableProvider<T> result = this.CreateDeleteable<T>();
             return result;
         }
+
         public virtual IDeleteable<T> Deleteable<T>(Expression<Func<T, bool>> expression) where T : class, new()
         {
             InitMappingInfo<T>();
             return this.Context.Deleteable<T>().Where(expression);
         }
+
         public virtual IDeleteable<T> Deleteable<T>(dynamic primaryKeyValue) where T : class, new()
         {
             InitMappingInfo<T>();
             return this.Context.Deleteable<T>().In(primaryKeyValue);
         }
+
         public virtual IDeleteable<T> Deleteable<T>(dynamic[] primaryKeyValues) where T : class, new()
         {
             InitMappingInfo<T>();
             return this.Context.Deleteable<T>().In(primaryKeyValues);
         }
+
         public virtual IDeleteable<T> Deleteable<T>(List<dynamic> pkValue) where T : class, new()
         {
             InitMappingInfo<T>();
             return this.Context.Deleteable<T>().In(pkValue);
         }
+
         public virtual IDeleteable<T> Deleteable<T>(T deleteObj) where T : class, new()
         {
             InitMappingInfo<T>();
             return this.Context.Deleteable<T>().Where(deleteObj);
         }
+
         public virtual IDeleteable<T> Deleteable<T>(List<T> deleteObjs) where T : class, new()
         {
             InitMappingInfo<T>();
             return this.Context.Deleteable<T>().Where(deleteObjs);
         }
-        #endregion
+
+        #endregion Deleteable
 
         #region Updateable
+
         public virtual IUpdateable<T> Updateable<T>(T[] UpdateObjs) where T : class, new()
         {
             InitMappingInfo<T>();
             UpdateableProvider<T> result = this.CreateUpdateable(UpdateObjs);
             return result;
         }
+
         public virtual IUpdateable<T> Updateable<T>(List<T> UpdateObjs) where T : class, new()
         {
             //Check.ArgumentNullException(UpdateObjs, "Updateable.UpdateObjs can't be null");
@@ -756,33 +823,36 @@ namespace SqlSugar
             {
                 UpdateObjs = new List<T>();
             }
-            var result= (UpdateableProvider<T>)Updateable(UpdateObjs.ToArray());
+            var result = (UpdateableProvider<T>)Updateable(UpdateObjs.ToArray());
             result.UpdateBuilder.IsListUpdate = true;
             return result;
         }
+
         public virtual IUpdateable<T> Updateable<T>(T UpdateObj) where T : class, new()
         {
             return this.Context.Updateable(new T[] { UpdateObj });
         }
+
         public virtual IUpdateable<T> Updateable<T>() where T : class, new()
         {
             var result = this.Context.Updateable(new T[] { new T() });
             result.UpdateParameterIsNull = true;
             return result;
         }
+
         public virtual IUpdateable<T> Updateable<T>(Expression<Func<T, T>> columns) where T : class, new()
         {
             var result = this.Context.Updateable<T>().SetColumns(columns);
             result.UpdateParameterIsNull = true;
             return result;
         }
+
         public virtual IUpdateable<T> Updateable<T>(Expression<Func<T, bool>> columns) where T : class, new()
         {
             var result = this.Context.Updateable<T>().SetColumns(columns);
             result.UpdateParameterIsNull = true;
             return result;
         }
-
 
         public virtual IUpdateable<T> Updateable<T>(Dictionary<string, object> columnDictionary) where T : class, new()
         {
@@ -792,6 +862,7 @@ namespace SqlSugar
             var columns = columnDictionary.Select(it => it.Key).ToList();
             return this.Context.Updateable(updateObject).UpdateColumns(columns.ToArray()); ;
         }
+
         public virtual IUpdateable<T> Updateable<T>(dynamic updateDynamicObject) where T : class, new()
         {
             InitMappingInfo<T>();
@@ -807,33 +878,39 @@ namespace SqlSugar
                 return this.Context.Updateable(updateObject).UpdateColumns(columns.ToArray()); ;
             }
         }
-        #endregion
+
+        #endregion Updateable
 
         #region Saveable
+
         public ISaveable<T> Saveable<T>(List<T> saveObjects) where T : class, new()
         {
             return new SaveableProvider<T>(this, saveObjects);
         }
+
         public ISaveable<T> Saveable<T>(T saveObject) where T : class, new()
         {
             return new SaveableProvider<T>(this, saveObject);
         }
+
         public IStorageable<T> Storageable<T>(List<T> dataList) where T : class, new()
         {
             this.InitMappingInfo<T>();
             var sqlBuilder = InstanceFactory.GetSqlbuilder(this.Context.CurrentConnectionConfig);
-            var result= new Storageable<T>(dataList,this);
+            var result = new Storageable<T>(dataList, this);
             result.Builder = sqlBuilder;
             return result;
         }
+
         public IStorageable<T> Storageable<T>(T data) where T : class, new()
         {
             return Storageable(new List<T>() { data });
         }
-        public StorageableDataTable Storageable(DataTable data) 
+
+        public StorageableDataTable Storageable(DataTable data)
         {
             var result = new StorageableDataTable();
-            Check.Exception(data.TableName.IsNullOrEmpty() || data.TableName == "Table",ErrorMessage.GetThrowMessage( "DataTable data.TableName is null", "参数DataTable没有设置TableName ，参数.TableName=表名"));
+            Check.Exception(data.TableName.IsNullOrEmpty() || data.TableName == "Table", ErrorMessage.GetThrowMessage("DataTable data.TableName is null", "参数DataTable没有设置TableName ，参数.TableName=表名"));
             result.DataTable = data;
             result.Context = this;
             data.Columns.Add(new DataColumn("SugarGroupId", typeof(StorageType)));
@@ -842,10 +919,12 @@ namespace SqlSugar
             data.Columns.Add(new DataColumn("SugarColumns", typeof(string[])));
             return result;
         }
-        #endregion
+
+        #endregion Saveable
 
         #region Reportable
-        public IReportable<T> Reportable<T>(T data)  
+
+        public IReportable<T> Reportable<T>(T data)
         {
             var result = new ReportableProvider<T>(data);
             result.formatBuilder = InstanceFactory.GetInsertBuilder(this.Context.CurrentConnectionConfig);
@@ -854,7 +933,8 @@ namespace SqlSugar
             result.queryBuilder = this.Queryable<object>().QueryBuilder;
             return result;
         }
-        public IReportable<T> Reportable<T>(List<T> list)  
+
+        public IReportable<T> Reportable<T>(List<T> list)
         {
             var result = new ReportableProvider<T>(list);
             result.formatBuilder = InstanceFactory.GetInsertBuilder(this.Context.CurrentConnectionConfig);
@@ -863,7 +943,8 @@ namespace SqlSugar
             result.queryBuilder = this.Queryable<object>().QueryBuilder;
             return result;
         }
-        public IReportable<T> Reportable<T>(T [] list)
+
+        public IReportable<T> Reportable<T>(T[] list)
         {
             if (list == null)
                 list = new T[] { };
@@ -874,9 +955,11 @@ namespace SqlSugar
             result.queryBuilder = this.Queryable<object>().QueryBuilder;
             return result;
         }
-        #endregion
+
+        #endregion Reportable
 
         #region DbFirst
+
         public virtual IDbFirst DbFirst
         {
             get
@@ -887,9 +970,11 @@ namespace SqlSugar
                 return dbFirst;
             }
         }
-        #endregion
+
+        #endregion DbFirst
 
         #region CodeFirst
+
         public virtual ICodeFirst CodeFirst
         {
             get
@@ -899,9 +984,11 @@ namespace SqlSugar
                 return codeFirst;
             }
         }
-        #endregion
+
+        #endregion CodeFirst
 
         #region Db Maintenance
+
         public virtual IDbMaintenance DbMaintenance
         {
             get
@@ -915,9 +1002,11 @@ namespace SqlSugar
                 return this._DbMaintenance;
             }
         }
-        #endregion
+
+        #endregion Db Maintenance
 
         #region Entity Maintenance
+
         public virtual EntityMaintenance EntityMaintenance
         {
             get
@@ -931,9 +1020,11 @@ namespace SqlSugar
             }
             set { this._EntityProvider = value; }
         }
-        #endregion
+
+        #endregion Entity Maintenance
 
         #region Gobal Filter
+
         public virtual QueryFilterProvider QueryFilter
         {
             get
@@ -947,9 +1038,11 @@ namespace SqlSugar
             }
             set { this._QueryFilterProvider = value; }
         }
-        #endregion
+
+        #endregion Gobal Filter
 
         #region SimpleClient
+
         //[Obsolete("Use SqlSugarClient.GetSimpleClient() Or SqlSugarClient.GetSimpleClient<T>() ")]
         //public virtual SimpleClient SimpleClient
         //{
@@ -964,33 +1057,39 @@ namespace SqlSugar
         {
             return new SimpleClient<T>(this);
         }
+
         //public virtual SimpleClient GetSimpleClient()
         //{
         //    if (this._SimpleClient == null)
         //        this._SimpleClient = new SimpleClient(this);
         //    return this._SimpleClient;
         //}
-        #endregion
+        #endregion SimpleClient
 
         #region Dispose OR Close
+
         public virtual void Close()
         {
             if (this.Context.Ado != null)
                 this.Context.Ado.Close();
         }
+
         public virtual void Open()
         {
             if (this.Context.Ado != null)
                 this.Context.Ado.Open();
         }
+
         public virtual void Dispose()
         {
             if (this.Context.Ado != null)
                 this.Context.Ado.Dispose();
         }
-        #endregion
 
-        #region   Queue
+        #endregion Dispose OR Close
+
+        #region Queue
+
         public int SaveQueues(bool isTran = true)
         {
             return SaveQueuesProvider(isTran, (sql, parameters) => { return this.Ado.ExecuteCommand(sql, parameters); });
@@ -1000,62 +1099,77 @@ namespace SqlSugar
         {
             return await SaveQueuesProviderAsync(isTran, (sql, parameters) => { return this.Ado.ExecuteCommandAsync(sql, parameters); });
         }
+
         public List<T> SaveQueues<T>(bool isTran = true)
         {
             return SaveQueuesProvider(isTran, (sql, parameters) => { return this.Ado.SqlQuery<T>(sql, parameters); });
         }
+
         public async Task<List<T>> SaveQueuesAsync<T>(bool isTran = true)
         {
             return await SaveQueuesProviderAsync(isTran, (sql, parameters) => { return this.Ado.SqlQueryAsync<T>(sql, parameters); });
         }
+
         public Tuple<List<T>, List<T2>> SaveQueues<T, T2>(bool isTran = true)
         {
             return SaveQueuesProvider(isTran, (sql, parameters) => { return this.Ado.SqlQuery<T, T2>(sql, parameters); });
         }
+
         public async Task<Tuple<List<T>, List<T2>>> SaveQueuesAsync<T, T2>(bool isTran = true)
         {
             return await SaveQueuesProviderAsync(isTran, (sql, parameters) => { return this.Ado.SqlQueryAsync<T, T2>(sql, parameters); });
         }
+
         public Tuple<List<T>, List<T2>, List<T3>> SaveQueues<T, T2, T3>(bool isTran = true)
         {
             return SaveQueuesProvider(isTran, (sql, parameters) => { return this.Ado.SqlQuery<T, T2, T3>(sql, parameters); });
         }
+
         public async Task<Tuple<List<T>, List<T2>, List<T3>>> SaveQueuesAsync<T, T2, T3>(bool isTran = true)
         {
             return await SaveQueuesProviderAsync(isTran, (sql, parameters) => { return this.Ado.SqlQueryAsync<T, T2, T3>(sql, parameters); });
         }
+
         public Tuple<List<T>, List<T2>, List<T3>, List<T4>> SaveQueues<T, T2, T3, T4>(bool isTran = true)
         {
             return SaveQueuesProvider(isTran, (sql, parameters) => { return this.Ado.SqlQuery<T, T2, T3, T4>(sql, parameters); });
         }
+
         public async Task<Tuple<List<T>, List<T2>, List<T3>, List<T4>>> SaveQueuesAsync<T, T2, T3, T4>(bool isTran = true)
         {
             return await SaveQueuesProviderAsync(isTran, (sql, parameters) => { return this.Ado.SqlQueryAsync<T, T2, T3, T4>(sql, parameters); });
         }
+
         public Tuple<List<T>, List<T2>, List<T3>, List<T4>, List<T5>> SaveQueues<T, T2, T3, T4, T5>(bool isTran = true)
         {
             return SaveQueuesProvider(isTran, (sql, parameters) => { return this.Ado.SqlQuery<T, T2, T3, T4, T5>(sql, parameters); });
         }
+
         public async Task<Tuple<List<T>, List<T2>, List<T3>, List<T4>, List<T5>>> SaveQueuesAsync<T, T2, T3, T4, T5>(bool isTran = true)
         {
             return await SaveQueuesProviderAsync(isTran, (sql, parameters) => { return this.Ado.SqlQueryAsync<T, T2, T3, T4, T5>(sql, parameters); });
         }
+
         public Tuple<List<T>, List<T2>, List<T3>, List<T4>, List<T5>, List<T6>> SaveQueues<T, T2, T3, T4, T5, T6>(bool isTran = true)
         {
             return SaveQueuesProvider(isTran, (sql, parameters) => { return this.Ado.SqlQuery<T, T2, T3, T4, T5, T6>(sql, parameters); });
         }
+
         public async Task<Tuple<List<T>, List<T2>, List<T3>, List<T4>, List<T5>, List<T6>>> SaveQueuesAsync<T, T2, T3, T4, T5, T6>(bool isTran = true)
         {
             return await SaveQueuesProviderAsync(isTran, (sql, parameters) => { return this.Ado.SqlQueryAsync<T, T2, T3, T4, T5, T6>(sql, parameters); });
         }
+
         public Tuple<List<T>, List<T2>, List<T3>, List<T4>, List<T5>, List<T6>, List<T7>> SaveQueues<T, T2, T3, T4, T5, T6, T7>(bool isTran = true)
         {
             return SaveQueuesProvider(isTran, (sql, parameters) => { return this.Ado.SqlQuery<T, T2, T3, T4, T5, T6, T7>(sql, parameters); });
         }
+
         public async Task<Tuple<List<T>, List<T2>, List<T3>, List<T4>, List<T5>, List<T6>, List<T7>>> SaveQueuesAsync<T, T2, T3, T4, T5, T6, T7>(bool isTran = true)
         {
             return await SaveQueuesProviderAsync(isTran, (sql, parameters) => { return this.Ado.SqlQueryAsync<T, T2, T3, T4, T5, T6, T7>(sql, parameters); });
         }
+
         public void AddQueue(string sql, object parsmeters = null)
         {
             if (Queues == null)
@@ -1064,6 +1178,7 @@ namespace SqlSugar
             }
             this.Queues.Add(sql, this.Context.Ado.GetParameters(parsmeters));
         }
+
         public void AddQueue(string sql, SugarParameter parsmeter)
         {
             if (Queues == null)
@@ -1072,6 +1187,7 @@ namespace SqlSugar
             }
             this.Queues.Add(sql, new List<SugarParameter>() { parsmeter });
         }
+
         public void AddQueue(string sql, List<SugarParameter> parsmeters)
         {
             if (Queues == null)
@@ -1080,9 +1196,9 @@ namespace SqlSugar
             }
             this.Queues.Add(sql, parsmeters);
         }
-        public QueueList Queues { get { if (_Queues == null) { _Queues = new QueueList(); } return _Queues; } set { _Queues = value; } }
 
-
+        public QueueList Queues
+        { get { if (_Queues == null) { _Queues = new QueueList(); } return _Queues; } set { _Queues = value; } }
 
         private async Task<T> SaveQueuesProviderAsync<T>(bool isTran, Func<string, List<SugarParameter>, Task<T>> func)
         {
@@ -1143,6 +1259,7 @@ namespace SqlSugar
                 throw ex;
             }
         }
+
         private T SaveQueuesProvider<T>(bool isTran, Func<string, List<SugarParameter>, T> func)
         {
             try
@@ -1183,9 +1300,9 @@ namespace SqlSugar
                             .TrimEnd('\r')
                             .TrimEnd('\n')
                             .TrimEnd(';') + ";";
-                        if (itemSql == "begin;"   ) 
+                        if (itemSql == "begin;")
                         {
-                            itemSql = itemSql.TrimEnd(';')+"\n";
+                            itemSql = itemSql.TrimEnd(';') + "\n";
                         }
                         sqlBuilder.AppendLine(itemSql);
                         index++;
@@ -1203,25 +1320,29 @@ namespace SqlSugar
             }
         }
 
-        #endregion
+        #endregion Queue
 
         #region Cache
-        public SugarCacheProvider DataCache 
-        { 
-            get {
-                var services=this.CurrentConnectionConfig.ConfigureExternalServices;
+
+        public SugarCacheProvider DataCache
+        {
+            get
+            {
+                var services = this.CurrentConnectionConfig.ConfigureExternalServices;
                 if (services == null)
                     return new SugarCacheProvider();
                 if (services.DataInfoCacheService == null)
                     return new SugarCacheProvider();
                 SugarCacheProvider cache = new SugarCacheProvider();
-                cache.Servie=services.DataInfoCacheService;
+                cache.Servie = services.DataInfoCacheService;
                 return cache;
             }
         }
-        #endregion
+
+        #endregion Cache
 
         #region Split table
+
         public SplitTableContext SplitHelper<T>() where T : class, new()
         {
             var result = new SplitTableContext(this.Context)
@@ -1230,6 +1351,7 @@ namespace SqlSugar
             };
             return result;
         }
+
         public SplitTableContextResult<T> SplitHelper<T>(T data) where T : class, new()
         {
             var result = new SplitTableContext(this.Context)
@@ -1242,6 +1364,7 @@ namespace SqlSugar
                 Helper = result
             };
         }
+
         public SplitTableContextResult<T> SplitHelper<T>(List<T> data) where T : class, new()
         {
             var result = new SplitTableContext(this.Context)
@@ -1254,25 +1377,30 @@ namespace SqlSugar
                 Helper = result
             };
         }
-        #endregion
+
+        #endregion Split table
 
         #region AsTenant
+
         public ITenant AsTenant()
         {
-            Check.Exception(true,ErrorMessage.GetThrowMessage("Child objects do not support tenant methods, var childDb= Db.GetConnection(confid)  ,Db is master  ", "Db子对象不支持租户方法，请使用主对象,例如：var childDb= Db.GetConnection(confid)  Db是主对象，childDb是子对象 "));
+            Check.Exception(true, ErrorMessage.GetThrowMessage("Child objects do not support tenant methods, var childDb= Db.GetConnection(confid)  ,Db is master  ", "Db子对象不支持租户方法，请使用主对象,例如：var childDb= Db.GetConnection(confid)  Db是主对象，childDb是子对象 "));
             return null;
         }
 
-        #endregion
+        #endregion AsTenant
 
         #region Fastest
-        public IFastest<T> Fastest<T>() where T:class,new()
+
+        public IFastest<T> Fastest<T>() where T : class, new()
         {
             return new FastestProvider<T>(this);
         }
-        #endregion
+
+        #endregion Fastest
 
         #region
+
         public void ThenMapper<T>(IEnumerable<T> list, Action<T> action)
         {
             MapperContext<T> result = new MapperContext<T>();
@@ -1290,6 +1418,7 @@ namespace SqlSugar
             }
             result.context.TempItems.Remove(key);
         }
+
         public async Task ThenMapperAsync<T>(IEnumerable<T> list, Func<T, Task> action)
         {
             MapperContext<T> result = new MapperContext<T>();
@@ -1307,6 +1436,7 @@ namespace SqlSugar
             }
             result.context.TempItems.Remove(key);
         }
+
         #endregion
     }
 }

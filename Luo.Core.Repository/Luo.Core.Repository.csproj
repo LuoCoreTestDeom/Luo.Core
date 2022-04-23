@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Luo.Core.DatabaseFactory\Luo.Core.DatabaseFactory.csproj" />
+    <ProjectReference Include="..\Luo.Core.IRepository\Luo.Core.IRepository.csproj" />
+  </ItemGroup>
+
 </Project>

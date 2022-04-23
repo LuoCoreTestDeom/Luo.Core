@@ -180,7 +180,7 @@ layui.define(['view', 'setter'], function (exports) {
             //主题设置
             , theme: function (options) {
                 //TODO 查询在哪里调用了
-               
+
                 const theme = setter.theme;
                 const local = layui.data(setter.tableName);
                 /*判断文件的颜色类型 和本地存储的类型是否一样，不一样就使用文件的 start*/
@@ -189,7 +189,7 @@ layui.define(['view', 'setter'], function (exports) {
                     options.color = fileColor;
                 }
                 /*判断文件的颜色类型 和本地存储的类型是否一样，不一样就使用文件的 end*/
-               
+
                 const id = 'LAY_layadmin_theme';
                 const style = document.createElement('style');
                 const styleText = laytpl([
@@ -224,7 +224,7 @@ layui.define(['view', 'setter'], function (exports) {
                     , '{{# } }}'
                 ].join('')).render(options = $.extend({}, local.theme, options))
                     , styleElem = document.getElementById(id);
-              
+
                 //添加主题样式
                 if ('styleSheet' in style) {
                     style.setAttribute('type', 'text/css');
@@ -483,7 +483,6 @@ layui.define(['view', 'setter'], function (exports) {
 
         //主题设置
         , setTheme: function (othis) {
-            
             var index = othis.data('index')
                 , nextIndex = othis.siblings('.layui-this').data('index');
 
@@ -674,7 +673,6 @@ layui.define(['view', 'setter'], function (exports) {
 
     //初始
     !function () {
-        
         //主题初始化，本地主题记录优先，其次为 initColorIndex
         var local = layui.data(setter.tableName);
         if (local.theme) {
@@ -699,7 +697,6 @@ layui.define(['view', 'setter'], function (exports) {
                 , id: 'LAY_errorIE'
             });
         }
-
     }();
 
     //admin.prevRouter = {}; //上一个路由
@@ -744,7 +741,6 @@ layui.define(['view', 'setter'], function (exports) {
                                 othis3.addClass(selected).siblings().removeClass(selected); //标记选择器
                                 return false;
                             }
-
                         });
 
                         if (matched2) {
@@ -752,7 +748,6 @@ layui.define(['view', 'setter'], function (exports) {
                             othis2.addClass(selected).siblings().removeClass(selected); //标记选择器
                             return false
                         }
-
                     });
 
                     if (matched1) {
@@ -760,7 +755,6 @@ layui.define(['view', 'setter'], function (exports) {
                         othis1.addClass(selected).siblings().removeClass(selected); //标记选择器
                         return false;
                     }
-
                 });
             }
 

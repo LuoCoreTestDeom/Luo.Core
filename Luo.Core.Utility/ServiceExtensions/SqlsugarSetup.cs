@@ -2,11 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SqlSugar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Luo.Core.Utility.ServiceExtensions
 {
@@ -15,25 +10,26 @@ namespace Luo.Core.Utility.ServiceExtensions
     /// </summary>
     public static class SqlsugarSetup
     {
-        public static void AddSqlSugarSetup(this IServiceCollection services) 
+        public static void AddSqlSugarSetup(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
             var sqlConnectString = Appsettings.GetValue(new string[] { "ConnectionStrings", "SqlServer" });
             if (string.IsNullOrWhiteSpace(sqlConnectString))
             {
+                services.AddScoped<ISqlSugarInitDatabase, SqlSugarInitDatabase>();
                 //多租户，多库
                 var dbConfigDatas = Appsettings.GetObjectList<DbConnectionConfigModel>("DbConnectionConfig");
-                services.AddSqlSugarClients<SqlSugarsFactory>((dbconfigs) =>
+                services.AddSqlSugarClientList<SqlSugarFactoryList>((sp, dbconfigs) =>
                 {
                     foreach (var item in dbConfigDatas)
                     {
-                        if (string.IsNullOrWhiteSpace(item.ConnectionString)) 
+                        if (string.IsNullOrWhiteSpace(item.ConnectionString))
                         {
                             continue;
                         }
                         var dbSqlConfig = new ConnectionConfig()
                         {
-                            ConnectionString = SpecialDbString(item.DatabaseType, item.ConnectionString) ,
+                            ConnectionString = SpecialDbString(item.DatabaseType, item.ConnectionString),
                             DbType = item.DatabaseType,
                             ConfigId = item.ConfigId,
                             IsAutoCloseConnection = true,//开启自动释放模式和EF原理一样我就不多解释了
@@ -46,7 +42,7 @@ namespace Luo.Core.Utility.ServiceExtensions
                             {
                                 if (string.IsNullOrWhiteSpace(item2.ConnectionString))
                                 {
-                                    continue; 
+                                    continue;
                                 }
                                 dbSqlConfig.SlaveConnectionConfigs.Add(new SlaveConnectionConfig()
                                 {
@@ -57,13 +53,12 @@ namespace Luo.Core.Utility.ServiceExtensions
                         }
                         dbconfigs.Add(dbSqlConfig);
                     }
-
                 });
             }
             else
             {
                 //单库
-                services.AddSqlSugarClient<SqlSugarFactory>((dbconfig) =>
+                services.AddSqlSugarClient<SqlSugarFactory>((sp,dbconfig) =>
                 {
                     dbconfig.ConnectionString = sqlConnectString;
                     dbconfig.DbType = DbType.SqlServer;
@@ -71,27 +66,32 @@ namespace Luo.Core.Utility.ServiceExtensions
                     dbconfig.InitKeyType = InitKeyType.Attribute;//从特性读取主键和自增列信息
                 });
             }
+
+            
         }
+
         /// <summary>
         /// 定制Db字符串
         /// 目的是保证安全：优先从本地txt文件获取，若没有文件则从appsettings.json中获取
         /// </summary>
         /// <param name="mutiDBOperate"></param>
         /// <returns></returns>
-        private static string SpecialDbString(SqlSugar.DbType dbType,string strConnect)
+        private static string SpecialDbString(SqlSugar.DbType dbType, string strConnect)
         {
             string sqlConnectString = string.Empty;
-            switch (dbType) 
+            switch (dbType)
             {
-
-                case DbType.Sqlite: sqlConnectString= $"DataSource=" + Path.Combine(Environment.CurrentDirectory, strConnect); 
+                case DbType.Sqlite:
+                    sqlConnectString = $"DataSource=" + Path.Combine(Environment.CurrentDirectory, strConnect);
                     break;
+
                 case DbType.SqlServer:
                     sqlConnectString = DifDBConnOfSecurity(@"D:\my-file\dbCountPsw1_SqlserverConn.txt", strConnect);
                     break;
             }
             return sqlConnectString;
         }
+
         private static string DifDBConnOfSecurity(params string[] conn)
         {
             foreach (var item in conn)
@@ -108,6 +108,7 @@ namespace Luo.Core.Utility.ServiceExtensions
 
             return conn[conn.Length - 1];
         }
+
         // <summary>
         /// SqlSugar上下文注入
         /// </summary>
@@ -116,20 +117,22 @@ namespace Luo.Core.Utility.ServiceExtensions
         /// <param name="configAction"></param>
         /// <param name="lifetime">用于在容器中注册TSugarClient服务的生命周期</param>
         /// <returns></returns>
-        internal static IServiceCollection AddSqlSugarClient<TSugarContext>(this IServiceCollection serviceCollection, Action<ConnectionConfig> configAction, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        internal static IServiceCollection AddSqlSugarClient<TSugarContext>(this IServiceCollection serviceCollection, Action<IServiceProvider, ConnectionConfig> configAction, ServiceLifetime lifetime = ServiceLifetime.Scoped)
              where TSugarContext : ISqlSugarFactory
         {
+            var sdFactory = new ServiceDescriptor(typeof(ISqlSugarFactory), typeof(SqlSugarFactory), lifetime);
+            serviceCollection.Add(sdFactory);
+
+            var sdSqlSugarConfig = new ServiceDescriptor(typeof(ConnectionConfig), sp => sp.ConnectionConfigFactory(configAction), lifetime);
+            serviceCollection.TryAdd(sdSqlSugarConfig);
 
             var sdContext = new ServiceDescriptor(typeof(TSugarContext), typeof(TSugarContext), lifetime);
             serviceCollection.TryAdd(sdContext);
 
-            var sdSqlSugarConfig = new ServiceDescriptor(typeof(ConnectionConfig), sp => configAction, lifetime);
-
-            serviceCollection.TryAdd(sdSqlSugarConfig);
+           
             return serviceCollection;
         }
 
-
         // <summary>
         /// SqlSugar上下文注入
         /// </summary>
@@ -138,17 +141,30 @@ namespace Luo.Core.Utility.ServiceExtensions
         /// <param name="configAction"></param>
         /// <param name="lifetime">用于在容器中注册TSugarClient服务的生命周期</param>
         /// <returns></returns>
-        internal static IServiceCollection AddSqlSugarClients<TSugarContext>(this IServiceCollection serviceCollection, Action<List<ConnectionConfig>> configAction, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        internal static IServiceCollection AddSqlSugarClientList<TSugarContext>(this IServiceCollection serviceCollection, Action<IServiceProvider, List<ConnectionConfig>> configAction, ServiceLifetime lifetime = ServiceLifetime.Scoped)
              where TSugarContext : ISqlSugarFactory
         {
+            var sdFactory = new ServiceDescriptor(typeof(ISqlSugarFactory), typeof(SqlSugarFactoryList), lifetime);
+            serviceCollection.Add(sdFactory);
 
-            var sdContext = new ServiceDescriptor(typeof(TSugarContext), typeof(TSugarContext), lifetime);
-            serviceCollection.TryAdd(sdContext);
-
-            var sdSqlSugarConfig = new ServiceDescriptor(typeof(ConnectionConfig), sp => configAction, lifetime);
-
+            var sdSqlSugarConfig = new ServiceDescriptor(typeof(List<ConnectionConfig>), sp => sp.ConnectionConfigFactoryList(configAction), lifetime);
             serviceCollection.TryAdd(sdSqlSugarConfig);
+
+         
             return serviceCollection;
+        }
+        private static ConnectionConfig ConnectionConfigFactory(this IServiceProvider applicationServiceProvider, Action<IServiceProvider, ConnectionConfig> configAction)
+        {
+            var config = new ConnectionConfig();
+            configAction.Invoke(applicationServiceProvider, config);
+            return config;
+        }
+        private static List<ConnectionConfig> ConnectionConfigFactoryList(this IServiceProvider applicationServiceProvider, Action<IServiceProvider, List<ConnectionConfig>> configAction)
+        {
+            var configList = new List<ConnectionConfig>();
+
+            configAction.Invoke(applicationServiceProvider, configList);
+            return configList;
         }
     }
 }

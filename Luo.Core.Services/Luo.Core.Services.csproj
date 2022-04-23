@@ -1,9 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Luo.Core.DatabaseFactory\Luo.Core.DatabaseFactory.csproj" />
+    <ProjectReference Include="..\Luo.Core.IRepository\Luo.Core.IRepository.csproj" />
+    <ProjectReference Include="..\Luo.Core.IServices\Luo.Core.IServices.csproj" />
+  </ItemGroup>
 
 </Project>

@@ -1,10 +1,5 @@
 ﻿using Luo.Core.Common;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Luo.Core.Utility.ServiceExtensions
 {
@@ -25,7 +20,6 @@ namespace Luo.Core.Utility.ServiceExtensions
 
                         policy =>
                         {
-
                             policy
                             .WithOrigins(Appsettings.GetValue(new string[] { "Startup", "Cors", "IPs" }).Split(','))
                             .AllowAnyHeader()//Ensures that the policy allows any header. 确保策略允许任何报头。
@@ -45,7 +39,6 @@ namespace Luo.Core.Utility.ServiceExtensions
                             .AllowCredentials();
                         });
                 }
-
             });
         }
     }

@@ -1,6 +1,5 @@
 ﻿/*版全局配置*/
 layui.define(['laytpl', 'layer', 'element', 'util'], function (exports) {
-
     exports('setter', {
         container: 'LAY_app' //容器ID
         , base: layui.cache.base //记录静态资源所在路径

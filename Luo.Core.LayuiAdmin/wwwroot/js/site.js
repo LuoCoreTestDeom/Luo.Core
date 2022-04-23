@@ -6,6 +6,5 @@
 layui.config({
     base: '/layui_extend/' //静态资源所在路径
 }).use('index', function () {
-
     layui.admin.deleteLoader(1);
 })

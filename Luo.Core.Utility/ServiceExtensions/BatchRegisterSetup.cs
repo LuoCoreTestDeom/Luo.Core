@@ -1,17 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Luo.Core.Utility.ServiceExtensions
 {
     public static class BatchRegisterSetup
     {
-
         /// <summary>
         /// 批量注册
         /// </summary>
@@ -28,16 +22,17 @@ namespace Luo.Core.Utility.ServiceExtensions
                     case ServiceLifetime.Scoped:
                         services.AddScoped(item.Value, item.Key);
                         break;
+
                     case ServiceLifetime.Singleton:
                         services.AddSingleton(item.Value, item.Key);
                         break;
+
                     case ServiceLifetime.Transient:
                         services.AddTransient(item.Value, item.Key);
                         break;
                 }
             }
         }
-
 
         /// <summary>
         /// 获取程序集中的类
@@ -69,13 +64,10 @@ namespace Luo.Core.Utility.ServiceExtensions
                 }
                 catch (Exception ex)
                 {
-
                     Debug.WriteLine(ex);
                 }
-
             }
             return result;
         }
-
     }
 }
