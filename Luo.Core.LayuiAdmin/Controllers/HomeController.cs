@@ -7,15 +7,16 @@ namespace Luo.Core.LayuiAdmin.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IServices.DataInitService _dataInit;
+        public HomeController(ILogger<HomeController> logger, IServices.DataInitService dataInit)
         {
             _logger = logger;
+            _dataInit = dataInit;
         }
 
         public IActionResult Main()
         {
-       
+            _dataInit.InitUser();
             return View();
         }
 
