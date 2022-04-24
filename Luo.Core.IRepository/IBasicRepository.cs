@@ -2,7 +2,7 @@
 
 namespace Luo.Core.IRepository
 {
-    public interface IDatabaseInitRepository : ISqlSugarRepository
+    public interface IBasicRepository : ISqlSugarRepository
     {
     }
 }

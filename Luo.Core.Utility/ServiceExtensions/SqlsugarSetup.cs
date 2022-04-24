@@ -1,4 +1,5 @@
-﻿using Luo.Core.DatabaseFactory;
+﻿using Luo.Core.Common;
+using Luo.Core.DatabaseFactory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SqlSugar;

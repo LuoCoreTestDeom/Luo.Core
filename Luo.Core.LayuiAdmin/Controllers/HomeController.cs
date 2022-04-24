@@ -15,6 +15,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
 
         public IActionResult Main()
         {
+       
             return View();
         }
 

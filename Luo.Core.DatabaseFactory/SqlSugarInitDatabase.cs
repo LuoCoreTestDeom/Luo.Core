@@ -41,6 +41,7 @@ namespace Luo.Core.DatabaseFactory
 
         public void CreateDatabaseTables(string assemblyName)
         {
+         
             Factory.GetDbContext((db) =>
             {
                 //排除程序程序集中的接口、私有类、抽象类
@@ -59,5 +60,7 @@ namespace Luo.Core.DatabaseFactory
                 }
             });
         }
+
+        
     }
 }

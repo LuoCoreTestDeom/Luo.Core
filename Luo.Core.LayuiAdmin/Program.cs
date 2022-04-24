@@ -1,6 +1,7 @@
 using Luo.Core.DatabaseFactory;
-using Luo.Core.Utility;
+using Luo.Core.Common;
 using Luo.Core.Utility.ServiceExtensions;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +36,10 @@ app.MapControllerRoute(
 var initDatabase = builder.Services.BuildServiceProvider().GetService<ISqlSugarInitDatabase>();
 initDatabase.CreateDatabase();
 initDatabase.CreateDatabaseTables("Luo.Core.DatabaseEntity");
+
+
 string executDirPath = Directory.GetCurrentDirectory();
-initDatabase.CreateDatabaseEntityFile(executDirPath.Substring(0, executDirPath.IndexOf("\\Luo.Core.LayuiAdmin")), "Luo.Core.DatabaseEntity");
+executDirPath=executDirPath.Replace("Luo.Core.LayuiAdmin", "Luo.Core.DatabaseEntity");
+initDatabase.CreateDatabaseEntityFile(executDirPath, "Luo.Core.DatabaseEntity");
 //var ddd = builder.Services.BuildServiceProvider().GetService<Luo.Core.IRepository.IDatabaseInitRepository>();
 app.Run();

@@ -4,9 +4,9 @@ using Luo.Core.IServices;
 
 namespace Luo.Core.Services
 {
-    public class DatabaseInitService : SqlSugarRepositoryList<ISqlSugarFactory, IDatabaseInitRepository>, IDatabaseInitService
+    public class DatabaseInitService : SqlSugarRepositoryList<ISqlSugarFactory, IBasicRepository>, IDatabaseInitService
     {
-        public DatabaseInitService(ISqlSugarFactory factory, IDatabaseInitRepository databaseInit) : base(factory)
+        public DatabaseInitService(ISqlSugarFactory factory, IBasicRepository databaseInit) : base(factory)
         {
             //databaseInit.CreateDatabase();
             //databaseInit.CreateDatabaseTables();
