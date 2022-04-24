@@ -18,7 +18,7 @@ namespace Luo.Core.Repository
         {
             bool res = false;
             string strValue = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.EncryptString("123456");
-            string strValue2 = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.DecryptString(strValue,false);
+            string strValue2 = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.DecryptString(strValue);
             Factory.GetDbContext((db) =>
             {
                 res= db.Insertable<Basic_User>(new

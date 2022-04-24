@@ -16,11 +16,7 @@ namespace Luo.Core.Common.SecurityEncryptDecrypt
         public static string EncryptString(string input)
         {
             string encryptStr= MD5Util.AddMD5Profix(Base64Util.Encrypt(MD5Util.AddMD5Profix(input)));
-            string xmlKeys, xmlPublicKey;
-            RSAUtil.RSA_Key(out xmlKeys, out xmlPublicKey);
-            var dddd2= RSAUtil.RSA_Encrypt(xmlPublicKey, encryptStr);
-            var  res22 = RSAUtil.RSA_Decrypt(xmlKeys, dddd2);
-            return RSAUtil.RSA_Encrypt(xmlPublicKey, encryptStr);
+            return AESUtil.AES_Encrypt(encryptStr); 
         }
         /// <summary>
         /// 解密加过密的字符串
@@ -28,14 +24,11 @@ namespace Luo.Core.Common.SecurityEncryptDecrypt
         /// <param name="input"></param>
         /// <param name="throwException">解密失败是否抛异常</param>
         /// <returns></returns>
-        public static string DecryptString(string input, bool throwException)
+        public static string DecryptString(string input)
         {
-            string res = "";
             try
             {
-                string xmlKeys, xmlPublicKey;
-                RSAUtil.RSA_Key(out xmlKeys, out xmlPublicKey);
-                res = RSAUtil.RSA_Decrypt(xmlKeys, input);
+                string res  = AESUtil.AES_Decrypt(input); ;
                 if (MD5Util.ValidateValue(res))
                 {
                     return MD5Util.RemoveMD5Profix(Base64Util.Decrypt(MD5Util.RemoveMD5Profix(res)));
@@ -45,16 +38,9 @@ namespace Luo.Core.Common.SecurityEncryptDecrypt
                     throw new Exception("字符串无法转换成功！");
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                if (throwException)
-                {
-                    throw;
-                }
-                else
-                {
-                    return "";
-                }
+                throw ex;
             }
         }
     }

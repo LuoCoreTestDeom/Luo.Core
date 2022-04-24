@@ -17,11 +17,13 @@ namespace Luo.Core.Common.SecurityEncryptDecrypt
         /// </summary>
         /// <param name="xmlKeys"></param>
         /// <param name="xmlPublicKey"></param>
-        public static void RSA_Key(out string xmlKeys, out string xmlPublicKey)
+        public static Tuple<string, string> RSA_Key()
         {
-            System.Security.Cryptography.RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
-            xmlKeys = rsa.ToXmlString(true);
-            xmlPublicKey = rsa.ToXmlString(false);
+            RSA rsa =  RSA.Create();
+            string strPrivateKey = rsa.ToXmlString(true);
+            string xmlPublicKey = rsa.ToXmlString(false);
+            Tuple<string, string> tupleKey = new Tuple<string, string>(strPrivateKey, xmlPublicKey);
+            return tupleKey;
         }
         #endregion RSA的密钥产生 
 
@@ -354,7 +356,7 @@ namespace Luo.Core.Common.SecurityEncryptDecrypt
                     formatter.SetHashAlgorithm("SHA1");
 
                     byte[] key = Convert.FromBase64String(encrytedString); //验证
-                    SHA1 sha =  SHA1.Create();
+                    SHA1 sha = SHA1.Create();
                     byte[] name = sha.ComputeHash(ASCIIEncoding.ASCII.GetBytes(originalString));
                     if (formatter.VerifySignature(name, key))
                     {
@@ -367,6 +369,6 @@ namespace Luo.Core.Common.SecurityEncryptDecrypt
             }
             return bPassed;
         }
-    
+
     }
 }
