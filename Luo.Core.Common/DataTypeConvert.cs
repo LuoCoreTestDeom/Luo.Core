@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Luo.Core.Common
 {
@@ -184,6 +187,72 @@ namespace Luo.Core.Common
         {
             TimeSpan ts = thisValue - new DateTime(1970, 1, 1, 0, 0, 0, 0);
             return Convert.ToInt64(ts.TotalSeconds).ToString();
+        }
+
+
+        /// <summary>
+        /// 将对象转换为byte数组
+        /// </summary>
+        /// <param name="obj">被转换对象</param>
+        /// <returns>转换后byte数组</returns>
+        public static byte[]? ObjToBytesArray<T>(this T obj) where T : new()
+        {
+            if (obj == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                using var memoryStream = new MemoryStream();
+                DataContractSerializer ser = new DataContractSerializer(typeof(T));
+                ser.WriteObject(memoryStream, obj);
+                var data = memoryStream.ToArray();
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return null;
+            }
+
+
+        }
+
+        /// <summary>
+        /// 将byte数组转换成对象
+        /// </summary>
+        /// <param name="buff">被转换byte数组</param>
+        /// <returns>转换完成后的对象</returns>
+        public static T? ByteArrayToObject<T>(this byte[] buff)
+        {
+            if (buff == null)
+            {
+                return default;
+            }
+
+            try
+            {
+                using var memoryStream = new MemoryStream(buff);
+                XmlDictionaryReader reader = XmlDictionaryReader.CreateTextReader(memoryStream, new XmlDictionaryReaderQuotas());
+                DataContractSerializer ser = new DataContractSerializer(typeof(T));
+                var obj = ser.ReadObject(reader, true);
+                if (obj == null)
+                {
+                    return default(T);
+                }
+                else
+                {
+                    return (T)obj;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Debug.WriteLine(ex);
+                return default;
+            }
+
         }
     }
 }

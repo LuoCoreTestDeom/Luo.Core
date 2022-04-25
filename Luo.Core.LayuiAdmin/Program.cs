@@ -7,13 +7,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddSingleton(new Appsettings(builder.Configuration));
+builder.Services.AddDistributedCacheSteup();
 builder.Services.AddSqlSugarSetup();
 builder.Services.AddBatchService("Luo.Core.Services");
 builder.Services.AddBatchService("Luo.Core.Repository");
+builder.Services.AddJwtService();
+builder.Services.AddAuthSetup();
 
 var app = builder.Build();
-
+builder.Services.InitEntityData();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -22,24 +26,16 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseRouting();
-
-app.UseAuthorization();
+app.UseRouting();//路由中间件
+app.UseAuthentication();//认证中间件
+app.UseAuthorization();//授权中间件
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Main}/{id?}");
 
-var initDatabase = builder.Services.BuildServiceProvider().GetService<ISqlSugarInitDatabase>();
-initDatabase.CreateDatabase();
-initDatabase.CreateDatabaseTables("Luo.Core.DatabaseEntity");
-
-
-string executDirPath = Directory.GetCurrentDirectory();
-executDirPath=executDirPath.Replace("Luo.Core.LayuiAdmin", "Luo.Core.DatabaseEntity");
-initDatabase.CreateDatabaseEntityFile(executDirPath, "Luo.Core.DatabaseEntity");
-//var ddd = builder.Services.BuildServiceProvider().GetService<Luo.Core.IRepository.IDatabaseInitRepository>();
 app.Run();
