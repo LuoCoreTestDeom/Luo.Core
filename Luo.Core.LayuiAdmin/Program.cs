@@ -13,11 +13,10 @@ builder.Services.AddDistributedCacheSteup();
 builder.Services.AddSqlSugarSetup();
 builder.Services.AddBatchService("Luo.Core.Services");
 builder.Services.AddBatchService("Luo.Core.Repository");
-builder.Services.AddJwtService();
-builder.Services.AddAuthSetup();
-
+builder.Services.AddAuthCookieSetup();
+//builder.Services.InitEntityData();
 var app = builder.Build();
-builder.Services.InitEntityData();
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
