@@ -1,16 +1,23 @@
 ﻿
+
+using Luo.Core.FiltersExtend.JsonWebToken;
+using Luo.Core.Utility.Authorization.JsonWebToken;
+using Luo.Core.Utility.Authorization.JsonWebToken.Secret;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Routing;
+using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
-namespace Luo.Core.Utility.Authorization.JsonWebToken.Handlers
+namespace Luo.Core.FiltersExtend.Handlers
 {
     /// <summary>
     /// 角色策略授权处理
@@ -26,17 +33,18 @@ namespace Luo.Core.Utility.Authorization.JsonWebToken.Handlers
         /// jwt 服务
         /// </summary>
         private readonly IJwtAppService _jwtApp;
-
+        private readonly IHttpContextAccessor _accessor;
 
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="schemes"></param>
         /// <param name="jwtApp"></param>
-        public PolicyHandler(IAuthenticationSchemeProvider schemes, IJwtAppService jwtApp)
+        public PolicyHandler(IAuthenticationSchemeProvider schemes, IJwtAppService jwtApp, IHttpContextAccessor accessor)
         {
             Schemes = schemes;
             _jwtApp = jwtApp;
+            _accessor = accessor;
         }
 
         /// <summary>
@@ -48,22 +56,46 @@ namespace Luo.Core.Utility.Authorization.JsonWebToken.Handlers
         /// <returns></returns>
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PolicyRequirement requirement)
         {
-
-
-            var httpContext = (context.Resource as AuthorizationFilterContext).HttpContext;
             if (requirement == null)
             {
                 context.Fail();
                 return;
             }
-            //获取授权方式  判断请求是否拥有凭据，即有没有登录
-            var defaultAuthenticate = await Schemes.GetDefaultAuthenticateSchemeAsync();
+            if (context.Resource is AuthorizationFilterContext mvcContext)
+            {
+                mvcContext.Result = new RedirectToActionResult("Login","User",null);
+            }
+
+            AuthorizationFilterContext filterContext = context.Resource as AuthorizationFilterContext;
+
+         
+            
+       
+
+        //获取授权方式  判断请求是否拥有凭据，即有没有登录
+        var defaultAuthenticate = await Schemes.GetDefaultAuthenticateSchemeAsync();
             if (defaultAuthenticate != null)
             {
-                //验证签发的用户信息
-                var result = await httpContext.AuthenticateAsync(defaultAuthenticate.Name);
-                if (result.Succeeded)
+                if (context.Resource is HttpContext httpContext)
                 {
+                    
+
+                    var endpoint = httpContext.GetEndpoint();
+
+                    RouteEndpoint aaaa = endpoint as RouteEndpoint;
+                    
+                    var actionDescriptor = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>();
+                    
+                      //验证签发的用户信息
+                      var result = await httpContext.AuthenticateAsync(defaultAuthenticate.Name);
+                    if (!result.Succeeded)
+                    {
+                        _accessor.HttpContext.Request.Path = new PathString("/User/Login");
+                        //httpContext.Request.Host = new HostString(httpContext.Request.Host.Host+ "/User/Login");
+
+
+                        return;
+                    }
                     //判断是否为已停用的 Token
                     if (!await _jwtApp.IsCurrentActiveTokenAsync())
                     {
@@ -115,10 +147,12 @@ namespace Luo.Core.Utility.Authorization.JsonWebToken.Handlers
                     }
                     return;
                 }
+               
             }
-            context.Fail();
+
         }
 
-      
+
+
     }
 }

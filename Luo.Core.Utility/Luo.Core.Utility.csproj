@@ -24,6 +24,7 @@
     <ProjectReference Include="..\Luo.Core.Common\Luo.Core.Common.csproj" />
     <ProjectReference Include="..\Luo.Core.DatabaseFactory\Luo.Core.DatabaseFactory.csproj" />
     <ProjectReference Include="..\Luo.Core.EnumModels\Luo.Core.EnumModels.csproj" />
+    <ProjectReference Include="..\Luo.Core.FiltersExtend\Luo.Core.FiltersExtend.csproj" />
   </ItemGroup>
 
   <ItemGroup>

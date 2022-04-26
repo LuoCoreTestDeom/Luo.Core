@@ -1,6 +1,9 @@
 ﻿using Luo.Core.LayuiAdmin.Models;
 using Luo.Core.Utility.Authorization.JsonWebToken;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -9,12 +12,13 @@ namespace Luo.Core.LayuiAdmin.Controllers
     [Authorize]
     public class HomeController : Controller
     {
+      
         private readonly ILogger<HomeController> _logger;
        
         public HomeController(ILogger<HomeController> logger)
         {
-            _logger = logger;
-            
+_logger = logger;
+           
         }
 
         public IActionResult Main()

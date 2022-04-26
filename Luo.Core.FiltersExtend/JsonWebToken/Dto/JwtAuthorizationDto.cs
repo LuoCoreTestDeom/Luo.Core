@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Luo.Core.Utility.Authorization.JsonWebToken.Dto
+namespace Luo.Core.FiltersExtend.JsonWebToken.Dto
 {
     public class JwtAuthorizationDto
     {

@@ -3,7 +3,7 @@ using Luo.Core.Utility.Authorization.JsonWebToken.Secret;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Luo.Core.Utility.Authorization.JsonWebToken.Handlers
+namespace Luo.Core.FiltersExtend.Handlers
 {
     /// <summary>
     /// 自定义策略要求
@@ -30,7 +30,7 @@ namespace Luo.Core.Utility.Authorization.JsonWebToken.Handlers
         /// <summary>
         /// 请求路径
         /// </summary>
-        public string LoginPath { get; set; } = "/Api/Login";
+        public string LoginPath { get; set; }
         /// <summary>
         /// 发行人
         /// </summary>
@@ -59,8 +59,9 @@ namespace Luo.Core.Utility.Authorization.JsonWebToken.Handlers
         /// <param name="audience">订阅人</param>
         /// <param name="signingCredentials">签名验证实体</param>
         /// <param name="expiration">过期时间</param>
-        public PolicyRequirement(string deniedAction, List<PermissionItem> permissions, string claimType, string issuer, string audience, SigningCredentials signingCredentials, TimeSpan expiration)
+        public PolicyRequirement(string loginPath, string deniedAction, List<PermissionItem> permissions, string claimType, string issuer, string audience, SigningCredentials signingCredentials, TimeSpan expiration)
         {
+            LoginPath = loginPath;
             ClaimType = claimType;
             DeniedAction = deniedAction;
             Permissions = permissions;

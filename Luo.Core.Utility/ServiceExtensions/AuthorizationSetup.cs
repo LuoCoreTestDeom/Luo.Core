@@ -1,15 +1,20 @@
 ﻿using Luo.Core.Common;
+using Luo.Core.FiltersExtend.Handlers;
+using Luo.Core.FiltersExtend.JsonWebToken;
 using Luo.Core.Utility.Authorization.JsonWebToken;
-using Luo.Core.Utility.Authorization.JsonWebToken.Handlers;
+using Luo.Core.Utility.Authorization.JsonWebToken.Secret;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,49 +22,82 @@ namespace Luo.Core.Utility.ServiceExtensions
 {
     public static class AuthorizationSetup
     {
-        public static void AddAuthCookieSetup(this IServiceCollection services) 
+        public static void AddAuthCookieSetup(this IServiceCollection services)
         {
             // 以下四种常见的授权方式。
 
             // 1、这个很简单，其他什么都不用做， 只需要在API层的controller上边，增加特性即可
             // [Authorize(Roles = "Admin,System")]
-
-
             // 2、这个和上边的异曲同工，好处就是不用在controller中，写多个 roles 。
             // 然后这么写 [Authorize(Policy = "Admin")]
             //services.AddAuthorization(options =>
             //{
-            //    options.AddPolicy("Client", policy => policy.RequireRole("Client").Build());
+            //    options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy => policy.Requirements.Add());
             //    options.AddPolicy("Admin", policy => policy.RequireRole("Admin").Build());
             //    options.AddPolicy("SystemOrAdmin", policy => policy.RequireRole("Admin", "System"));
             //    options.AddPolicy("A_S_O", policy => policy.RequireRole("Admin", "System", "Others"));
             //});
-
-            //设置登录界面和无权限界面
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-            {
-                options.LoginPath = "/Home/Index";
-                options.AccessDeniedPath = "/Home/Privacy";
-            });
-            //services.AddJwtService();
-           
-            //DI handler process function
-            services.AddSingleton<IAuthorizationHandler, PolicyHandler>();
+            services.AddAuthCookieService();
+            //services.AddAuthJwtService();
+            
         }
-
-        public static void AddAuthJwtService(this IServiceCollection services)
+        private static void AddAuthCookieService(this IServiceCollection services)
+        {
+            AuthenticationBuilder authBuilder = services.AddAuthentication(x =>
+            {
+                x.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                x.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            });
+            authBuilder.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+            {
+                options.LoginPath = Appsettings.GetValue("AuthCookieConfig", "LoginPath");
+                options.AccessDeniedPath = Appsettings.GetValue("AuthCookieConfig", "AccessDeniedPath");
+            });
+        }
+        private static void AddAuthJwtService(this IServiceCollection services)
         {
             services.AddTransient<IJwtAppService, JwtAppService>();
+            services.AddSingleton<IAuthorizationHandler, PolicyHandler>();
             var jwtToken = Appsettings.GetObject<TokenConfig>("JwtConfig");
-            // 开启Bearer认证
-            services.AddAuthentication(x =>
+
+            AuthenticationBuilder authBuilder = services.AddAuthentication(x =>
             {
                 x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x =>
+            });
+
+            #region 参数
+
+
+            var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtToken.SecurityKey)), SecurityAlgorithms.HmacSha256);
+
+            // 如果要数据库动态绑定，这里先留个空，后边处理器里动态赋值
+            var permission = new List<PermissionItem>();
+
+            // 角色与接口的权限要求参数
+            var permissionRequirement = new PolicyRequirement(
+                Appsettings.GetValue("AuthConfig", "LoginPath"),
+                 Appsettings.GetValue("AuthConfig", "AccessDeniedPath"),// 拒绝授权的跳转地址（目前无用）
+                permission,
+                ClaimTypes.NameIdentifier,//基于角色的授权
+                jwtToken.Issuer,//发行人
+                jwtToken.Audience,//听众
+                signingCredentials,//签名凭据
+                expiration: TimeSpan.FromSeconds(jwtToken.AccessExpiration)//接口的过期时间
+                );
+            #endregion 参数
+            services.AddAuthorization(options =>
             {
+                options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy => policy.Requirements.Add(permissionRequirement));
+            });
+
+            authBuilder.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, x =>
+            {
+                
+                x.Audience = "www.luocore.com";
+                x.Authority = "www.luocore.com";
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
                 //Token Validation Parameters
