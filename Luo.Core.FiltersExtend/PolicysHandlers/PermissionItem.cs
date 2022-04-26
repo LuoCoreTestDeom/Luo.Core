@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Luo.Core.Utility.Authorization.JsonWebToken.Secret
+namespace Luo.Core.FiltersExtend.PolicysHandlers
 {
     /// <summary>
     /// 用户或角色或其他凭据实体

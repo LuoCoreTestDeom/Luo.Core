@@ -66,10 +66,10 @@ layui.define(['setter', 'admin', 'view'], function (exports) {
     if (admin.screen() < 2) admin.sideFlexible();
 
     //将模块根路径设置为 controller 目录
-    layui.config({
-        base: setter.base + 'modules/',
-        version: "202101151212"
-    });
+    //layui.config({
+    //    base: setter.base + 'modules/',
+    //    version: "202101151212"
+    //});
  
  
     //扩展 lib 目录下的其它模块

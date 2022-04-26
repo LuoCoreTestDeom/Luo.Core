@@ -16,6 +16,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 });
 //clientId/clientIp解析器使用它。
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<Luo.Core.Common.CaptchaVerificationCode.ICaptcha, Luo.Core.Common.CaptchaVerificationCode.CaptchaImage>();
 builder.Services.AddSingleton(new Appsettings(builder.Configuration));
 builder.Services.AddDistributedCacheSteup();
 builder.Services.AddSqlSugarSetup();

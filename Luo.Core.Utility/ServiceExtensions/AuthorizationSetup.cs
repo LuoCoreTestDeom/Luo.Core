@@ -1,8 +1,7 @@
 ﻿using Luo.Core.Common;
-using Luo.Core.FiltersExtend.Handlers;
+using Luo.Core.FiltersExtend;
 using Luo.Core.FiltersExtend.JsonWebToken;
-using Luo.Core.Utility.Authorization.JsonWebToken;
-using Luo.Core.Utility.Authorization.JsonWebToken.Secret;
+using Luo.Core.FiltersExtend.PolicysHandlers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -15,6 +14,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,16 +30,30 @@ namespace Luo.Core.Utility.ServiceExtensions
             // [Authorize(Roles = "Admin,System")]
             // 2、这个和上边的异曲同工，好处就是不用在controller中，写多个 roles 。
             // 然后这么写 [Authorize(Policy = "Admin")]
-            //services.AddAuthorization(options =>
-            //{
-            //    options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy => policy.Requirements.Add());
-            //    options.AddPolicy("Admin", policy => policy.RequireRole("Admin").Build());
-            //    options.AddPolicy("SystemOrAdmin", policy => policy.RequireRole("Admin", "System"));
-            //    options.AddPolicy("A_S_O", policy => policy.RequireRole("Admin", "System", "Others"));
-            //});
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Client", policy => policy.RequireRole("Client").Build());
+                options.AddPolicy("Admin", policy => policy.RequireRole("Admin").Build());
+                options.AddPolicy("SystemOrAdmin", policy => policy.RequireRole("Admin", "System"));
+                options.AddPolicy("A_S_O", policy => policy.RequireRole("Admin", "System", "Others"));
+            });
+
+          
+            var permission = new List<PermissionItem>();
+            // 角色与接口的权限要求参数
+            var permissionRequirement = new PolicyRequirement(
+                permission,
+                ClaimTypes.Role,//基于角色的授权
+        new SigningCredentials(new SymmetricSecurityKey(Encoding.Default.GetBytes("LuoCore")), SecurityAlgorithms.HmacSha256)
+                );
+            // 3、自定义复杂的策略授权
+            services.AddAuthorization(options =>
+{
+                options.AddPolicy(GlobalVars.PermissionsName, policy => policy.Requirements.Add(permissionRequirement));
+            });
             services.AddAuthCookieService();
             //services.AddAuthJwtService();
-            
+            services.AddSingleton<IAuthorizationHandler, PolicyHandler>();
         }
         private static void AddAuthCookieService(this IServiceCollection services)
         {
@@ -58,7 +72,7 @@ namespace Luo.Core.Utility.ServiceExtensions
         private static void AddAuthJwtService(this IServiceCollection services)
         {
             services.AddTransient<IJwtAppService, JwtAppService>();
-            services.AddSingleton<IAuthorizationHandler, PolicyHandler>();
+           
             var jwtToken = Appsettings.GetObject<TokenConfig>("JwtConfig");
 
             AuthenticationBuilder authBuilder = services.AddAuthentication(x =>
@@ -77,16 +91,17 @@ namespace Luo.Core.Utility.ServiceExtensions
             var permission = new List<PermissionItem>();
 
             // 角色与接口的权限要求参数
-            var permissionRequirement = new PolicyRequirement(
-                Appsettings.GetValue("AuthConfig", "LoginPath"),
-                 Appsettings.GetValue("AuthConfig", "AccessDeniedPath"),// 拒绝授权的跳转地址（目前无用）
-                permission,
-                ClaimTypes.NameIdentifier,//基于角色的授权
-                jwtToken.Issuer,//发行人
-                jwtToken.Audience,//听众
-                signingCredentials,//签名凭据
-                expiration: TimeSpan.FromSeconds(jwtToken.AccessExpiration)//接口的过期时间
-                );
+            //var permissionRequirement = new PolicyRequirement(
+            //    Appsettings.GetValue("AuthConfig", "LoginPath"),
+            //     Appsettings.GetValue("AuthConfig", "AccessDeniedPath"),// 拒绝授权的跳转地址（目前无用）
+            //    permission,
+            //    ClaimTypes.NameIdentifier,//基于角色的授权
+            //    jwtToken.Issuer,//发行人
+            //    jwtToken.Audience,//听众
+            //    signingCredentials,//签名凭据
+            //    expiration: TimeSpan.FromSeconds(jwtToken.AccessExpiration)//接口的过期时间
+            //    );
+            PolicyRequirement permissionRequirement = new PolicyRequirement(null, ClaimTypes.NameIdentifier, signingCredentials);
             #endregion 参数
             services.AddAuthorization(options =>
             {

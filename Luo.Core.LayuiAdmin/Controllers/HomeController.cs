@@ -1,15 +1,16 @@
-﻿using Luo.Core.LayuiAdmin.Models;
-using Luo.Core.Utility.Authorization.JsonWebToken;
+﻿using Luo.Core.FiltersExtend;
+using Luo.Core.LayuiAdmin.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Polly;
 using System.Diagnostics;
 
 namespace Luo.Core.LayuiAdmin.Controllers
 {
-    [Authorize]
+    [Authorize(Policy= GlobalVars.PermissionsName)]
     public class HomeController : Controller
     {
       

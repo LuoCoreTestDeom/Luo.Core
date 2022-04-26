@@ -1,8 +1,4 @@
-﻿
-
-using Luo.Core.FiltersExtend.JsonWebToken;
-using Luo.Core.Utility.Authorization.JsonWebToken;
-using Luo.Core.Utility.Authorization.JsonWebToken.Secret;
+﻿using Luo.Core.FiltersExtend.JsonWebToken;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +13,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace Luo.Core.FiltersExtend.Handlers
+namespace Luo.Core.FiltersExtend.PolicysHandlers
 {
     /// <summary>
     /// 角色策略授权处理
@@ -29,10 +25,6 @@ namespace Luo.Core.FiltersExtend.Handlers
         /// 授权方式（cookie, bearer, oauth, openid）
         /// </summary>
         public IAuthenticationSchemeProvider Schemes { get; set; }
-        /// <summary>
-        /// jwt 服务
-        /// </summary>
-        private readonly IJwtAppService _jwtApp;
         private readonly IHttpContextAccessor _accessor;
 
         /// <summary>
@@ -40,10 +32,9 @@ namespace Luo.Core.FiltersExtend.Handlers
         /// </summary>
         /// <param name="schemes"></param>
         /// <param name="jwtApp"></param>
-        public PolicyHandler(IAuthenticationSchemeProvider schemes, IJwtAppService jwtApp, IHttpContextAccessor accessor)
+        public PolicyHandler(IAuthenticationSchemeProvider schemes,  IHttpContextAccessor accessor)
         {
             Schemes = schemes;
-            _jwtApp = jwtApp;
             _accessor = accessor;
         }
 
@@ -78,26 +69,12 @@ namespace Luo.Core.FiltersExtend.Handlers
             {
                 if (context.Resource is HttpContext httpContext)
                 {
-                    
-
                     var endpoint = httpContext.GetEndpoint();
-
-                    RouteEndpoint aaaa = endpoint as RouteEndpoint;
-                    
                     var actionDescriptor = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>();
                     
                       //验证签发的用户信息
                       var result = await httpContext.AuthenticateAsync(defaultAuthenticate.Name);
                     if (!result.Succeeded)
-                    {
-                        _accessor.HttpContext.Request.Path = new PathString("/User/Login");
-                        //httpContext.Request.Host = new HostString(httpContext.Request.Host.Host+ "/User/Login");
-
-
-                        return;
-                    }
-                    //判断是否为已停用的 Token
-                    if (!await _jwtApp.IsCurrentActiveTokenAsync())
                     {
                         context.Fail();
                         return;
@@ -117,7 +94,7 @@ namespace Luo.Core.FiltersExtend.Handlers
                         return;
                     }
                     //验证权限
-                    if (requirement.Audience != permissionsType.Value || !requirement.Permissions.Any(x => x.Role == userName.Value))
+                    if (requirement.ClaimType != permissionsType.Value || !requirement.Permissions.Any(x => x.Role == userName.Value))
                     {
                         context.Fail();
                         return;

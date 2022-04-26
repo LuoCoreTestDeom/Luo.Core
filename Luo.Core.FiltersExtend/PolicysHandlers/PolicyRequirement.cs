@@ -1,9 +1,8 @@
 ﻿
-using Luo.Core.Utility.Authorization.JsonWebToken.Secret;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Luo.Core.FiltersExtend.Handlers
+namespace Luo.Core.FiltersExtend.PolicysHandlers
 {
     /// <summary>
     /// 自定义策略要求
@@ -18,31 +17,13 @@ namespace Luo.Core.FiltersExtend.Handlers
         /// 同理，一个网站的认证发行中，也有很多权限详情(这里是Role和URL的关系)
         /// </summary>
         public List<PermissionItem> Permissions { get; set; }
-        /// <summary>
-        /// 无权限action
-        /// </summary>
-        public string DeniedAction { get; set; }
+     
 
         /// <summary>
         /// 认证授权类型
         /// </summary>
         public string ClaimType { get; set; }
-        /// <summary>
-        /// 请求路径
-        /// </summary>
-        public string LoginPath { get; set; }
-        /// <summary>
-        /// 发行人
-        /// </summary>
-        public string Issuer { get; set; }
-        /// <summary>
-        /// 订阅人
-        /// </summary>
-        public string Audience { get; set; }
-        /// <summary>
-        /// 过期时间
-        /// </summary>
-        public TimeSpan Expiration { get; set; }
+       
         /// <summary>
         /// 签名验证
         /// </summary>
@@ -59,15 +40,10 @@ namespace Luo.Core.FiltersExtend.Handlers
         /// <param name="audience">订阅人</param>
         /// <param name="signingCredentials">签名验证实体</param>
         /// <param name="expiration">过期时间</param>
-        public PolicyRequirement(string loginPath, string deniedAction, List<PermissionItem> permissions, string claimType, string issuer, string audience, SigningCredentials signingCredentials, TimeSpan expiration)
+        public PolicyRequirement( List<PermissionItem> permissions, string claimType, SigningCredentials signingCredentials)
         {
-            LoginPath = loginPath;
             ClaimType = claimType;
-            DeniedAction = deniedAction;
             Permissions = permissions;
-            Issuer = issuer;
-            Audience = audience;
-            Expiration = expiration;
             SigningCredentials = signingCredentials;
         }
     }

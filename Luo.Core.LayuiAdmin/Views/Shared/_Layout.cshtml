@@ -9,6 +9,7 @@
     <link href="~/lib/layui/css/layui.css" rel="stylesheet" media="all" asp-append-version="true" />
     <link href="~/css/admin.css" rel="stylesheet" media="all" asp-append-version="true" />
     <link rel="stylesheet" href="~/Luo.Core.LayuiAdmin.styles.css" asp-append-version="true" />
+    @await RenderSectionAsync("StyleCss", required: false)
 </head>
 <body>
 
@@ -25,8 +26,8 @@
     <script src="~/layui_extend/view.js" asp-append-version="true"></script>
     <script src="~/layui_extend/admin.js" asp-append-version="true"></script>
     <script src="~/layui_extend/index.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
-    <script src="~/js/site.js" asp-append-version="true"></script>
 
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

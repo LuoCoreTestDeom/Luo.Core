@@ -1,7 +1,7 @@
 ﻿
 using Luo.Core.Common;
 using Luo.Core.FiltersExtend.JsonWebToken.Dto;
-using Luo.Core.Utility.Authorization.JsonWebToken.Secret;
+using Luo.Core.FiltersExtend.PolicysHandlers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;

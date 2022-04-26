@@ -1,5 +1,5 @@
 ﻿using Luo.Core.FiltersExtend.JsonWebToken.Dto;
-using Luo.Core.Utility.Authorization.JsonWebToken.Secret;
+using Luo.Core.FiltersExtend.PolicysHandlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
