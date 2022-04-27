@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Luo.Core.DatabaseEntity\Luo.Core.DatabaseEntity.csproj" />
+    <ProjectReference Include="..\Luo.Core.Models\Luo.Core.Models.csproj" />
     <ProjectReference Include="..\Luo.Core.Repository\Luo.Core.Repository.csproj" />
     <ProjectReference Include="..\Luo.Core.Services\Luo.Core.Services.csproj" />
     <ProjectReference Include="..\Luo.Core.Utility\Luo.Core.Utility.csproj" />

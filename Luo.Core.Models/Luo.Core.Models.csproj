@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\Request\" />
-    <Folder Include="Dtos\Request\" />
-    <Folder Include="Dtos\Response\" />
-    <Folder Include="ViewModels\Request\" />
     <Folder Include="ViewModels\Response\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Luo.Core.DatabaseEntity\Luo.Core.DatabaseEntity.csproj" />
   </ItemGroup>
 
 </Project>

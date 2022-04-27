@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Luo.Core.Common
 {
-    public static class CookieSessionHelper
+    public static class CookieHelper
     {
         public static void SetCookies(this HttpContext httpContext, string key, string value, int minutes = 30)
         {
@@ -38,19 +38,6 @@ namespace Luo.Core.Common
                 return res;
             }
         }
-
-        public static T GetSession<T>(this HttpContext context)
-        {
-            string sUser = context.Session.GetString("CurrentUser");
-            if (sUser == null)
-            {
-                return default(T);
-            }
-            else
-            {
-                T res = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(sUser);
-                return res;
-            }
-        }
+     
     }
 }

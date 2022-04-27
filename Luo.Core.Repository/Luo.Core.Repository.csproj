@@ -11,6 +11,7 @@
     <ProjectReference Include="..\Luo.Core.DatabaseEntity\Luo.Core.DatabaseEntity.csproj" />
     <ProjectReference Include="..\Luo.Core.DatabaseFactory\Luo.Core.DatabaseFactory.csproj" />
     <ProjectReference Include="..\Luo.Core.IRepository\Luo.Core.IRepository.csproj" />
+    <ProjectReference Include="..\Luo.Core.Models\Luo.Core.Models.csproj" />
   </ItemGroup>
 
 </Project>

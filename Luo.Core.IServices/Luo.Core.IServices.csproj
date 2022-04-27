@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Luo.Core.Models\Luo.Core.Models.csproj" />
+  </ItemGroup>
+
 </Project>

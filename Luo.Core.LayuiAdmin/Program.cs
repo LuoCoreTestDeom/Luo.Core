@@ -23,7 +23,7 @@ builder.Services.AddSqlSugarSetup();
 builder.Services.AddBatchService("Luo.Core.Services");
 builder.Services.AddBatchService("Luo.Core.Repository");
 builder.Services.AddAuthCookieSetup();
-
+builder.Services.AddAutoMapperSetup();
 //builder.Services.InitEntityData();
 var app = builder.Build();
 

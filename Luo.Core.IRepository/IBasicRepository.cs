@@ -1,4 +1,6 @@
 ﻿using Luo.Core.DatabaseFactory;
+using Luo.Core.Models.Dtos.Request;
+using Luo.Core.Models.Dtos.Response;
 
 namespace Luo.Core.IRepository
 {
@@ -9,5 +11,10 @@ namespace Luo.Core.IRepository
         /// </summary>
         /// <returns></returns>
         public bool AddInitUser();
+        /// <summary>
+        /// 查询用户信息
+        /// </summary>
+        /// <returns></returns>
+        public List<UserInfoDto> QueryUserInfo(QueryUserInfoDto req);
     }
 }

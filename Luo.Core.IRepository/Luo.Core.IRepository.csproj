@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Luo.Core.DatabaseFactory\Luo.Core.DatabaseFactory.csproj" />
+    <ProjectReference Include="..\Luo.Core.Models\Luo.Core.Models.csproj" />
   </ItemGroup>
 
 </Project>

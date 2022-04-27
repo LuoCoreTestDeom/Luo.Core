@@ -52,7 +52,7 @@ namespace Luo.Core.Utility.ServiceExtensions
                 options.AddPolicy(GlobalVars.PermissionsName, policy => policy.Requirements.Add(permissionRequirement));
             });
             services.AddAuthCookieService();
-            //services.AddAuthJwtService();
+            //注入权限处理器
             services.AddSingleton<IAuthorizationHandler, PolicyHandler>();
         }
         private static void AddAuthCookieService(this IServiceCollection services)
