@@ -6,10 +6,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -32,7 +35,7 @@ namespace Luo.Core.FiltersExtend.PolicysHandlers
         /// </summary>
         /// <param name="schemes"></param>
         /// <param name="jwtApp"></param>
-        public PolicyHandler(IAuthenticationSchemeProvider schemes,  IHttpContextAccessor accessor)
+        public PolicyHandler(IAuthenticationSchemeProvider schemes, IHttpContextAccessor accessor)
         {
             Schemes = schemes;
             _accessor = accessor;
@@ -54,79 +57,72 @@ namespace Luo.Core.FiltersExtend.PolicysHandlers
             }
             if (context.Resource is AuthorizationFilterContext mvcContext)
             {
-                mvcContext.Result = new RedirectToActionResult("Login","User",null);
+                mvcContext.Result = new RedirectToActionResult("Login", "User", null);
             }
 
             AuthorizationFilterContext filterContext = context.Resource as AuthorizationFilterContext;
 
-         
-            
-       
 
-        //获取授权方式  判断请求是否拥有凭据，即有没有登录
-        var defaultAuthenticate = await Schemes.GetDefaultAuthenticateSchemeAsync();
+
+
+
+            //获取授权方式  判断请求是否拥有凭据，即有没有登录
+            var defaultAuthenticate = await Schemes.GetDefaultAuthenticateSchemeAsync();
             if (defaultAuthenticate != null)
             {
                 if (context.Resource is HttpContext httpContext)
                 {
                     var endpoint = httpContext.GetEndpoint();
                     var actionDescriptor = endpoint.Metadata.GetMetadata<ControllerActionDescriptor>();
-                    
-                      //验证签发的用户信息
-                      var result = await httpContext.AuthenticateAsync(defaultAuthenticate.Name);
+
+                    //验证签发的用户信息
+                    var result = await httpContext.AuthenticateAsync(defaultAuthenticate.Name);
                     if (!result.Succeeded)
                     {
-                        context.Fail();
+                        AuthFail(context,httpContext);
                         return;
                     }
                     // 获取当前用户的角色信息
                     var currentPermissions = httpContext.User.Claims;
                     if (currentPermissions == null)
                     {
-                        context.Fail();
+                        AuthFail(context, httpContext);
                         return;
                     }
-                    var permissionsType = currentPermissions.SingleOrDefault(s => s.Type == JwtRegisteredClaimNames.Aud);
-                    var userName = currentPermissions.SingleOrDefault(s => s.Type == requirement.ClaimType);
-                    if (permissionsType == null || userName == null)
+                    #region 验证安全码
+                    var claimSecurityKey = currentPermissions.SingleOrDefault(s => s.Type == "SecurityKey");
+                    var singingSecurityKey = requirement.SigningCredentials.Key as SymmetricSecurityKey;
+                    if (claimSecurityKey == null || singingSecurityKey == null)
                     {
-                        context.Fail();
+                        AuthFail(context, httpContext);
                         return;
                     }
-                    //验证权限
-                    if (requirement.ClaimType != permissionsType.Value || !requirement.Permissions.Any(x => x.Role == userName.Value))
+                    if (string.IsNullOrWhiteSpace(claimSecurityKey.Value))
                     {
-                        context.Fail();
+                        AuthFail(context, httpContext);
                         return;
                     }
-                    httpContext.User = result.Principal;
-
-                    //判断角色与 Url 是否对应
-                    //
-                    var url = httpContext.Request.Path.Value.ToLower();
-                    var role = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault().Value;
-
-
-                    if (1 == null)
+                    var strClaimSecurityKey = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.DecryptString(claimSecurityKey.Value);
+                    var strSingingSecurityKey = Encoding.Default.GetString(singingSecurityKey.Key);
+                    if (!strClaimSecurityKey.StartsWith(strSingingSecurityKey))
                     {
-                        context.Fail();
+                        AuthFail(context, httpContext);
                         return;
                     }
-
-                    //判断是否过期
-                    if (DateTime.Parse(httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration).Value) >= DateTime.UtcNow)
-                    {
-                        context.Succeed(requirement);
-                    }
-                    else
-                    {
-                        context.Fail();
-                    }
+                    #endregion 验证安全码
+                    context.Succeed(requirement);
                     return;
                 }
-               
+
             }
 
+        }
+
+        private void AuthFail(AuthorizationHandlerContext context, HttpContext hc) 
+        {
+            context.Fail();
+            string js = " <script language=javascript>top.location.href='{0}'</script> ";
+            hc.Response.WriteAsync(string.Format(js, "/User/Login"));
         }
 
 

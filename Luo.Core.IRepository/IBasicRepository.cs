@@ -15,6 +15,6 @@ namespace Luo.Core.IRepository
         /// 查询用户信息
         /// </summary>
         /// <returns></returns>
-        public List<UserInfoDto> QueryUserInfo(QueryUserInfoDto req);
+        public UserInfoDto QueryUserInfo(QueryUserInfoDto req);
     }
 }

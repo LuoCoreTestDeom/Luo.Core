@@ -18,6 +18,8 @@ namespace Luo.Core.Utility.ServiceExtensions
             string executDirPath = Directory.GetCurrentDirectory();
             executDirPath = executDirPath.Replace("Luo.Core.LayuiAdmin", "Luo.Core.DatabaseEntity");
             initDatabase.CreateDatabaseEntityFile(executDirPath, "Luo.Core.DatabaseEntity");
+            var initTable = services.BuildServiceProvider().GetService<IServices.IUserService>();
+            initTable.InitUser();
         }
     }
 }

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Luo.Core.Common\Luo.Core.Common.csproj" />
     <ProjectReference Include="..\Luo.Core.DatabaseFactory\Luo.Core.DatabaseFactory.csproj" />
     <ProjectReference Include="..\Luo.Core.IRepository\Luo.Core.IRepository.csproj" />
     <ProjectReference Include="..\Luo.Core.IServices\Luo.Core.IServices.csproj" />

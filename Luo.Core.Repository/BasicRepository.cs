@@ -22,6 +22,7 @@ namespace Luo.Core.Repository
             string strValue = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.EncryptString("123456");
             Factory.GetDbContext((db) =>
             {
+                db.Deleteable<Basic_User>().Where(x => x.UserName == "Luo").ExecuteCommand();
                 res = db.Insertable<Basic_User>(new
                 {
                     UserName = "Luo",
@@ -37,23 +38,42 @@ namespace Luo.Core.Repository
         /// 查询用户信息
         /// </summary>
         /// <returns></returns>
-        public List<UserInfoDto> QueryUserInfo(QueryUserInfoDto req)
+        public UserInfoDto QueryUserInfo(QueryUserInfoDto req)
         {
-            List<UserInfoDto> res = new List<UserInfoDto>();
+            UserInfoDto res = new UserInfoDto();
          
             Factory.GetDbContext((db) =>
             {
-                res = db.Queryable<Basic_User>()
+                var result = db.Queryable<Basic_User>()
                 .LeftJoin<Basic_UserRole>((a, b) => b.UserId == a.Id)
                 .LeftJoin<Basic_Role>((a, b, c) => c.Id == b.RoleId)
                 .Where((a, b, c) => a.UserName == req.UserName && a.Password == req.Password)
-                .Select((a, b, c) => new UserInfoDto
+                .Select((a, b, c) => new 
                 {
                     UserId = a.Id,
                     UserName = a.UserName,
                     RoleId = c.Id,
                     RoleName = c.RoleName
                 }).ToList();
+                if (result != null&& result.Count>0)
+                {
+                    res.UserId = result[0].UserId;
+                    res.UserName=result[0].UserName;
+                    res.RoleInfos = new List<RoleInfoDto>();
+                    foreach (var item in result)
+                    {
+                        if (item.RoleId > 0) 
+                        {
+                            res.RoleInfos.Add(new RoleInfoDto()
+                            {
+                                RoleId = item.RoleId,
+                                RoleName = item.RoleName
+                            });
+                        }
+                        
+                    }
+                }
+               
             });
             return res;
         }

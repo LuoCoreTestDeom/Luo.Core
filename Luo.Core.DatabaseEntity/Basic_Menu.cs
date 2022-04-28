@@ -1,25 +1,41 @@
-﻿using SqlSugar;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Security.Principal;
 using System.Text;
-using System.Threading.Tasks;
+using SqlSugar;
 
 namespace Luo.Core.DatabaseEntity
 {
-    public class Basic_Menu
+    ///<summary>
+    ///
+    ///</summary>
+    [SugarTable("Basic_Menu")]
+    public partial class Basic_Menu
     {
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:False
-        /// </summary>           
-        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
-        public int Id { get; set; }
-        public string MenuName { get; set; }
+           public Basic_Menu(){
 
-        public string MenuAddress { get; set; }
+
+           }
+           /// <summary>
+           /// Desc:
+           /// Default:
+           /// Nullable:False
+           /// </summary>           
+           [SugarColumn(IsPrimaryKey=true,IsIdentity=true)]
+           public int Id {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:
+           /// Nullable:False
+           /// </summary>           
+           public string MenuName {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:
+           /// Nullable:False
+           /// </summary>           
+           public string MenuAddress {get;set;}
 
     }
 }

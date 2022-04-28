@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Luo.Core.Models.Dtos.Response
 {
-    public class UserInfoDto
+    public class RoleInfoDto
     {
-        public int UserId { get; set; }
-        public string UserName { get; set; }
-        public List<RoleInfoDto> RoleInfos { get; set; }
-
+        public int RoleId { get; set; }
+        public string RoleName { get; set; }
     }
 }

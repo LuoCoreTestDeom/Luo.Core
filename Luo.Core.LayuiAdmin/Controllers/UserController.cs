@@ -2,6 +2,7 @@
 using AutoMapper;
 using Luo.Core.Common;
 using Luo.Core.Common.CaptchaVerificationCode;
+using Luo.Core.FiltersExtend;
 using Luo.Core.Models.Dtos.Request;
 using Luo.Core.Models.ViewModels;
 using Luo.Core.Models.ViewModels.Request;
@@ -9,6 +10,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetTaste;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+
+using Luo.Core.Common.SecurityEncryptDecrypt;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Luo.Core.LayuiAdmin.Controllers
 {
@@ -27,6 +33,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+           
             return View();
         }
         [HttpGet]
@@ -38,7 +45,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
             return File(result.CaptchaMemoryStream.ToArray(), "image/png");
         }
         [HttpPost]
-        public IActionResult Login(UserLoginViewModel req, string callback)
+        public async Task<IActionResult> LoginAsync(UserLoginViewModel req, string callback)
         {
             CommonViewModel res = new CommonViewModel();
             if (string.IsNullOrWhiteSpace(req.UserName))
@@ -53,11 +60,38 @@ namespace Luo.Core.LayuiAdmin.Controllers
             else
             {
                 var captchaCode = this.HttpContext.GetSessionString("UserLoginCaptcha");
-                if (captchaCode.Equals(req.Vercode))
+                if (captchaCode.ToUpper().Equals(req.Vercode.ToUpper()))
                 {
                     var result = _userService.UserLogin(req);
-                    res = _mapper.Map<CommonViewModel>(result);
-                    
+                    if (result.Status && result.ResultData != null&& result.ResultData.UserId>0)
+                    {
+                        var claimIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+                        claimIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{result.ResultData.UserName}"));
+                        claimIdentity.AddClaim(new Claim("Userid", result.ResultData.UserId.ObjToString()));
+                        claimIdentity.AddClaim(new Claim("SecurityKey", CommonUtil.EncryptString("LuoCore" + DateTime.Now.DateToTimeStamp())));
+                  
+                        if (result.ResultData.RoleInfos != null) 
+                        {
+                            foreach (var item in result.ResultData.RoleInfos)
+                            {
+                                claimIdentity.AddClaim(new Claim(ClaimTypes.Role, item.RoleName));
+                                claimIdentity.AddClaim(new Claim("RoleId", item.RoleId.ObjToString()));
+                            }
+                        }
+                        
+                        
+                       await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity),new AuthenticationProperties() 
+                       {
+                           ExpiresUtc = DateTime.UtcNow.AddMinutes(Appsettings.GetValue("AuthCookieConfig", "ExpireTimeMinutes").ObjToMoney()),
+                       });
+                        res.Status = true;
+                    }
+                    else
+                    {
+                        res.Msg = "用户名或密码错误！";
+                        res.Status = false;
+                    }
+
                 }
                 else
                 {

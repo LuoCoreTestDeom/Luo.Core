@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Luo.Core.Common.SecurityEncryptDecrypt;
 using Luo.Core.DatabaseFactory;
 using Luo.Core.IRepository;
 using Luo.Core.IServices;
@@ -19,21 +20,22 @@ namespace Luo.Core.Services
             _mapper = mapper;
         }
 
-        public bool InitUser() 
+        public bool InitUser()
         {
-           return _basicRepository.AddInitUser();
+            return _basicRepository.AddInitUser();
         }
         /// <summary>
         /// 用户登录
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel<List<UserInfoDto>> UserLogin(UserLoginViewModel req)
+        public CommonViewModel<UserInfoDto> UserLogin(UserLoginViewModel req)
         {
-            CommonViewModel<List<UserInfoDto>> res = new CommonViewModel<List<UserInfoDto>>();
-            var reqData= _mapper.Map<QueryUserInfoDto>(req);
+            CommonViewModel<UserInfoDto> res = new CommonViewModel<UserInfoDto>();
+            var reqData = _mapper.Map<QueryUserInfoDto>(req);
             try
             {
+                reqData.Password = CommonUtil.EncryptString(reqData.Password);
                 res.ResultData = _basicRepository.QueryUserInfo(reqData);
                 res.Status = true;
             }
@@ -41,7 +43,7 @@ namespace Luo.Core.Services
             {
                 res.Msg = ex.Message;
             }
-           
+
             return res;
         }
     }

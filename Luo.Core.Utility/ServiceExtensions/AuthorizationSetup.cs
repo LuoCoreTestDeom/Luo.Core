@@ -1,4 +1,5 @@
-﻿using Luo.Core.Common;
+﻿using Google.Protobuf.WellKnownTypes;
+using Luo.Core.Common;
 using Luo.Core.FiltersExtend;
 using Luo.Core.FiltersExtend.JsonWebToken;
 using Luo.Core.FiltersExtend.PolicysHandlers;
@@ -46,6 +47,7 @@ namespace Luo.Core.Utility.ServiceExtensions
                 ClaimTypes.Role,//基于角色的授权
         new SigningCredentials(new SymmetricSecurityKey(Encoding.Default.GetBytes("LuoCore")), SecurityAlgorithms.HmacSha256)
                 );
+            //"SecurityKey", CommonUtil.EncryptString("LuoCore" +ClaimTypes.Role)
             // 3、自定义复杂的策略授权
             services.AddAuthorization(options =>
 {
@@ -62,6 +64,9 @@ namespace Luo.Core.Utility.ServiceExtensions
                 x.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 x.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                x.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                x.DefaultForbidScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                x.DefaultSignOutScheme = CookieAuthenticationDefaults.AuthenticationScheme;
             });
             authBuilder.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {

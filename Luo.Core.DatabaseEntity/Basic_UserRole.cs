@@ -1,25 +1,41 @@
-﻿using SqlSugar;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Security.Principal;
 using System.Text;
-using System.Threading.Tasks;
+using SqlSugar;
 
 namespace Luo.Core.DatabaseEntity
 {
-    public class Basic_UserRole
+    ///<summary>
+    ///
+    ///</summary>
+    [SugarTable("Basic_UserRole")]
+    public partial class Basic_UserRole
     {
-        /// <summary>
-        /// Desc:
-        /// Default:
-        /// Nullable:False
-        /// </summary>           
-        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
-        public int Id { get; set; }
+           public Basic_UserRole(){
 
-        public int UserId { get; set; }
 
-        public int RoleId { get; set; }
+           }
+           /// <summary>
+           /// Desc:
+           /// Default:
+           /// Nullable:False
+           /// </summary>           
+           [SugarColumn(IsPrimaryKey=true,IsIdentity=true)]
+           public int Id {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:
+           /// Nullable:False
+           /// </summary>           
+           public int UserId {get;set;}
+
+           /// <summary>
+           /// Desc:
+           /// Default:
+           /// Nullable:False
+           /// </summary>           
+           public int RoleId {get;set;}
+
     }
 }
