@@ -60,7 +60,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
             else
             {
                 var captchaCode = this.HttpContext.GetSessionString("UserLoginCaptcha");
-                if (captchaCode.ToUpper().Equals(req.Vercode.ToUpper()))
+                if (!string.IsNullOrWhiteSpace(captchaCode)&& captchaCode.ToUpper().Equals(req.Vercode.ToUpper()))
                 {
                     var result = _userService.UserLogin(req);
                     if (result.Status && result.ResultData != null&& result.ResultData.UserId>0)

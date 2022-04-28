@@ -28,10 +28,13 @@ namespace Luo.Core.Common.SecurityEncryptDecrypt
         {
             try
             {
-                string res  = AESUtil.AES_Decrypt(input); ;
+                string res  = AESUtil.AES_Decrypt(input); 
                 if (MD5Util.ValidateValue(res))
                 {
-                    return MD5Util.RemoveMD5Profix(Base64Util.Decrypt(MD5Util.RemoveMD5Profix(res)));
+                    var md5profix = MD5Util.RemoveMD5Profix(res);
+                    var base64Dec = Base64Util.Decrypt(md5profix);
+                    return MD5Util.RemoveMD5Profix(base64Dec);
+
                 }
                 else
                 {

@@ -3,6 +3,22 @@
 }
 @using Luo.Core.Common
 @section StyleCss {
+
+    @*<script type="text/javascript">
+        function myfun()
+        {
+            debugger;
+            var filename = top.location.href;
+            if (filename.indexOf("/User/Login")==-1)
+            {
+                alert(filename);
+                top.location.href = '/User/Login'
+            }
+           
+        } 　　 /*用window.onload调用myfun()*/
+        window.onload = myfun; //不要括号
+    </script>*@
+
     <link href="~/css/login.css" rel="stylesheet" asp-append-version="true" />
 }
 <div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
@@ -56,6 +72,7 @@
 
 @section Scripts {
     <script>
+        
         layui.use(['index', 'user'], function () {
             var $ = layui.$
                 , setter = layui.setter
@@ -101,7 +118,7 @@
                             layer.msg(res.Msg, { shift: 6 });
                             RefreshCerCode();
                         }
-                            
+
                     }, error: function (e) {
                         console.log(e);
                         layer.msg('请求异常，请重试', { shift: 6 });
@@ -109,11 +126,33 @@
 
                 });
             });
-            //实际使用时记得删除该代码
-            layer.msg('为了方便演示，用户名密码可随意输入', {
-                offset: '15px'
-                , icon: 1
+
+
+
+
+
+
+            $("#LAY-user-login-username").keydown(function (e) {
+                var eve = e ? e : window.event;
+                if (eve.keyCode === 13) {
+                    $("#LAY-user-login-password").focus();
+                    $("#LAY-user-login-password").select();
+                }
             });
+            $("#LAY-user-login-password").keydown(function (e) {
+                var eve = e ? e : window.event;
+                if (eve.keyCode === 13) {
+                    $("#LAY-user-login-vercode").focus();
+                    $("#LAY-user-login-vercode").select();
+                }
+            });
+            $("#LAY-user-login-vercode").keydown(function (e) {
+                var eve = e ? e : window.event;
+                if (eve.keyCode === 13) {
+                    $("button[lay-filter='LAY-user-login-submit']").trigger("click");
+                }
+            });
+
         });
     </script>
 }

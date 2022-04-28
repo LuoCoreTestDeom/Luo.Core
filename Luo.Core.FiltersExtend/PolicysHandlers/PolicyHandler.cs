@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
@@ -79,14 +80,14 @@ namespace Luo.Core.FiltersExtend.PolicysHandlers
                     var result = await httpContext.AuthenticateAsync(defaultAuthenticate.Name);
                     if (!result.Succeeded)
                     {
-                        AuthFail(context,httpContext);
+                        AuthFail(context);
                         return;
                     }
                     // 获取当前用户的角色信息
                     var currentPermissions = httpContext.User.Claims;
                     if (currentPermissions == null)
                     {
-                        AuthFail(context, httpContext);
+                        AuthFail(context);
                         return;
                     }
                     #region 验证安全码
@@ -94,21 +95,31 @@ namespace Luo.Core.FiltersExtend.PolicysHandlers
                     var singingSecurityKey = requirement.SigningCredentials.Key as SymmetricSecurityKey;
                     if (claimSecurityKey == null || singingSecurityKey == null)
                     {
-                        AuthFail(context, httpContext);
+                        AuthFail(context);
                         return;
                     }
                     if (string.IsNullOrWhiteSpace(claimSecurityKey.Value))
                     {
-                        AuthFail(context, httpContext);
+                        AuthFail(context);
                         return;
                     }
-                    var strClaimSecurityKey = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.DecryptString(claimSecurityKey.Value);
-                    var strSingingSecurityKey = Encoding.Default.GetString(singingSecurityKey.Key);
-                    if (!strClaimSecurityKey.StartsWith(strSingingSecurityKey))
+                    try
                     {
-                        AuthFail(context, httpContext);
+                        var strClaimSecurityKey = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.DecryptString(claimSecurityKey.Value);
+                        var strSingingSecurityKey = Encoding.Default.GetString(singingSecurityKey.Key);
+                        if (!strClaimSecurityKey.StartsWith(strSingingSecurityKey))
+                        {
+                            AuthFail(context);
+                            return;
+                        }
+                    }
+                    catch
+                    {
+                        AuthFail(context);
                         return;
                     }
+
+
                     #endregion 验证安全码
                     context.Succeed(requirement);
                     return;
@@ -118,11 +129,30 @@ namespace Luo.Core.FiltersExtend.PolicysHandlers
 
         }
 
-        private void AuthFail(AuthorizationHandlerContext context, HttpContext hc) 
+        private async void AuthFail(AuthorizationHandlerContext context)
         {
+            
+            if (context.Resource is HttpContext httpContext)
+            {
+                
+                StringBuilder jsBuilder = new StringBuilder();
+                jsBuilder.Append("<script language='javascript' type='text/javascript'> ");
+                jsBuilder.Append(" var filename = top.location.href; ");
+                jsBuilder.Append(" if(filename.indexOf('/User/Login')==-1) { ");
+                jsBuilder.Append(" top.location.href ='/User/Login'  } ");
+                jsBuilder.Append("</script>");
+             
+
+
+                string js = " <script language=javascript>alert('123');top.location.href='{0}'</script> ";
+                string js2 = " <script language=javascript>alert('123');location.replace('{0}')</script> ";
+
+               await httpContext.Response.WriteAsync(jsBuilder.ToString());
+                
+               
+            }
             context.Fail();
-            string js = " <script language=javascript>top.location.href='{0}'</script> ";
-            hc.Response.WriteAsync(string.Format(js, "/User/Login"));
+
         }
 
 
