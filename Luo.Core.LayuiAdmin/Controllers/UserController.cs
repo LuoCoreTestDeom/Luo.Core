@@ -56,14 +56,15 @@ namespace Luo.Core.LayuiAdmin.Controllers
                 if (captchaCode.Equals(req.Vercode))
                 {
                     var result = _userService.UserLogin(req);
-                   res= _mapper.Map<CommonViewModel>(result);
+                    res = _mapper.Map<CommonViewModel>(result);
+                    
                 }
-                else 
+                else
                 {
                     res.Msg = "验证码错误！";
                 }
             }
-           
+
 
             return Content(String.Format("{0}({1});", callback, res.ObjToJson()), "application/javascript");//返回jsonp
         }

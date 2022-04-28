@@ -32,7 +32,16 @@ namespace Luo.Core.Services
         {
             CommonViewModel<List<UserInfoDto>> res = new CommonViewModel<List<UserInfoDto>>();
             var reqData= _mapper.Map<QueryUserInfoDto>(req);
-            res.ResultData = _basicRepository.QueryUserInfo(reqData);
+            try
+            {
+                res.ResultData = _basicRepository.QueryUserInfo(reqData);
+                res.Status = true;
+            }
+            catch (Exception ex)
+            {
+                res.Msg = ex.Message;
+            }
+           
             return res;
         }
     }

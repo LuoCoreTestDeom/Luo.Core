@@ -7,6 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Luo.Core.Common;
+using Luo.Core.Models.Dtos.Request;
+using Luo.Core.Models.Dtos.Response;
+using Org.BouncyCastle.Ocsp;
+using Luo.Core.Models.ViewModels.Request;
+using System.ComponentModel;
+using System.Reflection;
+using System.Xml.Linq;
+using static Luo.Core.Utility.AutoMapper.CustomProfile;
 
 namespace Luo.Core.Utility.AutoMapper
 {
@@ -20,8 +28,13 @@ namespace Luo.Core.Utility.AutoMapper
             CreateMap<CommonDto, CommonViewModel>();
 
 
-            CreateMap<CommonViewModel<object>, CommonViewModel>()
-            .ForMember(dest => dest.ResultData, opt => opt.MapFrom(x=>x.ResultData.ObjToJson(false)));
+            
+
+            CreateMap<UserLoginViewModel, QueryUserInfoDto>();
+
+         
+            CreateMap(typeof(CommonViewModel<>), typeof(CommonViewModel))
+                .ConvertUsing(typeof(TypeTypeConverter<>));
 
 
             //CreateMap<SysUserInfoDto, SysUserInfo>()
@@ -43,5 +56,23 @@ namespace Luo.Core.Utility.AutoMapper
             //    .ForMember(a => a.IsDeleted, o => o.MapFrom(d => d.tdIsDelete))
             //    .ForMember(a => a.RoleNames, o => o.MapFrom(d => d.RoleNames));
         }
+
+        public class TypeTypeConverter<T> : ITypeConverter<CommonViewModel<T>, CommonViewModel>
+        {
+
+
+            public CommonViewModel Convert(CommonViewModel<T> source, CommonViewModel destination, ResolutionContext context)
+            {
+                return new CommonViewModel()
+                {
+                    Status = source.Status,
+                    StatusCode = source.StatusCode,
+                    Msg = source.Msg,
+                    ResultData = source.ResultData.ObjToJson()
+                };
+            }
+        }
+
+
     }
 }
