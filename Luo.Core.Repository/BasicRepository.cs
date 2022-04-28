@@ -40,12 +40,13 @@ namespace Luo.Core.Repository
         public List<UserInfoDto> QueryUserInfo(QueryUserInfoDto req)
         {
             List<UserInfoDto> res = new List<UserInfoDto>();
-            string strValue = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.EncryptString("123456");
+         
             Factory.GetDbContext((db) =>
             {
-                res = db.Queryable<Basic_User>().Where(a => a.UserName == req.UserName && a.Password == req.Password)
+                res = db.Queryable<Basic_User>()
                 .LeftJoin<Basic_UserRole>((a, b) => b.UserId == a.Id)
                 .LeftJoin<Basic_Role>((a, b, c) => c.Id == b.RoleId)
+                .Where((a, b, c) => a.UserName == req.UserName && a.Password == req.Password)
                 .Select((a, b, c) => new UserInfoDto
                 {
                     UserId = a.Id,
