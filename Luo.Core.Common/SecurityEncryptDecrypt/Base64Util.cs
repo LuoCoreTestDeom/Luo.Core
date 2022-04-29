@@ -195,6 +195,7 @@ namespace Luo.Core.Common.SecurityEncryptDecrypt
             }
             else
             {
+                InitDict();
                 List<byte> list = new List<byte>();
                 char[] tmp = source.ToCharArray();
                 int remain = tmp.Length % 4;

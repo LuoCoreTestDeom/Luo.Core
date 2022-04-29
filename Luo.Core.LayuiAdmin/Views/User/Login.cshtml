@@ -4,20 +4,18 @@
 @using Luo.Core.Common
 @section StyleCss {
 
-    @*<script type="text/javascript">
-        function myfun()
+    <script type="text/javascript">
+        function locationfun()
         {
-            debugger;
             var filename = top.location.href;
             if (filename.indexOf("/User/Login")==-1)
             {
                 alert(filename);
                 top.location.href = '/User/Login'
             }
-           
-        } 　　 /*用window.onload调用myfun()*/
-        window.onload = myfun; //不要括号
-    </script>*@
+        } 
+        window.onload = locationfun; //不要括号
+    </script>
 
     <link href="~/css/login.css" rel="stylesheet" asp-append-version="true" />
 }
@@ -111,7 +109,7 @@
                                 , icon: 1
                                 , time: 1000
                             }, function () {
-                                location.href = '/'; //后台主页
+                                top.window.location.href = '/'; //后台主页
                             });
                         }
                         else {

@@ -19,12 +19,10 @@ namespace Luo.Core.LayuiAdmin.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
 _logger = logger;
-           
         }
 
         public IActionResult Main()
         {
-           
             return View();
         }
 

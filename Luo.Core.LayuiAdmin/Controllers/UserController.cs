@@ -60,17 +60,17 @@ namespace Luo.Core.LayuiAdmin.Controllers
             else
             {
                 var captchaCode = this.HttpContext.GetSessionString("UserLoginCaptcha");
-                if (!string.IsNullOrWhiteSpace(captchaCode)&& captchaCode.ToUpper().Equals(req.Vercode.ToUpper()))
+                if (!string.IsNullOrWhiteSpace(captchaCode) && captchaCode.ToUpper().Equals(req.Vercode.ToUpper()))
                 {
                     var result = _userService.UserLogin(req);
-                    if (result.Status && result.ResultData != null&& result.ResultData.UserId>0)
+                    if (result.Status && result.ResultData != null && result.ResultData.UserId > 0)
                     {
                         var claimIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                         claimIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{result.ResultData.UserName}"));
                         claimIdentity.AddClaim(new Claim("Userid", result.ResultData.UserId.ObjToString()));
                         claimIdentity.AddClaim(new Claim("SecurityKey", CommonUtil.EncryptString("LuoCore" + DateTime.Now.DateToTimeStamp())));
-                  
-                        if (result.ResultData.RoleInfos != null) 
+
+                        if (result.ResultData.RoleInfos != null)
                         {
                             foreach (var item in result.ResultData.RoleInfos)
                             {
@@ -78,12 +78,12 @@ namespace Luo.Core.LayuiAdmin.Controllers
                                 claimIdentity.AddClaim(new Claim("RoleId", item.RoleId.ObjToString()));
                             }
                         }
-                        
-                        
-                       await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity),new AuthenticationProperties() 
-                       {
-                           ExpiresUtc = DateTime.UtcNow.AddMinutes(Appsettings.GetValue("AuthCookieConfig", "ExpireTimeMinutes").ObjToMoney()),
-                       });
+
+
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity), new AuthenticationProperties()
+                        {
+                            ExpiresUtc = DateTime.UtcNow.AddMinutes(Appsettings.GetValue("AuthCookieConfig", "ExpireTimeMinutes").ObjToMoney()),
+                        });
                         res.Status = true;
                     }
                     else

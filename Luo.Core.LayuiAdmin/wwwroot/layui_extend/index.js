@@ -27,7 +27,6 @@ layui.define(['setter', 'admin', 'view'], function (exports) {
             text = text || '新标签页';
 
             if (setter.pageTabs) {
-                debugger;
                 //如果未在选项卡中匹配到，则追加选项卡
                 if (!matchTo) {
                     //延迟修复 Firefox 空白问题
@@ -48,7 +47,6 @@ layui.define(['setter', 'admin', 'view'], function (exports) {
 
                 }
             } else {
-                debugger;
                 var iframe = admin.tabsBody(admin.tabsPage.index).find('.layadmin-iframe');
                 iframe[0].contentWindow.location.href = url;
             }

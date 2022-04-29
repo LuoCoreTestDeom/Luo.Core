@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 //clientId/clientIp解析器使用它。
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddCorsSetup();
 builder.Services.AddSingleton<Luo.Core.Common.CaptchaVerificationCode.ICaptcha, Luo.Core.Common.CaptchaVerificationCode.CaptchaImage>();
 builder.Services.AddSingleton(new Appsettings(builder.Configuration));
 builder.Services.AddSession(options => 
@@ -35,7 +36,7 @@ builder.Services.AddAuthCookieSetup();
 builder.Services.AddAutoMapperSetup();
 //builder.Services.InitEntityData();
 var app = builder.Build();
-
+app.UseCors();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
