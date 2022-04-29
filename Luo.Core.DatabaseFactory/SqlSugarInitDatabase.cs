@@ -1,4 +1,5 @@
-﻿using SqlSugar;
+﻿using AutoMapper;
+using SqlSugar;
 using System.Reflection;
 
 namespace Luo.Core.DatabaseFactory
@@ -16,11 +17,17 @@ namespace Luo.Core.DatabaseFactory
     {
         private readonly List<ConnectionConfig> configList;
 
-        public SqlSugarInitDatabase(ISqlSugarFactory factory) : base(factory)
+        public SqlSugarInitDatabase(ISqlSugarFactory factory, IMapper mapper) : base(factory, mapper)
         {
             var factoryList = factory as SqlSugarFactoryList;
             configList = factoryList.GetAllConnectionCOnfig();
         }
+
+        //public SqlSugarInitDatabase(ISqlSugarFactory factory) : base(factory)
+        //{
+        //    var factoryList = factory as SqlSugarFactoryList;
+        //    configList = factoryList.GetAllConnectionCOnfig();
+        //}
 
         public void CreateDatabaseEntityFile(string strPath, string classNameSpace)
         {

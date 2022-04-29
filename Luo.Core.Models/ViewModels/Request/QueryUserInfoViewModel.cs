@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Luo.Core.Models.Dtos.Request
+namespace Luo.Core.Models.ViewModels.Request
 {
-    public class QueryUserInfoDto
+    public class QueryUserInfoViewModel
     {
         public string UserName { get; set; }
         public bool TimeEnable { get; set; }

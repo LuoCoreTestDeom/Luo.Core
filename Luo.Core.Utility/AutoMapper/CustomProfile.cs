@@ -15,6 +15,8 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Xml.Linq;
 using static Luo.Core.Utility.AutoMapper.CustomProfile;
+using Luo.Core.Models.ViewModels.Response;
+using Luo.Core.DatabaseEntity;
 
 namespace Luo.Core.Utility.AutoMapper
 {
@@ -30,11 +32,26 @@ namespace Luo.Core.Utility.AutoMapper
 
             
 
-            CreateMap<UserLoginViewModel, QueryUserInfoDto>();
+            CreateMap<LoginUserViewModel, LoginUserDto>();
+            CreateMap<QueryUserInfoViewModel, QueryUserInfoDto>();
 
-         
+
+
+
             CreateMap(typeof(CommonViewModel<>), typeof(CommonViewModel))
                 .ConvertUsing(typeof(TypeTypeConverter<>));
+
+            CreateMap(typeof(CommonDto<>), typeof(CommonViewModel<>))
+                .ConvertUsing(typeof(CommonTypeConverter<>));
+
+            CreateMap<UserInfoDto, UserInfoViewModel>()
+                .ForMember(dest => dest.UserId, opts => opts.MapFrom(x => x.UserId))
+                .ForMember(dest => dest.UserName, opts => opts.MapFrom(x => x.UserName))
+                .ForMember(dest => dest.CreateName, opts => opts.MapFrom(x => x.CreateName))
+                .ForMember(dest => dest.CreateTime, opts => opts.MapFrom(x => x.CreateTime));
+            CreateMap<UserInfoListDto, UserInfoListViewModel>()
+                .ForMember(dest => dest.UserInfoList, opts => opts.MapFrom(x => x.UserInfoList))
+                .ForMember(dest => dest.TotalCount, opts => opts.MapFrom(x => x.TotalCount));
 
 
             //CreateMap<SysUserInfoDto, SysUserInfo>()
@@ -59,8 +76,6 @@ namespace Luo.Core.Utility.AutoMapper
 
         public class TypeTypeConverter<T> : ITypeConverter<CommonViewModel<T>, CommonViewModel>
         {
-
-
             public CommonViewModel Convert(CommonViewModel<T> source, CommonViewModel destination, ResolutionContext context)
             {
                 return new CommonViewModel()
@@ -71,6 +86,23 @@ namespace Luo.Core.Utility.AutoMapper
                     ResultData = source.ResultData.ObjToJson()
                 };
             }
+        }
+
+        public class CommonTypeConverter<T> : ITypeConverter<CommonDto<T>, CommonViewModel<T>>
+        {
+            public CommonViewModel<T> Convert(CommonDto<T> source, CommonViewModel<T> destination, ResolutionContext context)
+            {
+                 destination= new CommonViewModel<T>()
+                {
+                    Status = source.Status,
+                    StatusCode = source.StatusCode,
+                    Msg = source.Message,
+                    ResultData = source.ResultData
+                };
+                return destination;
+            }
+
+          
         }
 
 

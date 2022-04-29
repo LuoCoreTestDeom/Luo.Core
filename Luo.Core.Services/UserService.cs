@@ -13,12 +13,13 @@ namespace Luo.Core.Services
     public class UserService : SqlSugarRepositoryList<ISqlSugarFactory, IBasicRepository>, IServices.IUserService
     {
         IBasicRepository _basicRepository;
-        public readonly IMapper _mapper;
-        public UserService(ISqlSugarFactory factory, IBasicRepository basicRepository, IMapper mapper) : base(factory)
+
+        public UserService(ISqlSugarFactory factory, IMapper mapper, IBasicRepository basicRepository) : base(factory, mapper)
         {
             _basicRepository = basicRepository;
-            _mapper = mapper;
         }
+
+    
 
         public bool InitUser()
         {
@@ -29,10 +30,10 @@ namespace Luo.Core.Services
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel<UserInfoDto> UserLogin(UserLoginViewModel req)
+        public CommonViewModel<LoginUserInfoDto> UserLogin(LoginUserViewModel req)
         {
-            CommonViewModel<UserInfoDto> res = new CommonViewModel<UserInfoDto>();
-            var reqData = _mapper.Map<QueryUserInfoDto>(req);
+            CommonViewModel<LoginUserInfoDto> res = new CommonViewModel<LoginUserInfoDto>();
+            var reqData = _Mapper.Map<LoginUserDto>(req);
             try
             {
                 reqData.Password = CommonUtil.EncryptString(reqData.Password);
@@ -46,5 +47,7 @@ namespace Luo.Core.Services
 
             return res;
         }
+
+    
     }
 }

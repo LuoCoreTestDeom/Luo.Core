@@ -45,7 +45,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
             return File(result.CaptchaMemoryStream.ToArray(), "image/png");
         }
         [HttpPost]
-        public async Task<IActionResult> LoginAsync(UserLoginViewModel req, string callback)
+        public async Task<IActionResult> LoginAsync(LoginUserViewModel req, string callback)
         {
             CommonViewModel res = new CommonViewModel();
             if (string.IsNullOrWhiteSpace(req.UserName))

@@ -1,22 +1,23 @@
-﻿using Luo.Core.Models.ViewModels.Response;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Luo.Core.Models.Dtos.Response
+namespace Luo.Core.Models.ViewModels.Response
 {
-    public class UserInfoDto
+    public class UserInfoViewModel
     {
         public int UserId { get; set; }
         public string UserName { get; set; }
         public DateTime CreateTime { get; set; }
         public string CreateName { get; set; }
     }
-    public class UserInfoListDto
+
+    public class UserInfoListViewModel
     {
-        public List<UserInfoDto> UserInfoList { get; set; }
+        public List<UserInfoViewModel> UserInfoList { get; set; }
         public int TotalCount { get; set; }
     }
+
 }

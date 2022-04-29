@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\Response\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Luo.Core.DatabaseEntity\Luo.Core.DatabaseEntity.csproj" />
   </ItemGroup>
 

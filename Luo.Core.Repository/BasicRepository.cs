@@ -1,17 +1,19 @@
 ﻿using Luo.Core.DatabaseEntity;
 using Luo.Core.DatabaseFactory;
 using Luo.Core.IRepository;
+using Luo.Core.Models.Dtos;
 using Luo.Core.Models.Dtos.Request;
 using Luo.Core.Models.Dtos.Response;
-using Org.BouncyCastle.Asn1.X509;
+using SqlSugar;
 
 namespace Luo.Core.Repository
 {
     public class BasicRepository : SqlSugarRepositoryList<ISqlSugarFactory>, IBasicRepository
     {
-        public BasicRepository(ISqlSugarFactory factory) : base(factory)
+        public BasicRepository(ISqlSugarFactory factory, AutoMapper.IMapper mapper) : base(factory, mapper)
         {
         }
+
         /// <summary>
         /// 添加初始化数据
         /// </summary>
@@ -38,31 +40,31 @@ namespace Luo.Core.Repository
         /// 查询用户信息
         /// </summary>
         /// <returns></returns>
-        public UserInfoDto QueryUserInfo(QueryUserInfoDto req)
+        public LoginUserInfoDto QueryUserInfo(LoginUserDto req)
         {
-            UserInfoDto res = new UserInfoDto();
-         
+            LoginUserInfoDto res = new LoginUserInfoDto();
+
             Factory.GetDbContext((db) =>
             {
                 var result = db.Queryable<Basic_User>()
                 .LeftJoin<Basic_UserRole>((a, b) => b.UserId == a.Id)
                 .LeftJoin<Basic_Role>((a, b, c) => c.Id == b.RoleId)
                 .Where((a, b, c) => a.UserName == req.UserName && a.Password == req.Password)
-                .Select((a, b, c) => new 
+                .Select((a, b, c) => new
                 {
                     UserId = a.Id,
                     UserName = a.UserName,
                     RoleId = c.Id,
                     RoleName = c.RoleName
                 }).ToList();
-                if (result != null&& result.Count>0)
+                if (result != null && result.Count > 0)
                 {
                     res.UserId = result[0].UserId;
-                    res.UserName=result[0].UserName;
+                    res.UserName = result[0].UserName;
                     res.RoleInfos = new List<RoleInfoDto>();
                     foreach (var item in result)
                     {
-                        if (item.RoleId > 0) 
+                        if (item.RoleId > 0)
                         {
                             res.RoleInfos.Add(new RoleInfoDto()
                             {
@@ -70,10 +72,36 @@ namespace Luo.Core.Repository
                                 RoleName = item.RoleName
                             });
                         }
-                        
+
                     }
                 }
-               
+
+            });
+            return res;
+        }
+        /// <summary>
+        /// 查询所有用户信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public UserInfoListDto QueryUserInfoList(QueryUserInfoDto req)
+        {
+            UserInfoListDto res = new UserInfoListDto();
+            Factory.GetDbContext((db) =>
+            {
+                int totleCount = 0;
+                res.UserInfoList = db.Queryable<Basic_User>()
+                .WhereIF(!string.IsNullOrWhiteSpace(req.UserName), x => x.UserName.Contains(req.UserName))
+                 .WhereIF(req.TimeEnable, x => SqlFunc.Between(x.CreateTime, req.TimeStart, req.TimeEnd))
+                 .Select(x => new UserInfoDto
+                 {
+                     UserId = x.Id,
+                     UserName = x.UserName,
+                     CreateTime = x.CreateTime,
+                     CreateName = x.CreateName
+                 })
+                .ToPageList(req.PageIndex, req.PageCount, ref totleCount);
+                res.TotalCount = totleCount;
             });
             return res;
         }

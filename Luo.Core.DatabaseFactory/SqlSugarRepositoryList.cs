@@ -1,4 +1,6 @@
-﻿using SqlSugar;
+﻿using AutoMapper;
+using Org.BouncyCastle.Crypto;
+using SqlSugar;
 
 namespace Luo.Core.DatabaseFactory;
 
@@ -8,16 +10,26 @@ public class SqlSugarRepositoryList<TFactory, TIRepository> : ISqlSugarRepositor
     where TIRepository : ISqlSugarRepository
 {
     protected readonly TFactory Factory;
+    protected readonly IMapper _Mapper;
     protected SqlSugarClient DbContext => this.Factory.GetDbContext();
 
-    public SqlSugarRepositoryList(TFactory factory) => Factory = factory;
+    public SqlSugarRepositoryList(TFactory factory, IMapper mapper) 
+    {
+        Factory = factory;
+        _Mapper = mapper;
+    }
 }
 
 public class SqlSugarRepositoryList<TFactory> : ISqlSugarRepository
     where TFactory : ISqlSugarFactory
 {
     protected readonly TFactory Factory;
+    protected readonly IMapper _Mapper;
     protected SqlSugarClient DbContext => this.Factory.GetDbContext();
 
-    public SqlSugarRepositoryList(TFactory factory) => Factory = factory;
+    public SqlSugarRepositoryList(TFactory factory, IMapper mapper)
+    {
+        Factory = factory;
+        _Mapper = mapper;
+    }
 }

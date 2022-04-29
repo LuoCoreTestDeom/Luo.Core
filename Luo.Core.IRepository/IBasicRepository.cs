@@ -1,4 +1,5 @@
-﻿using Luo.Core.DatabaseFactory;
+﻿using Luo.Core.DatabaseEntity;
+using Luo.Core.DatabaseFactory;
 using Luo.Core.Models.Dtos.Request;
 using Luo.Core.Models.Dtos.Response;
 
@@ -15,6 +16,12 @@ namespace Luo.Core.IRepository
         /// 查询用户信息
         /// </summary>
         /// <returns></returns>
-        public UserInfoDto QueryUserInfo(QueryUserInfoDto req);
+        public LoginUserInfoDto QueryUserInfo(LoginUserDto req);
+        /// <summary>
+        /// 查询所有用户信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public UserInfoListDto QueryUserInfoList(QueryUserInfoDto req);
     }
 }
