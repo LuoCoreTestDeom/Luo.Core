@@ -125,9 +125,6 @@
                 debugger;
                 var msgDialogIndex = layer.msg('查询中，请稍等.....', { icon: 16, time: false, shade: 0 });
 
-                
-
-
                 $.ajax({
                     type: 'Post',
                     url: '/SystemConfig/QueryUserList',
@@ -172,7 +169,6 @@
                         layer.close(msgDialogIndex);
                         console.log(e);
                         layer.msg('请求异常，请重试', { shift: 6 });
-                        
                     }
                 });
                
