@@ -24,6 +24,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
         public IActionResult QueryUserList(Luo.Core.Models.ViewModels.Request.QueryUserInfoViewModel req) 
         {
             var res = _systemConfigService.QueryUserInfoList(req);
+            
             return  Json(res);
         }
     }
