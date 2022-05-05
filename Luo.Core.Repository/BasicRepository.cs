@@ -32,6 +32,16 @@ namespace Luo.Core.Repository
                     CreateTime = DateTime.Now,
                     CreateName = "LuoCore"
                 }).ExecuteCommand() > 0;
+                //for (int i = 0; i < 9999; i++)
+                //{
+                //    db.Insertable<Basic_User>(new
+                //    {
+                //        UserName = "Luo" + i,
+                //        Password = strValue,
+                //        CreateTime = DateTime.Now,
+                //        CreateName = "LuoCore" + i
+                //    }).ExecuteCommand();
+                //}
             });
             return res;
         }
@@ -92,7 +102,7 @@ namespace Luo.Core.Repository
                 int totleCount = 0;
                 res.UserInfoList = db.Queryable<Basic_User>()
                 .WhereIF(!string.IsNullOrWhiteSpace(req.UserName), x => x.UserName.Contains(req.UserName))
-                 .WhereIF(req.TimeEnable, x => SqlFunc.Between(x.CreateTime, req.TimeStart, req.TimeEnd))
+                .WhereIF(req.TimeEnable, x => SqlFunc.Between(x.CreateTime, req.TimeStart, req.TimeEnd))
                  .Select(x => new UserInfoDto
                  {
                      UserId = x.Id,
@@ -101,6 +111,7 @@ namespace Luo.Core.Repository
                      CreateName = x.CreateName
                  })
                 .ToPageList(req.PageIndex, req.PageCount, ref totleCount);
+             
                 res.TotalCount = totleCount;
             });
             return res;

@@ -27,5 +27,10 @@ namespace Luo.Core.LayuiAdmin.Controllers
             
             return  Json(res);
         }
+
+        public IActionResult AddUser() 
+        {
+            return View();
+        }
     }
 }

@@ -32,7 +32,7 @@ namespace Luo.Core.Services
             {
                 var userList = _basicRepository.QueryUserInfoList(_Mapper.Map<Models.Dtos.Request.QueryUserInfoDto>(req));
                 res.Status = true;
-                res.StatusCode = "200";
+                res.StatusCode = 200;
                 res.ResultData = _Mapper.Map<UserInfoListViewModel>(userList);
             }
             catch (Exception ex)

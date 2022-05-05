@@ -9,7 +9,7 @@ namespace Luo.Core.Models.ViewModels
     public class CommonViewModel
     {
         public bool Status { get; set; }
-        public string StatusCode { get; set; }
+        public int StatusCode { get; set; }
         public string Msg { get; set; }
         public string ResultData { get; set; }
     }
@@ -17,7 +17,7 @@ namespace Luo.Core.Models.ViewModels
     public class CommonViewModel<T>
     {
         public bool Status { get; set; }
-        public string StatusCode { get; set; }
+        public int StatusCode { get; set; }
         public string Msg { get; set; }
         public T ResultData { get; set; }
     }
