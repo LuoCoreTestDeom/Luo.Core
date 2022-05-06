@@ -70,7 +70,10 @@ namespace Luo.Core.Utility.ServiceExtensions
             });
             authBuilder.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
             {
+                //登入地址
                 options.LoginPath = Appsettings.GetValue("AuthCookieConfig", "LoginPath");
+                //登出地址
+                options.LogoutPath = Appsettings.GetValue("AuthCookieConfig", "LoginPath");
                 options.AccessDeniedPath = Appsettings.GetValue("AuthCookieConfig", "AccessDeniedPath");
             });
         }

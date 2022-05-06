@@ -12,6 +12,6 @@ namespace Luo.Core.IServices
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel<LoginUserInfoDto> UserLogin(LoginUserViewModel req);
+        public CommonViewModel<LoginUserInfoDto> UserLogin(LoginUserForm req);
     }
 }

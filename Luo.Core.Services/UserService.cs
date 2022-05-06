@@ -30,7 +30,7 @@ namespace Luo.Core.Services
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel<LoginUserInfoDto> UserLogin(LoginUserViewModel req)
+        public CommonViewModel<LoginUserInfoDto> UserLogin(LoginUserForm req)
         {
             CommonViewModel<LoginUserInfoDto> res = new CommonViewModel<LoginUserInfoDto>();
             var reqData = _Mapper.Map<LoginUserDto>(req);

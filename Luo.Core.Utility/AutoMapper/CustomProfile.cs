@@ -33,8 +33,8 @@ namespace Luo.Core.Utility.AutoMapper
 
             
 
-            CreateMap<LoginUserViewModel, LoginUserDto>();
-            CreateMap<QueryUserInfoViewModel, QueryUserInfoDto>();
+            CreateMap<LoginUserForm, LoginUserDto>();
+            CreateMap<UserInfoQuery, QueryUserInfoDto>();
 
 
 
@@ -45,20 +45,20 @@ namespace Luo.Core.Utility.AutoMapper
             CreateMap(typeof(CommonDto<>), typeof(CommonViewModel<>))
                 .ConvertUsing(typeof(CommonTypeConverter<>));
 
-            CreateMap<UserInfoDto, UserInfoViewModel>()
+            CreateMap<UserInfoDto, UserInfoResult>()
                 .ForMember(dest => dest.UserId, opts => opts.MapFrom(x => x.UserId))
                 .ForMember(dest => dest.UserName, opts => opts.MapFrom(x => x.UserName))
                 .ForMember(dest => dest.CreateName, opts => opts.MapFrom(x => x.CreateName))
                 .ForMember(dest => dest.CreateTime, opts => opts.MapFrom(x => x.CreateTime));
-            CreateMap<UserInfoListDto, UserInfoListViewModel>()
-                .ForMember(dest => dest.UserInfoList, opts => opts.MapFrom(x => x.UserInfoList))
+            CreateMap<UserInfoListDto, UserInfoList>()
+                .ForMember(dest => dest.UserInfos, opts => opts.MapFrom(x => x.UserInfoList))
                 .ForMember(dest => dest.TotalCount, opts => opts.MapFrom(x => x.TotalCount));
 
          
-            CreateMap<UserInfoForm,AddUserDto>()
+            CreateMap<UserInfoInput,AddUserDto>()
                 .ForMember(dest => dest.Sex, opts => opts.MapFrom(x => x.UserSex));
 
-            CreateMap<UserInfoForm, UpdateUserDto>()
+            CreateMap<UserInfoInput, UpdateUserDto>()
                .ForMember(dest => dest.Sex, opts => opts.MapFrom(x => x.UserSex));
 
             //CreateMap<SysUserInfoDto, SysUserInfo>()

@@ -29,7 +29,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
         /// <param name="req"></param>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult QueryUserList(Luo.Core.Models.ViewModels.Request.QueryUserInfoViewModel req)
+        public IActionResult QueryUserList(UserInfoQuery req)
         {
             var res = _systemConfigService.QueryUserInfoList(req);
 
@@ -45,7 +45,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult AddUser(UserInfoForm req)
+        public IActionResult AddUser(UserInfoInput req)
         {
             var res = _systemConfigService.AddUser(req);
             return Json(res);
@@ -55,7 +55,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public IActionResult UpdateUser(UserInfoForm req)
+        public IActionResult UpdateUser(UserInfoInput req)
         {
             var res = _systemConfigService.UpdateUser(req);
             return Json(res);

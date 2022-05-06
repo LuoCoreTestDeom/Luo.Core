@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Luo.Core.Models.Dtos.Request;
+using Luo.Core.Models.Dtos.Response;
 
 namespace Luo.Core.IServices
 {
@@ -16,25 +18,27 @@ namespace Luo.Core.IServices
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel<UserInfoListViewModel> QueryUserInfoList(QueryUserInfoViewModel req);
+        public CommonViewModel<UserInfoList> QueryUserInfoList(UserInfoQuery req);
+
         /// <summary>
         /// 添加用户信息
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel AddUser(UserInfoForm req);
+        public CommonViewModel AddUser(UserInfoInput req);
+
         /// <summary>
         /// 修改用户信息
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel UpdateUser(UserInfoForm req);
+        public CommonViewModel UpdateUser(UserInfoInput req);
+
         /// <summary>
         /// 删除用户信息
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
         public CommonViewModel DeleteUserByUserIds(List<int> userIds);
-
     }
 }

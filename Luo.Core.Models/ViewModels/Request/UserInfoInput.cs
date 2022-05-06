@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Luo.Core.Models.ViewModels.Request
 {
-    public class UserInfoForm
+    public class UserInfoInput
     {
         public int UserId { get; set; }
         public string UserName { get; set; }

@@ -31,15 +31,15 @@ namespace Luo.Core.Services
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel<UserInfoListViewModel> QueryUserInfoList(QueryUserInfoViewModel req)
+        public CommonViewModel<UserInfoList> QueryUserInfoList(UserInfoQuery req)
         {
-            CommonViewModel<UserInfoListViewModel> res = new CommonViewModel<UserInfoListViewModel>();
+            CommonViewModel<UserInfoList> res = new CommonViewModel<UserInfoList>();
             try
             {
                 var userList = _basicRepository.QueryUserInfoList(_Mapper.Map<Models.Dtos.Request.QueryUserInfoDto>(req));
                 res.Status = true;
                 res.StatusCode = 200;
-                res.ResultData = _Mapper.Map<UserInfoListViewModel>(userList);
+                res.ResultData = _Mapper.Map<UserInfoList>(userList);
             }
             catch (Exception ex)
             {
@@ -53,7 +53,7 @@ namespace Luo.Core.Services
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel AddUser(UserInfoForm req)
+        public CommonViewModel AddUser(UserInfoInput req)
         {
              
             CommonViewModel res = new CommonViewModel();
@@ -83,7 +83,7 @@ namespace Luo.Core.Services
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel UpdateUser(UserInfoForm req)
+        public CommonViewModel UpdateUser(UserInfoInput req)
         {
 
             CommonViewModel res = new CommonViewModel();

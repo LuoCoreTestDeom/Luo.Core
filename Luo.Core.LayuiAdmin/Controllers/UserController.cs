@@ -45,7 +45,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
             return File(result.CaptchaMemoryStream.ToArray(), "image/png");
         }
         [HttpPost]
-        public async Task<IActionResult> LoginAsync(LoginUserViewModel req, string callback)
+        public async Task<IActionResult> LoginAsync(LoginUserForm req, string callback)
         {
             CommonViewModel res = new CommonViewModel();
             if (string.IsNullOrWhiteSpace(req.UserName))
@@ -99,9 +99,19 @@ namespace Luo.Core.LayuiAdmin.Controllers
                     res.Msg = "验证码错误！";
                 }
             }
-
-
+           
             return Content(String.Format("{0}({1});", callback, res.ObjToJson()), "application/javascript");//返回jsonp
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> LoginOut()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Main", "Home");
+            return Ok();
+        }
     }
+
+    
 }

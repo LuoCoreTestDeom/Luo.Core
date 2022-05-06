@@ -134,15 +134,15 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
 
     //查询
     function getDataTable() {
-       
+
         var msgDialogIndex = layer.msg('查询中，请稍等.....', { shade: 0.3,icon: 16 });
-        tempDataTable.reload("currentTable", {
+        tempDataTable.reload({
             parseData: function (res) { //res 即为原始返回的数据
                 return {
                     "code": res.statusCode, //解析接口状态
                     "msg": res.msg, //解析提示文本
                     "count": res.resultData.totalCount, //解析数据长度
-                    "data": res.resultData.userInfoList //解析数据列表
+                    "data": res.resultData.userInfos //解析数据列表
                 };
             },
             url: "/SystemConfig/QueryUserList",
@@ -179,26 +179,12 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
 
     function deleteUser(reqData)
     {
-        $.ajax({
-            type: "Post",
-            url: "/SystemConfig/DeleteUser",
-            data: { req: reqData },
-            success: function (data) {
-                if (data.status) {
-                    layer.msg('删除成功', { icon: 6 });
-                }
-                else {
-                    layer.msg(data.msg, { icon: 5 });
-                }
-            },
-            error: function (jqXHR) {
-                layer.msg("发生错误：" + jqXHR.status, {
-                    time: 0,  //不自动关闭
-                    btn: ['确定'],
-                    yes: function (index) {
-                        layer.close(index);
-                    }
-                });
+        LuoAjax("/SystemConfig/DeleteUser", "Post", { req: reqData }, function (res) {
+            if (res.status) {
+                layer.msg('删除成功', { icon: 6 });
+            }
+            else {
+                layer.msg(data.msg, { icon: 5 });
             }
         });
     }

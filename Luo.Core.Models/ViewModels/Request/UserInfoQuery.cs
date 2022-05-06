@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Luo.Core.Models.ViewModels.Request
 {
-    public class QueryUserInfoViewModel
+    public class UserInfoQuery
     {
         public string UserName { get; set; }
         public bool TimeEnable { get; set; }
