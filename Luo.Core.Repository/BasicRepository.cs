@@ -4,6 +4,7 @@ using Luo.Core.IRepository;
 using Luo.Core.Models.Dtos;
 using Luo.Core.Models.Dtos.Request;
 using Luo.Core.Models.Dtos.Response;
+using Org.BouncyCastle.Ocsp;
 using SqlSugar;
 
 namespace Luo.Core.Repository
@@ -111,8 +112,82 @@ namespace Luo.Core.Repository
                      CreateName = x.CreateName
                  })
                 .ToPageList(req.PageIndex, req.PageCount, ref totleCount);
-             
+
                 res.TotalCount = totleCount;
+            });
+            return res;
+        }
+        /// <summary>
+        /// 添加用户信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonDto AddUser(AddUserDto req)
+        {
+            CommonDto res = new CommonDto();
+            Factory.GetDbContext((db) =>
+            {
+                if (db.Queryable<Basic_User>().Any(x => x.UserName == req.UserName))
+                {
+                    res.Message = "用户名已存在";
+                    return;
+                }
+                res.Status = db.Insertable<Basic_User>(new
+                {
+                    UserName = req.UserName,
+                    Password = req.Password,
+                    CreateName = req.CreateName,
+                    CreateTime = DateTime.Now
+                }).ExecuteCommand() > 0;
+
+            });
+            return res;
+        }
+
+        /// <summary>
+        /// 修改用户信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonDto UpdateUser(UpdateUserDto req)
+        {
+            CommonDto res = new CommonDto();
+            Factory.GetDbContext((db) =>
+            {
+                res.Status = db.Updateable<Basic_User>(new
+                {
+                    UserName = req.UserName,
+                }).Where(x=>x.Id==req.UserId).ExecuteCommand() > 0;
+
+            });
+            return res;
+        }
+
+        /// <summary>
+        /// 删除用户
+        /// </summary>
+        /// <param name="userIds"></param>
+        /// <returns></returns>
+        public CommonDto DeleteUserByUserIds(List<int> userIds)
+        {
+            CommonDto res = new CommonDto();
+            Factory.GetDbContext((db) =>
+            {
+                try
+                {
+                    db.BeginTran();
+                    foreach (var item in userIds)
+                    {
+                        db.Deleteable<Basic_User>().Where(x => x.Id == item).ExecuteCommand();
+                    }
+                    db.CommitTran();
+                    res.Status = true;
+                }
+                catch (Exception ex)
+                {
+                    db.RollbackTran();
+                    res.Message = "删除发生异常：" + ex.Message;
+                }
             });
             return res;
         }

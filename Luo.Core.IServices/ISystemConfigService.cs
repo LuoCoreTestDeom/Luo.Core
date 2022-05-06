@@ -17,5 +17,24 @@ namespace Luo.Core.IServices
         /// <param name="req"></param>
         /// <returns></returns>
         public CommonViewModel<UserInfoListViewModel> QueryUserInfoList(QueryUserInfoViewModel req);
+        /// <summary>
+        /// 添加用户信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel AddUser(UserInfoForm req);
+        /// <summary>
+        /// 修改用户信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel UpdateUser(UserInfoForm req);
+        /// <summary>
+        /// 删除用户信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel DeleteUserByUserIds(List<int> userIds);
+
     }
 }

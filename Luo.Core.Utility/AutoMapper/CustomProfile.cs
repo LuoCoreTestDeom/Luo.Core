@@ -17,6 +17,7 @@ using System.Xml.Linq;
 using static Luo.Core.Utility.AutoMapper.CustomProfile;
 using Luo.Core.Models.ViewModels.Response;
 using Luo.Core.DatabaseEntity;
+using MySqlX.XDevAPI.Common;
 
 namespace Luo.Core.Utility.AutoMapper
 {
@@ -53,6 +54,12 @@ namespace Luo.Core.Utility.AutoMapper
                 .ForMember(dest => dest.UserInfoList, opts => opts.MapFrom(x => x.UserInfoList))
                 .ForMember(dest => dest.TotalCount, opts => opts.MapFrom(x => x.TotalCount));
 
+         
+            CreateMap<UserInfoForm,AddUserDto>()
+                .ForMember(dest => dest.Sex, opts => opts.MapFrom(x => x.UserSex));
+
+            CreateMap<UserInfoForm, UpdateUserDto>()
+               .ForMember(dest => dest.Sex, opts => opts.MapFrom(x => x.UserSex));
 
             //CreateMap<SysUserInfoDto, SysUserInfo>()
             //    .ForMember(a => a.Id, o => o.MapFrom(d => d.uID))

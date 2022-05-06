@@ -3,6 +3,9 @@ using Luo.Core.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Luo.Core.Common;
+using Luo.Core.Models.ViewModels.Request;
+using MySqlX.XDevAPI.Common;
+using Luo.Core.Models.Dtos.Response;
 
 namespace Luo.Core.LayuiAdmin.Controllers
 {
@@ -15,22 +18,58 @@ namespace Luo.Core.LayuiAdmin.Controllers
         {
             this._systemConfigService = systemConfigService;
         }
-       
+
         public IActionResult UserManage()
         {
             return View();
         }
+        /// <summary>
+        /// 查询用户信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
         [HttpPost]
-        public IActionResult QueryUserList(Luo.Core.Models.ViewModels.Request.QueryUserInfoViewModel req) 
+        public IActionResult QueryUserList(Luo.Core.Models.ViewModels.Request.QueryUserInfoViewModel req)
         {
             var res = _systemConfigService.QueryUserInfoList(req);
-            
-            return  Json(res);
+
+            return Json(res);
         }
 
-        public IActionResult AddUser() 
+        public IActionResult UserInfo()
         {
             return View();
+        }
+        /// <summary>
+        /// 添加用户
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult AddUser(UserInfoForm req)
+        {
+            var res = _systemConfigService.AddUser(req);
+            return Json(res);
+        }
+        /// <summary>
+        /// 添加用户
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult UpdateUser(UserInfoForm req)
+        {
+            var res = _systemConfigService.UpdateUser(req);
+            return Json(res);
+        }
+
+        /// <summary>
+        /// 删除用户
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult DeleteUser(List<int> req)
+        {
+            var res = _systemConfigService.DeleteUserByUserIds(req);
+            return Json(res);
         }
     }
 }

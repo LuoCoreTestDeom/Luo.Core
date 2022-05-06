@@ -65,6 +65,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
                     var result = _userService.UserLogin(req);
                     if (result.Status && result.ResultData != null && result.ResultData.UserId > 0)
                     {
+                        this.HttpContext.SetCookies("UserInfo", result.ResultData.ObjToJson(), Appsettings.GetValue("AuthCookieConfig", "ExpireTimeMinutes").ObjToInt());
                         var claimIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                         claimIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{result.ResultData.UserName}"));
                         claimIdentity.AddClaim(new Claim("Userid", result.ResultData.UserId.ObjToString()));

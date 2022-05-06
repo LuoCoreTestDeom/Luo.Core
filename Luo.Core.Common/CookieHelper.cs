@@ -25,16 +25,16 @@ namespace Luo.Core.Common
             httpContext.Request.Cookies.TryGetValue(key, out string value);
             return value;
         }
-        public static T GetCookie<T>(this HttpContext httpContext)
+        public static T GetCookie<T>(this HttpContext httpContext,string key)
         {
-            httpContext.Request.Cookies.TryGetValue("CurrentUser", out string sUser);
+            httpContext.Request.Cookies.TryGetValue(key, out string sUser);
             if (sUser == null)
             {
                 return default(T);
             }
             else
             {
-                T res = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(sUser);
+                T res = sUser.JsonToObj<T>();
                 return res;
             }
         }

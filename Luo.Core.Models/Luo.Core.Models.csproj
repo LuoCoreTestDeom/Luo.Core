@@ -10,4 +10,13 @@
     <ProjectReference Include="..\Luo.Core.DatabaseEntity\Luo.Core.DatabaseEntity.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\Request\Form\" />
+    <Folder Include="ViewModels\Request\Input\" />
+    <Folder Include="ViewModels\Request\Query\" />
+    <Folder Include="ViewModels\Response\Output\" />
+    <Folder Include="ViewModels\Response\List\" />
+    <Folder Include="ViewModels\Response\Result\" />
+  </ItemGroup>
+
 </Project>
