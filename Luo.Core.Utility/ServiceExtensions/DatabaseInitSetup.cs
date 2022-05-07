@@ -15,11 +15,14 @@ namespace Luo.Core.Utility.ServiceExtensions
             var initDatabase = services.BuildServiceProvider().GetService<ISqlSugarInitDatabase>();
             initDatabase.CreateDatabase();
             initDatabase.CreateDatabaseTables("Luo.Core.DatabaseEntity");
-            string executDirPath = Directory.GetCurrentDirectory();
-            executDirPath = executDirPath.Replace("Luo.Core.LayuiAdmin", "Luo.Core.DatabaseEntity");
-            initDatabase.CreateDatabaseEntityFile(executDirPath, "Luo.Core.DatabaseEntity");
-            var initTable = services.BuildServiceProvider().GetService<IServices.IUserService>();
-            initTable.InitUser();
+            //string executDirPath = Directory.GetCurrentDirectory();
+            //executDirPath = executDirPath.Replace("Luo.Core.LayuiAdmin", "Luo.Core.DatabaseEntity");
+            //initDatabase.CreateDatabaseEntityFile(executDirPath, "Luo.Core.DatabaseEntity");
+            var initTable = services.BuildServiceProvider().GetService<IServices.IDatabaseInitDataService>();
+            if(initTable.AddInitUser()&& initTable.AddInitMenu() && initTable.AddInitRole()) 
+            {
+                initTable.AddInitTableConcern();
+            }
         }
     }
 }

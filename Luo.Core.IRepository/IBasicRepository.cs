@@ -8,11 +8,7 @@ namespace Luo.Core.IRepository
 {
     public interface IBasicRepository : ISqlSugarRepository
     {
-        /// <summary>
-        /// 添加初始化数据
-        /// </summary>
-        /// <returns></returns>
-        public bool AddInitUser();
+       
         /// <summary>
         /// 查询用户信息
         /// </summary>
@@ -42,6 +38,20 @@ namespace Luo.Core.IRepository
         /// <param name="userIds"></param>
         /// <returns></returns>
         public CommonDto DeleteUserByUserIds(List<int> userIds);
-        
+
+        /// <summary>
+        /// 查询菜单列表信息
+        /// </summary>
+        /// <returns></returns>
+        public List<MenuInfoDto> QueryMenuList();
+
+        /// <summary>
+        /// 通过用户ID获取菜单列表
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<MenuInfoDto> QueryMenuInfoListUserId(int userId);
+
+
     }
 }

@@ -71,5 +71,16 @@ namespace Luo.Core.LayuiAdmin.Controllers
             var res = _systemConfigService.DeleteUserByUserIds(req);
             return Json(res);
         }
+
+        public IActionResult MenuPermissionManagement()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult GetMenuInfos() 
+        {
+           var res= _systemConfigService.GetMenuInfoList();
+            return Json(res);
+        }
     }
 }

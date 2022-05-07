@@ -15,37 +15,7 @@ namespace Luo.Core.Repository
         {
         }
 
-        /// <summary>
-        /// 添加初始化数据
-        /// </summary>
-        /// <returns></returns>
-        public bool AddInitUser()
-        {
-            bool res = false;
-            string strValue = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.EncryptString("123456");
-            Factory.GetDbContext((db) =>
-            {
-                db.Deleteable<Basic_User>().Where(x => x.UserName == "Luo").ExecuteCommand();
-                res = db.Insertable<Basic_User>(new
-                {
-                    UserName = "Luo",
-                    Password = strValue,
-                    CreateTime = DateTime.Now,
-                    CreateName = "LuoCore"
-                }).ExecuteCommand() > 0;
-                //for (int i = 0; i < 9999; i++)
-                //{
-                //    db.Insertable<Basic_User>(new
-                //    {
-                //        UserName = "Luo" + i,
-                //        Password = strValue,
-                //        CreateTime = DateTime.Now,
-                //        CreateName = "LuoCore" + i
-                //    }).ExecuteCommand();
-                //}
-            });
-            return res;
-        }
+
 
         /// <summary>
         /// 查询用户信息
@@ -157,7 +127,7 @@ namespace Luo.Core.Repository
                 res.Status = db.Updateable<Basic_User>(new
                 {
                     UserName = req.UserName,
-                }).Where(x=>x.Id==req.UserId).ExecuteCommand() > 0;
+                }).Where(x => x.Id == req.UserId).ExecuteCommand() > 0;
 
             });
             return res;
@@ -188,6 +158,61 @@ namespace Luo.Core.Repository
                     db.RollbackTran();
                     res.Message = "删除发生异常：" + ex.Message;
                 }
+            });
+            return res;
+        }
+        /// <summary>
+        /// 查询菜单列表信息
+        /// </summary>
+        /// <returns></returns>
+        public List<MenuInfoDto> QueryMenuList()
+        {
+            List<MenuInfoDto> res = new List<MenuInfoDto>();
+            Factory.GetDbContext((db) =>
+            {
+                res = db.Queryable<Basic_Menu>().Select(x => new MenuInfoDto()
+                {
+                    MenuId = x.Id,
+                    MenuName = x.MenuName,
+                    MenuType = x.MenuType,
+                    MenuIcon = x.MenuIcon,
+                    MenuSort = x.MenuSort,
+                    MenuEnable = x.MenuEnable,
+                    ParentMenuId = x.ParentMenuId
+
+                }).ToList();
+            });
+            return res;
+        }
+
+
+        /// <summary>
+        /// 通过用户ID获取菜单列表
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<MenuInfoDto> QueryMenuInfoListUserId(int userId)
+        {
+            List<MenuInfoDto> res = new List<MenuInfoDto>();
+            Factory.GetDbContext((db) =>
+            {
+
+                res = db.Queryable<Basic_Menu>()
+                 .LeftJoin<Basic_MenuRole>((a, b) => b.MenuId == a.Id)
+                 .LeftJoin<Basic_UserRole>((a, b, c) => c.RoleId == b.RoleId)
+                 .Where((a, b, c) => a.MenuEnable && c.UserId == userId)
+                 .Distinct()
+                 .Select((a, b) => new MenuInfoDto
+                 {
+                     MenuId = a.Id,
+                     MenuName = a.MenuName,
+                     MenuAddress=a.MenuAddress,
+                     MenuIcon = a.MenuIcon,
+                     MenuSort = a.MenuSort,
+                     MenuType = a.MenuType,
+                     ParentMenuId = a.ParentMenuId,
+                     MenuEnable = a.MenuEnable
+                 }).ToList();
             });
             return res;
         }

@@ -6,7 +6,7 @@ namespace Luo.Core.IServices
 {
     public interface IUserService
     {
-        public bool InitUser();
+     
         /// <summary>
         /// 用户登录
         /// </summary>

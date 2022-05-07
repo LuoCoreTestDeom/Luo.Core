@@ -40,5 +40,11 @@ namespace Luo.Core.IServices
         /// <param name="req"></param>
         /// <returns></returns>
         public CommonViewModel DeleteUserByUserIds(List<int> userIds);
+
+        /// <summary>
+        /// 获取菜单信息
+        /// </summary>
+        /// <returns></returns>
+        public CommonViewModel<List<MenuInfoList>> GetMenuInfoList();
     }
 }

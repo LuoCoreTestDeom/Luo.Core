@@ -11,12 +11,14 @@ public class SqlSugarRepositoryList<TFactory, TIRepository> : ISqlSugarRepositor
 {
     protected readonly TFactory Factory;
     protected readonly IMapper _Mapper;
+    protected readonly TIRepository _Rep;
     protected SqlSugarClient DbContext => this.Factory.GetDbContext();
 
-    public SqlSugarRepositoryList(TFactory factory, IMapper mapper) 
+    public SqlSugarRepositoryList(TFactory factory, TIRepository rep, IMapper mapper) 
     {
         Factory = factory;
         _Mapper = mapper;
+        _Rep = rep;
     }
 }
 

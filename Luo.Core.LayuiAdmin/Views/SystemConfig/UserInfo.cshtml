@@ -59,44 +59,49 @@
 </div>
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
-<script>
-    let userId = 0;
-    $('button[name="btn-save"]').click(function () {
-        let userEditUrl = "/SystemConfig/AddUser";
-        if (userId > 0) {
-            userEditUrl = "/SystemConfig/UpdateUser";
-        }
-      
-        LuoAjax(userEditUrl, "Post", {
-            UserId: userId,
-            UserName: $("#userName").val(),
-            Password: $("#userPassword").val(),
-            ConfirmPassword: $("#userConfirmPassword").val(),
-            UserSex: $("input[name='userSex']:checked").val(),
-        }, function (res) {
-            if (res.status) {
-                layer.msg(userId > 0 ? '修改成功' : '添加成功', {
-                    time: 2000,
-                    end: function () {
-                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-                        parent.layer.close(index);
-                    }
-                });
+@section Scripts {
+    <script>
+        let userId = 0;
+        $('button[name="btn-save"]').click(function () {
+            let userEditUrl = "/SystemConfig/AddUser";
+            if (userId > 0) {
+                userEditUrl = "/SystemConfig/UpdateUser";
             }
-            else {
-                layer.msg(res.msg, { icon: 5 });
-            }
-        });
 
-        
-        
-    })
-    function ParentSetValue(reqData) {
-        debugger;
-        userId = reqData.userId;
-        document.getElementById("userName").value = reqData.userName;
-        $("#Luo-user-Password").hide();
-    }
-</script>
+            LuoAjax(userEditUrl, "Post", {
+                UserId: userId,
+                UserName: $("#userName").val(),
+                Password: $("#userPassword").val(),
+                ConfirmPassword: $("#userConfirmPassword").val(),
+                UserSex: $("input[name='userSex']:checked").val(),
+            }, function (res) {
+                if (res.status) {
+                    layer.msg(userId > 0 ? '修改成功' : '添加成功', {
+                        time: 2000,
+                        end: function () {
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                            parent.layer.close(index);
+                        }
+                    });
+                }
+                else {
+                    layer.msg(res.msg, { icon: 5 });
+                }
+            });
+
+
+
+        })
+        function ParentSetValue(reqData) {
+            debugger;
+            userId = reqData.userId;
+            document.getElementById("userName").value = reqData.userName;
+            $("#Luo-user-Password").hide();
+        }
+    </script>
+
+}
+
+
 
 

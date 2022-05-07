@@ -1,4 +1,5 @@
-﻿ <!-- 侧边菜单 -->
+﻿@model List<Luo.Core.Models.ViewModels.Response.UserMenuInfoOutput>
+<!-- 侧边菜单 -->
 <div class="layui-side layui-side-menu">
     <div class="layui-side-scroll">
         <div class="layui-logo" lay-href="home/console.html">
@@ -17,18 +18,52 @@
                     </dd>
                 </dl>
             </li>
-            <li data-name="systemConfig" class="layui-nav-item">
-                <a href="javascript:;" lay-tips="系统配置" lay-direction="2">
-                    <i class="layui-icon layui-icon-component"></i>
-                    <cite>系统配置</cite>
-                </a>
-                <dl class="layui-nav-child">
-                    <dd data-name="nav">
-                        <a lay-href="/SystemConfig/UserManage">用户管理</a>
-                    </dd>
-                </dl>
-            </li>
-         
+            @{
+                void RenderName(List<Luo.Core.Models.ViewModels.Response.UserMenuInfoOutput> menuInfos)
+                {
+                    foreach (var item in menuInfos)
+                    {
+
+                        if (item.MenuType == 0)
+                        {
+                            <li data-name="systemConfig" class="layui-nav-item">
+                                <a href="javascript:;" lay-tips="@item.MenuName" lay-direction="2">
+                                    <i class="layui-icon layui-icon-component"></i>
+                                    <cite>@item.MenuName</cite>
+                                </a>
+                                @{
+                                    if (item.ChildrenMeuns.Count > 0)
+                                    {
+                                        RenderName(item.ChildrenMeuns);
+                                    }
+                                }
+                            </li>
+                        }
+                        else if (item.MenuType == 1)
+                        {
+                            <dl class="layui-nav-child">
+                                <dd data-name="nav">
+                                    @{
+                                        if (!string.IsNullOrWhiteSpace(item.MenuIcon))
+                                        {
+                                            <i class="layui-icon @item.MenuIcon"></i>
+                                        }
+                                        <a lay-href="@item.MenuUrl">@item.MenuName</a>
+                                        if (item.ChildrenMeuns.Count > 0)
+                                        {
+                                            RenderName(item.ChildrenMeuns);
+                                        }
+                                    }
+                                </dd>
+                            </dl>
+                        }
+                    }
+
+                }
+                RenderName(Model);
+            }
+
+
         </ul>
     </div>
 </div>

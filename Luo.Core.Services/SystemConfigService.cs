@@ -18,14 +18,16 @@ namespace Luo.Core.Services
 {
     public class SystemConfigService : SqlSugarRepositoryList<ISqlSugarFactory, IBasicRepository>, IServices.ISystemConfigService
     {
-        private readonly IBasicRepository _basicRepository;
+       
         private readonly IHttpContextAccessor _accessor;
 
-        public SystemConfigService(ISqlSugarFactory factory, IMapper mapper, IBasicRepository basicRepository, IHttpContextAccessor accessor) : base(factory, mapper)
+        public SystemConfigService(ISqlSugarFactory factory, IBasicRepository rep, IMapper mapper, IHttpContextAccessor accessor) : base(factory, rep, mapper)
         {
-            _basicRepository = basicRepository;
             _accessor = accessor;
         }
+
+       
+     
         /// <summary>
         /// 查询用户信息
         /// </summary>
@@ -36,7 +38,7 @@ namespace Luo.Core.Services
             CommonViewModel<UserInfoList> res = new CommonViewModel<UserInfoList>();
             try
             {
-                var userList = _basicRepository.QueryUserInfoList(_Mapper.Map<Models.Dtos.Request.QueryUserInfoDto>(req));
+                var userList = _Rep.QueryUserInfoList(_Mapper.Map<Models.Dtos.Request.QueryUserInfoDto>(req));
                 res.Status = true;
                 res.StatusCode = 200;
                 res.ResultData = _Mapper.Map<UserInfoList>(userList);
@@ -68,7 +70,7 @@ namespace Luo.Core.Services
                 var reqData = _Mapper.Map<AddUserDto>(req);
                 var userInfo = _accessor.HttpContext.GetCookie<LoginUserInfoDto>("UserInfo");
                 reqData.CreateName = userInfo.UserName;
-                var resData = _basicRepository.AddUser(reqData);
+                var resData = _Rep.AddUser(reqData);
                 res = _Mapper.Map<CommonViewModel>(resData);
             }
             catch (Exception ex)
@@ -96,7 +98,7 @@ namespace Luo.Core.Services
                     return res;
                 }
                 var reqData = _Mapper.Map<UpdateUserDto>(req);
-                var resData = _basicRepository.UpdateUser(reqData);
+                var resData = _Rep.UpdateUser(reqData);
                 res = _Mapper.Map<CommonViewModel>(resData);
             }
             catch (Exception ex)
@@ -116,7 +118,7 @@ namespace Luo.Core.Services
             CommonViewModel res = new CommonViewModel();
             try
             {
-                var resData = _basicRepository.DeleteUserByUserIds(userIds);
+                var resData = _Rep.DeleteUserByUserIds(userIds);
                 res = _Mapper.Map<CommonViewModel>(resData);
             }
             catch (Exception ex)
@@ -124,6 +126,28 @@ namespace Luo.Core.Services
                 res.Msg = ex.Message;
             }
             return res;
+        }
+
+        /// <summary>
+        /// 获取菜单信息
+        /// </summary>
+        /// <returns></returns>
+        public CommonViewModel<List<MenuInfoList>> GetMenuInfoList() 
+        {
+            CommonViewModel<List<MenuInfoList>> res = new CommonViewModel<List<MenuInfoList>>();
+            try
+            {
+                var resData = _Rep.QueryMenuList();
+                res.ResultData= _Mapper.Map<List<MenuInfoDto>, List<MenuInfoList>>(resData);
+                res.Status= true;
+                res.StatusCode = 0;
+            }
+            catch (Exception ex)
+            {
+                res.Msg = ex.Message;
+            }
+            return res;
+          
         }
     }
 }

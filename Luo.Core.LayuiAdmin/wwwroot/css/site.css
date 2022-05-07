@@ -16,3 +16,12 @@ html {
 body {
   margin-bottom: 60px;
 }
+@media screen and (max-width: 790px) {
+    .layui-btn-mt10 {
+        margin-top: 10px;
+    }
+    .layui-btn-ml10 {
+        margin-left: 10px;
+    }
+}
+

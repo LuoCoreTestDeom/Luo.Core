@@ -12,19 +12,14 @@ namespace Luo.Core.Services
 {
     public class UserService : SqlSugarRepositoryList<ISqlSugarFactory, IBasicRepository>, IServices.IUserService
     {
-        IBasicRepository _basicRepository;
-
-        public UserService(ISqlSugarFactory factory, IMapper mapper, IBasicRepository basicRepository) : base(factory, mapper)
+        public UserService(ISqlSugarFactory factory, IBasicRepository rep, IMapper mapper) : base(factory, rep, mapper)
         {
-            _basicRepository = basicRepository;
         }
 
-    
 
-        public bool InitUser()
-        {
-            return _basicRepository.AddInitUser();
-        }
+
+
+
         /// <summary>
         /// 用户登录
         /// </summary>
@@ -37,7 +32,7 @@ namespace Luo.Core.Services
             try
             {
                 reqData.Password = CommonUtil.EncryptString(reqData.Password);
-                res.ResultData = _basicRepository.QueryUserInfo(reqData);
+                res.ResultData = _Rep.QueryUserInfo(reqData);
                 res.Status = true;
             }
             catch (Exception ex)

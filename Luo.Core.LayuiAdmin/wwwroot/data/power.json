@@ -1,0 +1,59 @@
+{
+	"code": 0,
+	"msg": "...",
+	"count": null,
+	"data": [
+		{
+			"id": "1",
+			"menuName": "系统管理",
+			"powerType": "0",
+			"powerCode": "",
+			"powerUrl": "",
+			"openType": null,
+			"parentMenuId": "0",
+			"icon": "layui-icon-set-fill",
+			"sort": 1,
+			"enable": 1,
+			"checkArr": "0"
+		},
+		{
+			"id": "2",
+			"menuName": "用户管理",
+			"powerType": "1",
+			"powerCode": "sys:user:main",
+			"powerUrl": "/system/user/main",
+			"openType": null,
+			"parentMenuId": "1",
+			"icon": "layui-icon-username",
+			"sort": null,
+			"enable": 1,
+			"checkArr": "0"
+		},
+		{
+			"id": "3",
+			"menuName": "角色管理",
+			"powerType": "1",
+			"powerCode": "sys:role:main",
+			"powerUrl": "/system/role/main",
+			"openType": null,
+			"parentMenuId": "1",
+			"icon": "layui-icon-user",
+			"sort": null,
+			"enable": 1,
+			"checkArr": "0"
+		},
+		{
+			"id": "4",
+			"menuName": "权限管理",
+			"powerType": "1",
+			"powerCode": "sys:power:main",
+			"powerUrl": "/system/power/main",
+			"openType": null,
+			"parentMenuId": "1",
+			"icon": "layui-icon-vercode",
+			"sort": null,
+			"checkArr": "0"
+		}
+		
+	]
+}
