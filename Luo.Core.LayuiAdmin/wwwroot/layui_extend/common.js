@@ -31,6 +31,7 @@ layui.define(function(exports){
             async: false,
             success: function (res) {
                 layer.close(msgDialogIndex);
+                window.location.href = res;
             },
             error: function (jqXHR) {
                 layer.close(msgDialogIndex);

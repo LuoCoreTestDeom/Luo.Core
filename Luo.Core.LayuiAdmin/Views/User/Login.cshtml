@@ -93,22 +93,14 @@
 
 
                 LuoAjax('/User/Login', "Post", obj.field, function (res) {
-                   
                     if (res.Status) {
-                        //登入成功的提示与跳转
-                        layer.msg('登入成功', {
-                            offset: '15px'
-                            , icon: 1
-                            , time: 1000
-                        }, function () {
-                            top.window.location.href = '/'; //后台主页
-                        });
+                        top.window.location.href = '/'; //后台主页
                     }
                     else {
                         layer.msg(res.Msg, { shift: 6 });
                         RefreshCerCode();
                     }
-                },"jsonp");
+                }, false, "jsonp");
 
             });
 

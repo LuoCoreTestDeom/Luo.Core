@@ -29,7 +29,7 @@ Date.prototype.format = function (format) {
     return format;
 };
 
-function LuoAjax(reqUrl, reqType, reqData, funSuccess, resDataType=null) {
+function LuoAjax(reqUrl, reqType, reqData, funSuccess, reqAsync=true,resDataType=null) {
 
     layui.use('layer', function () {
         let $ = layui.jquery;
@@ -38,6 +38,7 @@ function LuoAjax(reqUrl, reqType, reqData, funSuccess, resDataType=null) {
             $.ajax({
                 type: reqType,
                 url: reqUrl,
+                async: reqAsync,
                 data: reqData,
                 success: function (res) {
                     funSuccess(res);
@@ -59,6 +60,7 @@ function LuoAjax(reqUrl, reqType, reqData, funSuccess, resDataType=null) {
             $.ajax({
                 type: reqType,
                 url: reqUrl,
+                async: reqAsync,
                 data: reqData,
                 dataType:resDataType,
                 success: function (res) {

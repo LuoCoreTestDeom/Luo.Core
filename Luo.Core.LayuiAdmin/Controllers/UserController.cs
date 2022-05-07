@@ -108,8 +108,14 @@ namespace Luo.Core.LayuiAdmin.Controllers
         public async Task<IActionResult> LoginOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Main", "Home");
-            return Ok();
+            if (this.Request.IsAjax()) 
+            {
+                return Ok(Appsettings.GetValue("AuthCookieConfig", "LoginPath"));
+            }
+            else 
+            {
+                return RedirectPermanent(Appsettings.GetValue("AuthCookieConfig", "LoginPath"));
+            }
         }
     }
 
