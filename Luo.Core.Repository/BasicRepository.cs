@@ -216,5 +216,32 @@ namespace Luo.Core.Repository
             });
             return res;
         }
+
+        /// <summary>
+        /// 获取所有菜单列表
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<MenuInfoDto> QueryAllMenuInfoList()
+        {
+            List<MenuInfoDto> res = new List<MenuInfoDto>();
+            Factory.GetDbContext((db) =>
+            {
+
+                res = db.Queryable<Basic_Menu>()
+                 .Select(a => new MenuInfoDto
+                 {
+                     MenuId = a.Id,
+                     MenuName = a.MenuName,
+                     MenuAddress = a.MenuAddress,
+                     MenuIcon = a.MenuIcon,
+                     MenuSort = a.MenuSort,
+                     MenuType = a.MenuType,
+                     ParentMenuId = a.ParentMenuId,
+                     MenuEnable = a.MenuEnable
+                 }).ToList();
+            });
+            return res;
+        }
     }
 }

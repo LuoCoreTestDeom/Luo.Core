@@ -9,6 +9,11 @@ namespace Luo.Core.IServices
 {
     public interface ISharedService
     {
+        /// <summary>
+        /// 获取用户的菜单列表
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public List<UserMenuInfoOutput> GetUserMenuInfos(int userId);
     }
 }

@@ -72,7 +72,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
             return Json(res);
         }
 
-        public IActionResult MenuPermissionManagement()
+        public IActionResult MenuManage()
         {
             return View();
         }
@@ -80,6 +80,17 @@ namespace Luo.Core.LayuiAdmin.Controllers
         public IActionResult GetMenuInfos() 
         {
            var res= _systemConfigService.GetMenuInfoList();
+            return Json(res);
+        }
+
+        public IActionResult MenuInfo() 
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult GetAllMenuInfos() 
+        {
+            var res= _systemConfigService.GetMenuInfos();
             return Json(res);
         }
     }

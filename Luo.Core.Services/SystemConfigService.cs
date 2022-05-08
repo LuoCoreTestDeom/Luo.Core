@@ -149,5 +149,37 @@ namespace Luo.Core.Services
             return res;
           
         }
+
+
+        /// <summary>
+        /// 获取所有菜单列表
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<MenuGroupInfoResult> GetMenuInfos()
+        {
+            var resData = _Rep.QueryAllMenuInfoList();
+
+            return RecursionMenu(resData.Where(x => x.MenuType == 0).ToList(), resData);
+        }
+        /// <summary>
+        /// 递归遍历菜单
+        /// </summary>
+        /// <param name="resData"></param>
+        /// <param name="sourceData"></param>
+        /// <returns></returns>
+        private List<MenuGroupInfoResult> RecursionMenu(List<MenuInfoDto> resData, List<MenuInfoDto> sourceData)
+        {
+            List<MenuGroupInfoResult> res = new List<MenuGroupInfoResult>();
+            foreach (var item in resData)
+            {
+                var menuInfo = _Mapper.Map<MenuGroupInfoResult>(item);
+                menuInfo.Children = RecursionMenu(sourceData.Where(x => x.ParentMenuId == item.MenuId).ToList(), sourceData);
+                res.Add(menuInfo);
+            }
+            return res;
+        }
+
+
     }
 }

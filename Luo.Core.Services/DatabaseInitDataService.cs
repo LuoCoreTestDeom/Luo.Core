@@ -93,7 +93,7 @@ namespace Luo.Core.Services
                         ParentMenuId = menuId,
                         MenuSort = 2,
                         MenuIcon = "layui-icon-component",
-                        MenuAddress = "/SystemConfig/MenuPermissionManagement"
+                        MenuAddress = "/SystemConfig/MenuManage"
                     }).ExecuteCommand();
                     db.CommitTran();
                     res = true;

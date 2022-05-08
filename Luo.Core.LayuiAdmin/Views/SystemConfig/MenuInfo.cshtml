@@ -1,0 +1,133 @@
+﻿
+@{
+    ViewData["Title"] = "MenuInfo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/font/iconfont.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+
+<div class="card text-center">
+
+    <div class="card-body">
+        <form class="row gx-3 gy-2 align-items-center layui-form">
+            <div class="col-sm-3">
+                <div class="input-group-text">上级菜单</div>
+                <div id="menuSelectBox" class="ew-xmselect-tree"></div>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group-text">菜单名称</div>
+                <input name="name" class="layui-input" placeholder="请输入菜单名称" lay-verType="tips" lay-verify="required" required />
+            </div>
+
+            <div class="col-sm-3">
+                <div class="input-group-text">菜单图标</div>
+                <div class="card text-center">
+                    <div class="card-body">
+
+                        <input type="text" id="iconPicker" value="layui-icon-heart-fill" lay-filter="iconPicker" class="hide">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="input-group-text">排序</div>
+                <input name="sort" class="layui-input" type="number" placeholder="请输入排序" lay-verType="tips" lay-verify="required" required />
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group-text">是否禁用</div>
+                <div class="card text-center">
+                    <div class="card-body">
+
+                        <input type="checkbox" name="" title="禁用" checked>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+       
+    </div>
+    <div class="card-footer text-muted">
+        <div class="col-auto">
+            <button type="button" name="btn-save" class="btn btn-primary">保存</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+@section Scripts {
+    <script src="~/layui_extend/iconPicker.js"></script>
+    <script src="~/layui_extend/xm-select.js"></script>
+    <script>
+        layui.use(['layer', 'form', 'xmSelect'], function () {
+
+            var $ = layui.jquery;
+            var layer = layui.layer;
+            var form = layui.form;
+            var xmSelect = layui.xmSelect;
+         
+            var icon = layui.icon;
+
+            //初始化图标选择
+            icon.render({
+                elem: '#iconPicker',
+                style: 'color: #5FB878;',
+                placeholder: '',
+                isSplit: true,
+                page: true,
+                search: true,
+                click: function (obj) {
+                    console.log(obj)
+                },
+                ready: function () {
+                    console.log(1)
+                }
+            });
+
+
+            LuoAjax('/SystemConfig/GetAllMenuInfos', "post", {}, function (res) {
+                xmSelect.render({
+                    el: '#menuSelectBox',
+                    name: 'parentMenuId',
+                    height: '250px',
+                    layVerify: 'required',
+                    layVerType: 'tips',
+                    //initValue: [],//选中 的优先级大于选项中的selected
+                    data: res,
+                    model: { icon: 'hidden', label: { type: 'text' } },
+                    prop: {
+                        name: 'menuName',
+                        value: 'menuId'
+                    },
+                    radio: true,
+                    clickClose: true,
+                    filterable: true,//是否开启搜索
+                    searchTips: "请输入菜单名称",//搜索提示
+
+                    tree: {
+                        show: true,
+                        indent: 15,//间距
+                        strict: false,//是否严格遵守父子模式
+                        expandedKeys: true,// 默认展开的节点数组, 为true时展开所有节点
+                        clickCheck: true,//点击节点是否选中, false时点击复选框进行选中操作
+                        showLine: true, //是否显示虚线
+                        clickExpand: false//点击节点是否展开, false时点击三角箭头进行展开操作
+                    },
+                    tips: '请选择上级菜单'
+                });
+
+
+            }, false);
+
+           
+
+
+        });
+    </script>
+
+}

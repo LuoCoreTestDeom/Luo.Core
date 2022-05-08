@@ -15,14 +15,23 @@ namespace Luo.Core.Services
         public SharedService(ISqlSugarFactory factory, IBasicRepository rep, IMapper mapper) : base(factory, rep, mapper)
         {
         }
-
+        /// <summary>
+        /// 获取用户的菜单列表
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public List<UserMenuInfoOutput> GetUserMenuInfos(int userId)
         {
             var resData = _Rep.QueryMenuInfoListUserId(userId);
            
             return RecursionMenu(resData.Where(x => x.MenuType == 0).ToList(), resData);
         }
-
+        /// <summary>
+        /// 递归遍历菜单
+        /// </summary>
+        /// <param name="resData"></param>
+        /// <param name="sourceData"></param>
+        /// <returns></returns>
         private List<UserMenuInfoOutput> RecursionMenu(List<Luo.Core.Models.Dtos.Response.MenuInfoDto> resData, List<Luo.Core.Models.Dtos.Response.MenuInfoDto> sourceData)
         {
             List<UserMenuInfoOutput> res = new List<UserMenuInfoOutput>();
