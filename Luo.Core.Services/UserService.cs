@@ -7,6 +7,7 @@ using Luo.Core.Models.Dtos.Request;
 using Luo.Core.Models.Dtos.Response;
 using Luo.Core.Models.ViewModels;
 using Luo.Core.Models.ViewModels.Request;
+using Luo.Core.Models.ViewModels.Response;
 
 namespace Luo.Core.Services
 {
@@ -43,6 +44,36 @@ namespace Luo.Core.Services
             return res;
         }
 
+
+        /// <summary>
+        /// 获取用户的菜单列表
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<MenuInfoList> GetUserMenuInfos(int userId)
+        {
+           var resData= _Rep.QueryMenuInfoListUserId(userId);
+            return _Mapper.Map<List<MenuInfoList>>(resData);
+        }
     
+        /// <summary>
+        /// 递归遍历菜单
+        /// </summary>
+        /// <param name="resData"></param>
+        /// <param name="sourceData"></param>
+        /// <returns></returns>
+        public List<UserMenuInfoOutput> RecursionMenu(List<MenuInfoList> resData, List<MenuInfoList> sourceData)
+        {
+            List<UserMenuInfoOutput> res = new List<UserMenuInfoOutput>();
+            foreach (var item in resData)
+            {
+                var menuInfo = _Mapper.Map<UserMenuInfoOutput>(item);
+                menuInfo.ChildrenMeuns = RecursionMenu(sourceData.Where(x => x.ParentMenuId == item.MenuId).ToList(), sourceData);
+                res.Add(menuInfo);
+            }
+            return res;
+        }
+
+
     }
 }

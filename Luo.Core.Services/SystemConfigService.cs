@@ -68,8 +68,8 @@ namespace Luo.Core.Services
                     return res;
                 }
                 var reqData = _Mapper.Map<AddUserDto>(req);
-                var userInfo = _accessor.HttpContext.GetCookie<LoginUserInfoDto>("UserInfo");
-                reqData.CreateName = userInfo.UserName;
+             
+                reqData.CreateName = _accessor.HttpContext.User.Claims.SingleOrDefault(x => x.Type == "UserName").Value;
                 var resData = _Rep.AddUser(reqData);
                 res = _Mapper.Map<CommonViewModel>(resData);
             }
@@ -159,7 +159,7 @@ namespace Luo.Core.Services
         public List<MenuGroupInfoResult> GetMenuInfos()
         {
             var resData = _Rep.QueryAllMenuInfoList();
-
+           
             return RecursionMenu(resData.Where(x => x.MenuType == 0).ToList(), resData);
         }
         /// <summary>

@@ -1,4 +1,4 @@
-﻿@model List<Luo.Core.Models.ViewModels.Response.UserMenuInfoOutput>
+﻿@using Luo.Core.Common
 <!-- 侧边菜单 -->
 <div class="layui-side layui-side-menu">
     <div class="layui-side-scroll">
@@ -60,7 +60,13 @@
                     }
 
                 }
-                RenderName(Model);
+                var userClaims = this.Context.User.Claims.SingleOrDefault(x => x.Type == "UserMenuInfo");
+                if (userClaims != null)
+                {
+
+                    var userMenuInfo = userClaims.Value.JsonToObj<List<Luo.Core.Models.ViewModels.Response.UserMenuInfoOutput>>();
+                    RenderName(userMenuInfo);
+                }
             }
 
 

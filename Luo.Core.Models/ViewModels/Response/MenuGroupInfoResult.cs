@@ -8,6 +8,7 @@ namespace Luo.Core.Models.ViewModels.Response
 {
     public class MenuGroupInfoResult: MenuInfoList
     {
+        public bool SelectedCheck { get; set; }
         public List<MenuGroupInfoResult> Children { get; set; }
     }
 }

@@ -13,9 +13,7 @@ namespace Luo.Core.LayuiAdmin.ViewComponents
         }
         public IViewComponentResult Invoke()
         {
-            var userInfo = this.HttpContext.GetCookie<LoginUserInfoDto>("UserInfo");
-           var res= _service.GetUserMenuInfos(userInfo.UserId);
-            return View(res);
+            return View();
         }
     }
 }

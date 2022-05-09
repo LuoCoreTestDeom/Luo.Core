@@ -65,11 +65,16 @@ namespace Luo.Core.LayuiAdmin.Controllers
                     var result = _userService.UserLogin(req);
                     if (result.Status && result.ResultData != null && result.ResultData.UserId > 0)
                     {
-                        this.HttpContext.SetCookies("UserInfo", result.ResultData.ObjToJson(), Appsettings.GetValue("AuthCookieConfig", "ExpireTimeMinutes").ObjToInt());
+                      
                         var claimIdentity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
                         claimIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{result.ResultData.UserName}"));
                         claimIdentity.AddClaim(new Claim("Userid", result.ResultData.UserId.ObjToString()));
+                        claimIdentity.AddClaim(new Claim("UserName", result.ResultData.UserName.ObjToString()));
                         claimIdentity.AddClaim(new Claim("SecurityKey", CommonUtil.EncryptString("LuoCore" + DateTime.Now.DateToTimeStamp())));
+                        var menuInfo = _userService.GetUserMenuInfos(result.ResultData.UserId);
+                        claimIdentity.AddClaim(new Claim("UserMenuList", menuInfo.ObjToJson()));
+                        var userMenuInfos = _userService.RecursionMenu(menuInfo.Where(x => x.MenuType == 0).ToList(), menuInfo);
+                        claimIdentity.AddClaim(new Claim("UserMenuInfo", userMenuInfos.ObjToJson()));
 
                         if (result.ResultData.RoleInfos != null)
                         {
@@ -108,6 +113,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
         public async Task<IActionResult> LoginOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            
             if (this.Request.IsAjax()) 
             {
                 return Ok(Appsettings.GetValue("AuthCookieConfig", "LoginPath"));

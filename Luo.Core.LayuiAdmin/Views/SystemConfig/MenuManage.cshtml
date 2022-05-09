@@ -146,12 +146,14 @@
             });
 
             window.add = function () {
+               
                 layer.open({
+                    title: "菜单信息",
+                    area: ['400px', '500px'],
+                    anim: 1,//弹出动画
+                    resize: false,//是否允许拉伸
                     type: 2,
-                    title: '新增',
-                    shade: 0.1,
-                    area: ['450px', '500px'],
-                    content:'/SystemConfig/MenuInfo'
+                    content: '/SystemConfig/MenuInfo'
                 });
             }
 

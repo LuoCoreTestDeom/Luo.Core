@@ -20,7 +20,10 @@ namespace Luo.Core.Common
         {
             httpContext.Response.Cookies.Delete(key);
         }
-        public static string GetCookiesValue(this HttpContext httpContext, string key)
+       
+        
+
+    public static string GetCookiesValue(this HttpContext httpContext, string key)
         {
             httpContext.Request.Cookies.TryGetValue(key, out string value);
             return value;

@@ -7,35 +7,61 @@
 <link href="~/font/iconfont.css" rel="stylesheet" />
 <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
 
-<div class="card text-center">
+<div class="card">
 
     <div class="card-body">
         <form class="row gx-3 gy-2 align-items-center layui-form">
             <div class="col-sm-3">
-                <div class="input-group-text">上级菜单</div>
+                <label class="input-group-text">上级菜单</label>
                 <div id="menuSelectBox" class="ew-xmselect-tree"></div>
             </div>
             <div class="col-sm-3">
-                <div class="input-group-text">菜单名称</div>
+                <label class="input-group-text">菜单名称</label>
                 <input name="name" class="layui-input" placeholder="请输入菜单名称" lay-verType="tips" lay-verify="required" required />
             </div>
 
             <div class="col-sm-3">
-                <div class="input-group-text">菜单图标</div>
-                <div class="card text-center">
-                    <div class="card-body">
+                <label class="input-group-text">菜单类型</label>
+               
+                <select name="menuType" lay-verify="">
+                   
+                    @{
+                        Type enumType = typeof(Luo.Core.EnumModels.MenuTypeEnum);
+                        Array values = Enum.GetValues(enumType);
+                        if (values.Length > 0)
+                        {
+                            foreach (int item in values)
+                            {
+                                <option value="@item.ToString()">@Enum.GetName(enumType, item)</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
 
-                        <input type="text" id="iconPicker" value="layui-icon-heart-fill" lay-filter="iconPicker" class="hide">
+            <div class="col-sm-3">
+                <label class="input-group-text">菜单图标</label>
+                <div class="card ">
+                    <div class="card-body bd-example">
+                        <div class="row">
+                            <div class="col-6" style="width:fit-content">
+                                <input type="text" id="iconPicker" value="layui-icon-heart-fill" lay-filter="iconPicker" class="hide">
+                            </div>
+                            <div class="col-6">
+                                <label name="menuIcon" class="col-form-label">layui-icon-heart-fill</label>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
 
             <div class="col-sm-3">
-                <div class="input-group-text">排序</div>
+                <label class="input-group-text">排序</label>
                 <input name="sort" class="layui-input" type="number" placeholder="请输入排序" lay-verType="tips" lay-verify="required" required />
             </div>
             <div class="col-sm-3">
-                <div class="input-group-text">是否禁用</div>
+                <label class="input-group-text">是否禁用</label>
                 <div class="card text-center">
                     <div class="card-body">
 
@@ -48,9 +74,9 @@
 
        
     </div>
-    <div class="card-footer text-muted">
+    <div class="card-footer text-muted  text-center">
         <div class="col-auto">
-            <button type="button" name="btn-save" class="btn btn-primary">保存</button>
+            <button type="button" name="btn-save" class="btn btn-primary btn-lg">保存</button>
         </div>
     </div>
 </div>
@@ -83,15 +109,16 @@
                 search: true,
                 click: function (obj) {
                     console.log(obj)
+                    $("label[name='menuIcon']").html(obj.fontclass);
                 },
                 ready: function () {
                     console.log(1)
                 }
             });
 
-
+            let menuParentSelect;
             LuoAjax('/SystemConfig/GetAllMenuInfos', "post", {}, function (res) {
-                xmSelect.render({
+                menuParentSelect=  xmSelect.render({
                     el: '#menuSelectBox',
                     name: 'parentMenuId',
                     height: '250px',
@@ -102,7 +129,8 @@
                     model: { icon: 'hidden', label: { type: 'text' } },
                     prop: {
                         name: 'menuName',
-                        value: 'menuId'
+                        value: 'menuId',
+                        selected:"selectedCheck"
                     },
                     radio: true,
                     clickClose: true,
@@ -120,12 +148,15 @@
                     },
                     tips: '请选择上级菜单'
                 });
-
-
             }, false);
 
-           
 
+            $('button[name="btn-save"]').click(function () {
+               
+
+                console.log(menuParentSelect.getValue());
+
+            })
 
         });
     </script>

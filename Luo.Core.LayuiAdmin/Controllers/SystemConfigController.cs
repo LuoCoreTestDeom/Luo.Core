@@ -74,6 +74,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
 
         public IActionResult MenuManage()
         {
+         
             return View();
         }
         [HttpPost]

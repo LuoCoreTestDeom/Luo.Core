@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Luo.Core.DatabaseEntity;
 using Luo.Core.DatabaseFactory;
+using Luo.Core.EnumModels;
 using Luo.Core.IRepository;
 using System;
 using System.Collections.Generic;
@@ -62,39 +63,103 @@ namespace Luo.Core.Services
                 try
                 {
                     db.BeginTran();
-                    db.Deleteable<Basic_Menu>().Where(x => x.MenuName == "系统管理").ExecuteCommand();
-                    db.Deleteable<Basic_Menu>().Where(x => x.MenuName == "用户管理").ExecuteCommand();
-                    db.Deleteable<Basic_Menu>().Where(x => x.MenuName == "菜单管理").ExecuteCommand();
+                    db.Deleteable<Basic_Menu>().ExecuteCommand();
                     var menuId = db.Insertable<Basic_Menu>(new
                     {
                         MenuName = "系统管理",
                         MenuEnable = true,
-                        MenuType = 0,
+                        MenuType = MenuTypeEnum.目录,
                         ParentMenuId = 0,
                         MenuSort = 1,
                         MenuIcon = "layui-icon-component",
                         MenuAddress = ""
                     }).ExecuteReturnIdentity();
-                    db.Insertable<Basic_Menu>(new
+                    #region 用户管理
+                  var userMenuId = db.Insertable<Basic_Menu>(new
                     {
                         MenuName = "用户管理",
                         MenuEnable = true,
-                        MenuType = 1,
+                        MenuType = MenuTypeEnum.菜单,
                         ParentMenuId = menuId,
                         MenuSort = 1,
                         MenuIcon = "layui-icon-component",
                         MenuAddress = "/SystemConfig/UserManage"
+                    }).ExecuteReturnIdentity();
+                    db.Insertable<Basic_Menu>(new
+                    {
+                        MenuName = "添加",
+                        MenuEnable = true,
+                        ParentMenuId = userMenuId,
+                        MenuType = MenuTypeEnum.按钮,
+                        MenuSort = 1,
+                        MenuIcon = "",
+                        MenuAddress = ""
                     }).ExecuteCommand();
                     db.Insertable<Basic_Menu>(new
                     {
+                        MenuName = "修改",
+                        MenuEnable = true,
+                        ParentMenuId = userMenuId,
+                        MenuType = MenuTypeEnum.按钮,
+                        MenuSort = 2,
+                        MenuIcon = "",
+                        MenuAddress = ""
+                    }).ExecuteCommand();
+                    db.Insertable<Basic_Menu>(new
+                    {
+                        MenuName = "删除",
+                        MenuEnable = true,
+                        ParentMenuId = userMenuId,
+                        MenuType = MenuTypeEnum.按钮,
+                        MenuSort = 3,
+                        MenuIcon = "",
+                        MenuAddress = ""
+                    }).ExecuteCommand();
+                    #endregion 用户管理
+
+                    #region 菜单管理
+                    var menuManageId = db.Insertable<Basic_Menu>(new
+                    {
                         MenuName = "菜单管理",
                         MenuEnable = true,
-                        MenuType = 1,
+                        MenuType = MenuTypeEnum.菜单,
                         ParentMenuId = menuId,
                         MenuSort = 2,
                         MenuIcon = "layui-icon-component",
                         MenuAddress = "/SystemConfig/MenuManage"
+                    }).ExecuteReturnIdentity();
+                    db.Insertable<Basic_Menu>(new
+                    {
+                        MenuName = "添加",
+                        MenuEnable = true,
+                        ParentMenuId = menuManageId,
+                        MenuType = MenuTypeEnum.按钮,
+                        MenuSort = 1,
+                        MenuIcon = "",
+                        MenuAddress = ""
                     }).ExecuteCommand();
+                    db.Insertable<Basic_Menu>(new
+                    {
+                        MenuName = "修改",
+                        MenuEnable = true,
+                        ParentMenuId = menuManageId,
+                        MenuType = MenuTypeEnum.按钮,
+                        MenuSort = 2,
+                        MenuIcon = "",
+                        MenuAddress = ""
+                    }).ExecuteCommand();
+                    db.Insertable<Basic_Menu>(new
+                    {
+                        MenuName = "删除",
+                        MenuEnable = true,
+                        ParentMenuId = menuManageId,
+                        MenuType = MenuTypeEnum.按钮,
+                        MenuSort = 3,
+                        MenuIcon = "",
+                        MenuAddress = ""
+                    }).ExecuteCommand();
+                    #endregion 菜单管理
+
                     db.CommitTran();
                     res = true;
                 }
