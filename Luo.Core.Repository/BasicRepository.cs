@@ -268,5 +268,29 @@ namespace Luo.Core.Repository
             });
             return res;
         }
+
+        /// <summary>
+        /// 修改菜单
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public bool EditMenuInfo(EditMenuInfoDto req)
+        {
+            bool res = false;
+            Factory.GetDbContext((db) =>
+            {
+                res = db.Updateable<Basic_Menu>(new
+                {
+                    MenuName = req.MenuName,
+                    MenuAddress = req.MenuAddress,
+                    MenuIcon = req.MenuIcon,
+                    MenuSort = req.MenuSort,
+                    MenuType = req.MenuType,
+                    ParentMenuId = req.ParentMenuId,
+                    MenuEnable = req.MenuEnable
+                }).Where(x=>x.Id==req.MenuId).ExecuteCommand() > 0;
+            });
+            return res;
+        }
     }
 }

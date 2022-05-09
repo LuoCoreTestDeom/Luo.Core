@@ -66,5 +66,12 @@ namespace Luo.Core.IRepository
         /// <returns></returns>
         public bool AddMenuInfo(AddMenuInfoDto req);
 
+        /// <summary>
+        /// 修改菜单
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public bool EditMenuInfo(EditMenuInfoDto req);
+
     }
 }

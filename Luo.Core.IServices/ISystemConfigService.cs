@@ -55,10 +55,10 @@ namespace Luo.Core.IServices
         public List<MenuGroupInfoResult> GetMenuInfos();
 
         /// <summary>
-        /// 添加菜单
+        /// 添加修改菜单
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel AddMenuInfo(MenuInfoInput req);
+        public CommonViewModel AddEditMenuInfo(MenuInfoInput req);
     }
 }

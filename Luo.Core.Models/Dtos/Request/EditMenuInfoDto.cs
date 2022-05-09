@@ -4,16 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Luo.Core.Models.ViewModels.Request
+namespace Luo.Core.Models.Dtos.Request
 {
-    public class MenuInfoInput
+    public class EditMenuInfoDto
     {
         public int MenuId { get; set; }
         public string MenuName { get; set; }
         public string MenuAddress { get; set; }
         public string MenuIcon { get; set; }
         public int MenuSort { get; set; }
-        public int MenuType { get; set; }
+
+        public EnumModels.MenuTypeEnum MenuType { get; set; }
+
         public int ParentMenuId { get; set; }
         public bool MenuEnable { get; set; }
     }

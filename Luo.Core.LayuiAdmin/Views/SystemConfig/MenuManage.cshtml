@@ -82,8 +82,13 @@
 </script>
 
 <script type="text/html" id="menu-enable">
-    <input type="checkbox" name="menu-enable" value="{{d.menuEnable}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="user-enable" checked="{{ d.menuEnable ? 'true' : 'false' }}">
+    <input type="checkbox" name="menu-enable" value="{{d.menuEnable}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="menu-enable" {{ d.menuEnable ? 'checked' : '' }}>
 </script>
+<script type="text/html" id="switchTpl">
+    <!-- 这里的 checked 的状态只是演示 -->
+    <input type="checkbox" name="sex" value="{{d.id}}" lay-skin="switch" lay-text="女|男" lay-filter="sexDemo" >
+</script>
+
 
 <script type="text/html" id="menu-icon">
     <i class="layui-icon {{d.menuIcon}}"></i>
@@ -126,7 +131,7 @@
                     ]
                 ]
             });
-            debugger;
+
             table.on('tool(tableFilter)', function (obj) {
                 if (obj.event === 'remove') {
                     window.remove(obj);
@@ -159,32 +164,30 @@
             });
 
             window.add = function () {
-
-                layer.open({
-                    title: "菜单信息",
-                    area: ['400px', '500px'],
-                    anim: 1,//弹出动画
-                    resize: false,//是否允许拉伸
-                    type: 2,
-                    content: '/SystemConfig/MenuInfo',
-                });
+                DialogShowBox({ title: "新增菜单信息", data: null })
             }
 
             window.edit = function (obj) {
-              
+
+                DialogShowBox({ title: "修改菜单信息", data: obj.data })
+            }
+
+            const DialogShowBox = (obj) => {
                 layer.open({
                     type: 2,
-                    title: '修改',
+                    title: obj.title,
                     shade: 0.1,
-                    area: ['450px', '500px'],
+                    anim: 1,//弹出动画
+                    resize: false,//是否允许拉伸
+                    area: ['400px', '500px'],
                     content: '/SystemConfig/MenuInfo',
                     success: function (layero, index) {
-                        //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-                        var iframe = window[layero.find('iframe')[0]['name']];
-                        iframe.ParentSetValue(obj.data);
+                        const iframe = window['layui-layer-iframe' + index];
+                        iframe.ShowDialog_Load(obj.data);
                     }
                 });
             }
+
 
             window.remove = function (obj) {
                 layer.confirm('确定要删除该权限', { icon: 3, title: '提示' }, function (index) {

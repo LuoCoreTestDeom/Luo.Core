@@ -97,12 +97,12 @@ namespace Luo.Core.LayuiAdmin.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddMenuInfo(MenuInfoInput req)
+        public IActionResult AddEditMenuInfo(MenuInfoInput req)
         {
             req.MenuEnable = !req.MenuEnable;
-            var res = _systemConfigService.AddMenuInfo(req);
+            var res = _systemConfigService.AddEditMenuInfo(req);
             return Json(res);
         }
-
+       
     }
 }

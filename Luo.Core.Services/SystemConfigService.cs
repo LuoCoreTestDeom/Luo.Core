@@ -186,16 +186,24 @@ namespace Luo.Core.Services
         }
 
         /// <summary>
-        /// 添加菜单
+        /// 添加修改菜单
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel AddMenuInfo(MenuInfoInput req) 
+        public CommonViewModel AddEditMenuInfo(MenuInfoInput req) 
         {
             CommonViewModel res = new CommonViewModel();
             try
             {
-               res.Status= _Rep.AddMenuInfo(_Mapper.Map<AddMenuInfoDto>(req));
+                if (req.MenuId > 0) 
+                {
+                    res.Status = _Rep.EditMenuInfo(_Mapper.Map<EditMenuInfoDto>(req));
+                }
+                else 
+                {
+                    res.Status = _Rep.AddMenuInfo(_Mapper.Map<AddMenuInfoDto>(req));
+                }
+               
             }
             catch (Exception ex)
             {
