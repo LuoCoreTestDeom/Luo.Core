@@ -73,7 +73,9 @@ namespace Luo.Core.Utility.AutoMapper
               .ForMember(dest => dest.MenuUrl, opts => opts.MapFrom(x => x.MenuAddress));
 
             CreateMap<MenuInfoList, UserMenuInfoOutput>();
-            
+
+            CreateMap<MenuInfoInput,AddMenuInfoDto>()
+            .ForMember(dest => dest.MenuType, opts => opts.MapFrom(x => x.MenuType.ObjToInt()));
 
             //CreateMap<SysUserInfoDto, SysUserInfo>()
             //    .ForMember(a => a.Id, o => o.MapFrom(d => d.uID))

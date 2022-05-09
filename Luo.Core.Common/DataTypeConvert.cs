@@ -190,6 +190,54 @@ namespace Luo.Core.Common
         }
 
 
+
+        public static T StringToEnum<T>(this string str)
+        {
+            try
+            {
+                return (T)Enum.Parse(typeof(T), str);
+            }
+            catch (Exception)
+            {
+                return default(T);
+            }
+        }
+
+        public static T IntToEnum<T>(this int value)
+        {
+            try
+            {
+                return (T)Enum.ToObject(typeof(T), value);
+            }
+            catch (Exception)
+            {
+                return default(T);
+            }
+        }
+
+        public static string EnumToString<T>(this T value)
+        {
+            try
+            {
+                return Enum.GetName(typeof(T), value);
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
+
+        public static int EnumToInt<T>(this T value)
+        {
+            try
+            {
+                return (int)Enum.ToObject(typeof(T), value);
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
         /// <summary>
         /// 将对象转换为byte数组
         /// </summary>

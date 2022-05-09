@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Luo.Core.DatabaseEntity\Luo.Core.DatabaseEntity.csproj" />
+    <ProjectReference Include="..\Luo.Core.EnumModels\Luo.Core.EnumModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>

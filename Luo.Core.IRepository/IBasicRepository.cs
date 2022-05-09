@@ -59,5 +59,12 @@ namespace Luo.Core.IRepository
         /// <returns></returns>
         public List<MenuInfoDto> QueryAllMenuInfoList();
 
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public bool AddMenuInfo(AddMenuInfoDto req);
+
     }
 }

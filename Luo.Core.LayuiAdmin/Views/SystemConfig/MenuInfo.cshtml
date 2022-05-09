@@ -17,14 +17,14 @@
             </div>
             <div class="col-sm-3">
                 <label class="input-group-text">菜单名称</label>
-                <input name="name" class="layui-input" placeholder="请输入菜单名称" lay-verType="tips" lay-verify="required" required />
+                <input id="menuName" class="layui-input" placeholder="请输入菜单名称" lay-verType="tips" lay-verify="required" required />
             </div>
 
             <div class="col-sm-3">
                 <label class="input-group-text">菜单类型</label>
-               
-                <select name="menuType" lay-verify="">
-                   
+
+                <select id="menuType" lay-verify="">
+
                     @{
                         Type enumType = typeof(Luo.Core.EnumModels.MenuTypeEnum);
                         Array values = Enum.GetValues(enumType);
@@ -38,6 +38,10 @@
                     }
                 </select>
             </div>
+            <div class="col-sm-3">
+                <label class="input-group-text">菜单链接</label>
+                <input id="menuUrl" class="layui-input" placeholder="请输入菜单链接" lay-verType="tips" lay-verify="required" required />
+            </div>
 
             <div class="col-sm-3">
                 <label class="input-group-text">菜单图标</label>
@@ -48,7 +52,7 @@
                                 <input type="text" id="iconPicker" value="layui-icon-heart-fill" lay-filter="iconPicker" class="hide">
                             </div>
                             <div class="col-6">
-                                <label name="menuIcon" class="col-form-label">layui-icon-heart-fill</label>
+                                <label id="menuIcon" class="col-form-label">layui-icon-heart-fill</label>
                             </div>
                         </div>
 
@@ -58,21 +62,20 @@
 
             <div class="col-sm-3">
                 <label class="input-group-text">排序</label>
-                <input name="sort" class="layui-input" type="number" placeholder="请输入排序" lay-verType="tips" lay-verify="required" required />
+                <input id="menuSort" class="layui-input" type="number" placeholder="请输入排序" lay-verType="tips" lay-verify="required" required />
             </div>
             <div class="col-sm-3">
                 <label class="input-group-text">是否禁用</label>
                 <div class="card text-center">
                     <div class="card-body">
-
-                        <input type="checkbox" name="" title="禁用" checked>
+                        <input type="checkbox" id="menuEnable" value="true" title="禁用">
                     </div>
                 </div>
             </div>
         </form>
 
 
-       
+
     </div>
     <div class="card-footer text-muted  text-center">
         <div class="col-auto">
@@ -90,14 +93,36 @@
     <script src="~/layui_extend/iconPicker.js"></script>
     <script src="~/layui_extend/xm-select.js"></script>
     <script>
+        let menuId = 0;
+        let menuParWinObj;
+        function ParentSetValue(reqData) {
+
+            debugger;
+            menuId = reqData.menuId;
+            menuParWinObj = reqData;
+          
+            document.getElementById("menuName").value = menuParWinObj.menuName;
+            document.getElementById("menuUrl").value = menuParWinObj.menuUrl;
+            document.getElementById("menuIcon").value = menuParWinObj.menuIcon;
+            document.getElementById("menuSort").value = menuParWinObj.menuSort;
+            document.getElementById("menuType").value = menuParWinObj.menuType;
+            form.render();
+            //if (reqData.menuEnable) {
+            //    document.getElementById("menuEnable").attr('checked', 'checked');
+            //}
+
+
+        }
         layui.use(['layer', 'form', 'xmSelect'], function () {
 
             var $ = layui.jquery;
             var layer = layui.layer;
             var form = layui.form;
             var xmSelect = layui.xmSelect;
-         
+
             var icon = layui.icon;
+
+           
 
             //初始化图标选择
             icon.render({
@@ -109,7 +134,7 @@
                 search: true,
                 click: function (obj) {
                     console.log(obj)
-                    $("label[name='menuIcon']").html(obj.fontclass);
+                    $('#menuIcon').html(obj.fontclass);
                 },
                 ready: function () {
                     console.log(1)
@@ -118,7 +143,7 @@
 
             let menuParentSelect;
             LuoAjax('/SystemConfig/GetAllMenuInfos', "post", {}, function (res) {
-                menuParentSelect=  xmSelect.render({
+                menuParentSelect = xmSelect.render({
                     el: '#menuSelectBox',
                     name: 'parentMenuId',
                     height: '250px',
@@ -130,7 +155,7 @@
                     prop: {
                         name: 'menuName',
                         value: 'menuId',
-                        selected:"selectedCheck"
+                        selected: "selectedCheck"
                     },
                     radio: true,
                     clickClose: true,
@@ -148,13 +173,41 @@
                     },
                     tips: '请选择上级菜单'
                 });
+                menuParentSelect.setValue([{ menuName: "顶级", menuId: 0, selectedCheck: true }]);//
             }, false);
-
+           
 
             $('button[name="btn-save"]').click(function () {
-               
 
-                console.log(menuParentSelect.getValue());
+                const menuParientId = menuParentSelect.getValue();
+                if (menuParientId.length < 1) {
+                    layer.msg("请选择父级菜单！");
+                    return;
+                }
+
+                LuoAjax("/SystemConfig/AddMenuInfo", "post", {
+                    MenuName: $('#menuName').val(),
+                    MenuAddress: $('#menuUrl').val(),
+                    MenuIcon: $('#menuIcon').html(),
+                    MenuSort: $('#menuSort').val(),
+                    MenuType: $('#menuType').val(),
+                    ParentMenuId: menuParientId[0].menuId,
+                    MenuEnable: $('#menuEnable:checked').val()
+                }, function (res) {
+                    if (res.status) {
+                        layer.msg(userId > 0 ? '修改成功' : '添加成功', {
+                            time: 2000,
+                            end: function () {
+                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                parent.layer.close(index);
+                            }
+                        });
+                       
+                    }
+                    else {
+                        layer.msg(data.msg, { icon: 5 });
+                    }
+                });
 
             })
 

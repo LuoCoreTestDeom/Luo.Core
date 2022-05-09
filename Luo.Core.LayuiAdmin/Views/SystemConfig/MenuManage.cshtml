@@ -1,7 +1,9 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-<link href="~/css/treetable.css" rel="stylesheet" asp-append-version="true"/>
+﻿@using Luo.Core.Utility;
+@{
+    List<Luo.Core.Models.ViewModels.Response.MenuInfoList> _userBtn = this.Context.GetMenuButton("/SystemConfig/MenuManage");
+
+}
+<link href="~/css/treetable.css" rel="stylesheet" asp-append-version="true" />
 <div class="layui-card">
     <div class="layui-card-body">
         <form class="layui-form" action="">
@@ -29,20 +31,30 @@
     </div>
 </div>
 
-<script type="text/html" id="power-toolbar">
-    
+<script type="text/html" id="menu-toolbar">
+
     <button class="layui-btn layui-btn-normal layui-btn-md layui-btn-mt10 layui-btn-ml10" lay-event="btnQuery">
         <i class="layui-icon layui-icon-search"></i>
         查询
     </button>
-    <button class="layui-btn layui-btn-primary layui-btn-md layui-btn-mt10" lay-event="add">
-        <i class="layui-icon layui-icon-add-1"></i>
-        新增
-    </button>
-    <button class="layui-btn layui-btn-danger layui-btn-md layui-btn-mt10" lay-event="batchRemove">
-        <i class="layui-icon layui-icon-delete"></i>
-        删除
-    </button>
+    @{
+        if (_userBtn.Any(x => x.MenuName == "添加"))
+        {
+            <button class="layui-btn layui-btn-primary layui-btn-md layui-btn-mt10" lay-event="add">
+                <i class="layui-icon layui-icon-add-1"></i>
+                新增
+            </button>
+        }
+        if (_userBtn.Any(x => x.MenuName == "删除"))
+        {
+            <button class="layui-btn layui-btn-danger layui-btn-md layui-btn-mt10" lay-event="batchRemove">
+                <i class="layui-icon layui-icon-delete"></i>
+                删除
+            </button>
+        }
+    }
+
+
     <button class="layui-btn layui-btn-success layui-btn-md layui-btn-mt10" lay-event="expandAll">
         <i class="layui-icon layui-icon-spread-left"></i>
         展开
@@ -54,7 +66,7 @@
 
 </script>
 
-<script type="text/html" id="power-bar">
+<script type="text/html" id="menu-bar">
     <button class="layui-btn layui-btn-primary layui-btn-sm" lay-event="edit"><i class="layui-icon layui-icon-edit"></i></button>
     <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="remove"><i class="layui-icon layui-icon-delete"></i></button>
 </script>
@@ -94,27 +106,28 @@
                 treeColIndex: 1,
                 treeSpid: 0,
                 treeIdName: 'menuId',
-                method:"post",
+                method: "post",
                 treePidName: 'parentMenuId',
                 skin: 'line',
                 treeDefaultClose: true,
-                toolbar: '#power-toolbar',
+                toolbar: '#menu-toolbar',
                 page: false,
                 cols: [
                     [
                         { type: 'checkbox' },
                         { field: 'menuName', minWidth: 200, title: '权限名称' },
                         { field: 'menuIcon', title: '图标', templet: '#menu-icon' },
+                        { field: 'menuUrl', minWidth: 200, title: '权限链接' },
                         { field: 'menuType', title: '权限类型', templet: '#menu-type' },
-                        { field: 'menuEnable', title: '是否可用', templet: '#menu-enable' },
+                        { field: 'menuEnable', title: '是否禁用', templet: '#menu-enable' },
                         { field: 'menuSort', title: '排序' },
 
-                        { title: '操作', templet: '#power-bar', width: 150, align: 'center' }
+                        { title: '操作', templet: '#menu-bar', width: 150, align: 'center' }
                     ]
                 ]
             });
             debugger;
-            table.on('tool(power-table)', function (obj) {
+            table.on('tool(tableFilter)', function (obj) {
                 if (obj.event === 'remove') {
                     window.remove(obj);
                 } else if (obj.event === 'edit') {
@@ -146,24 +159,30 @@
             });
 
             window.add = function () {
-               
+
                 layer.open({
                     title: "菜单信息",
                     area: ['400px', '500px'],
                     anim: 1,//弹出动画
                     resize: false,//是否允许拉伸
                     type: 2,
-                    content: '/SystemConfig/MenuInfo'
+                    content: '/SystemConfig/MenuInfo',
                 });
             }
 
             window.edit = function (obj) {
+              
                 layer.open({
                     type: 2,
                     title: '修改',
                     shade: 0.1,
                     area: ['450px', '500px'],
-                    content: MODULE_PATH + 'edit.html'
+                    content: '/SystemConfig/MenuInfo',
+                    success: function (layero, index) {
+                        //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                        var iframe = window[layero.find('iframe')[0]['name']];
+                        iframe.ParentSetValue(obj.data);
+                    }
                 });
             }
 

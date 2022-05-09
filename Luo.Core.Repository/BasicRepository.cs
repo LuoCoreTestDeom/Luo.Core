@@ -174,6 +174,7 @@ namespace Luo.Core.Repository
                 {
                     MenuId = x.Id,
                     MenuName = x.MenuName,
+                    MenuAddress=x.MenuAddress,
                     MenuType = x.MenuType,
                     MenuIcon = x.MenuIcon,
                     MenuSort = x.MenuSort,
@@ -240,6 +241,30 @@ namespace Luo.Core.Repository
                      ParentMenuId = a.ParentMenuId,
                      MenuEnable = a.MenuEnable
                  }).ToList();
+            });
+            return res;
+        }
+
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public bool AddMenuInfo(AddMenuInfoDto req)
+        {
+            bool res = false;
+            Factory.GetDbContext((db) =>
+            {
+                res= db.Insertable<Basic_Menu>(new
+                {
+                    MenuName = req.MenuName,
+                    MenuAddress = req.MenuAddress,
+                    MenuIcon = req.MenuIcon,
+                    MenuSort = req.MenuSort,
+                    MenuType = req.MenuType,
+                    ParentMenuId = req.ParentMenuId,
+                    MenuEnable = req.MenuEnable
+                }).ExecuteCommand()>0;
             });
             return res;
         }

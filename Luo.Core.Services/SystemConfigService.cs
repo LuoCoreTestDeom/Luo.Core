@@ -159,8 +159,13 @@ namespace Luo.Core.Services
         public List<MenuGroupInfoResult> GetMenuInfos()
         {
             var resData = _Rep.QueryAllMenuInfoList();
-           
-            return RecursionMenu(resData.Where(x => x.MenuType == 0).ToList(), resData);
+            resData.Add(new MenuInfoDto()
+            {
+                MenuId=0,
+                MenuName="顶级",
+                ParentMenuId=-1,
+            });
+            return RecursionMenu(resData.Where(x => x.ParentMenuId == -1).ToList(), resData);
         }
         /// <summary>
         /// 递归遍历菜单
@@ -180,6 +185,24 @@ namespace Luo.Core.Services
             return res;
         }
 
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel AddMenuInfo(MenuInfoInput req) 
+        {
+            CommonViewModel res = new CommonViewModel();
+            try
+            {
+               res.Status= _Rep.AddMenuInfo(_Mapper.Map<AddMenuInfoDto>(req));
+            }
+            catch (Exception ex)
+            {
+               res.Msg=ex.Message;
+            }
+            return res;
+        }
 
     }
 }

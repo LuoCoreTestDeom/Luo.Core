@@ -53,5 +53,12 @@ namespace Luo.Core.IServices
         /// <param name="userId"></param>
         /// <returns></returns>
         public List<MenuGroupInfoResult> GetMenuInfos();
+
+        /// <summary>
+        /// 添加菜单
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel AddMenuInfo(MenuInfoInput req);
     }
 }
