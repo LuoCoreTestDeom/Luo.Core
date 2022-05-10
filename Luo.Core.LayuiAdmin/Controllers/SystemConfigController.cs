@@ -6,6 +6,7 @@ using Luo.Core.Common;
 using Luo.Core.Models.ViewModels.Request;
 using MySqlX.XDevAPI.Common;
 using Luo.Core.Models.Dtos.Response;
+using Org.BouncyCastle.Ocsp;
 
 namespace Luo.Core.LayuiAdmin.Controllers
 {
@@ -106,7 +107,18 @@ namespace Luo.Core.LayuiAdmin.Controllers
         [HttpDelete]
         public IActionResult DeleteMenuInfoByIds(List<int> ids)
         {
-           var res= _systemConfigService.DeleteMenuInfoByIds(ids);
+            var res = _systemConfigService.DeleteMenuInfoByIds(ids);
+            return Json(res);
+        }
+
+        public IActionResult RoleManage()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult GetPageRoleInfo(RoleInfoPageQuery req)
+        {
+            var res = _systemConfigService.QueryRolePage(req);
             return Json(res);
         }
     }

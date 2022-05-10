@@ -160,6 +160,49 @@ namespace Luo.Core.Services
                     }).ExecuteCommand();
                     #endregion 菜单管理
 
+                    #region 角色管理
+                    var roleId = db.Insertable<Basic_Menu>(new
+                    {
+                        MenuName = "角色管理",
+                        MenuEnable = true,
+                        MenuType = MenuTypeEnum.菜单,
+                        ParentMenuId = menuId,
+                        MenuSort = 1,
+                        MenuIcon = "layui-icon-component",
+                        MenuAddress = "/SystemConfig/RoleManage"
+                    }).ExecuteReturnIdentity();
+                    db.Insertable<Basic_Menu>(new
+                    {
+                        MenuName = "添加",
+                        MenuEnable = true,
+                        ParentMenuId = roleId,
+                        MenuType = MenuTypeEnum.按钮,
+                        MenuSort = 1,
+                        MenuIcon = "",
+                        MenuAddress = ""
+                    }).ExecuteCommand();
+                    db.Insertable<Basic_Menu>(new
+                    {
+                        MenuName = "修改",
+                        MenuEnable = true,
+                        ParentMenuId = roleId,
+                        MenuType = MenuTypeEnum.按钮,
+                        MenuSort = 2,
+                        MenuIcon = "",
+                        MenuAddress = ""
+                    }).ExecuteCommand();
+                    db.Insertable<Basic_Menu>(new
+                    {
+                        MenuName = "删除",
+                        MenuEnable = true,
+                        ParentMenuId = roleId,
+                        MenuType = MenuTypeEnum.按钮,
+                        MenuSort = 3,
+                        MenuIcon = "",
+                        MenuAddress = ""
+                    }).ExecuteCommand();
+                    #endregion 用户管理
+
                     db.CommitTran();
                     res = true;
                 }

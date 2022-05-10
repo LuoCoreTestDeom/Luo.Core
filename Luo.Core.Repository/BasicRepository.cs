@@ -174,7 +174,7 @@ namespace Luo.Core.Repository
                 {
                     MenuId = x.Id,
                     MenuName = x.MenuName,
-                    MenuAddress=x.MenuAddress,
+                    MenuAddress = x.MenuAddress,
                     MenuType = x.MenuType,
                     MenuIcon = x.MenuIcon,
                     MenuSort = x.MenuSort,
@@ -207,7 +207,7 @@ namespace Luo.Core.Repository
                  {
                      MenuId = a.Id,
                      MenuName = a.MenuName,
-                     MenuAddress=a.MenuAddress,
+                     MenuAddress = a.MenuAddress,
                      MenuIcon = a.MenuIcon,
                      MenuSort = a.MenuSort,
                      MenuType = a.MenuType,
@@ -255,7 +255,7 @@ namespace Luo.Core.Repository
             bool res = false;
             Factory.GetDbContext((db) =>
             {
-                res= db.Insertable<Basic_Menu>(new
+                res = db.Insertable<Basic_Menu>(new
                 {
                     MenuName = req.MenuName,
                     MenuAddress = req.MenuAddress,
@@ -264,7 +264,7 @@ namespace Luo.Core.Repository
                     MenuType = req.MenuType,
                     ParentMenuId = req.ParentMenuId,
                     MenuEnable = req.MenuEnable
-                }).ExecuteCommand()>0;
+                }).ExecuteCommand() > 0;
             });
             return res;
         }
@@ -288,7 +288,7 @@ namespace Luo.Core.Repository
                     MenuType = req.MenuType,
                     ParentMenuId = req.ParentMenuId,
                     MenuEnable = req.MenuEnable
-                }).Where(x=>x.Id==req.MenuId).ExecuteCommand() > 0;
+                }).Where(x => x.Id == req.MenuId).ExecuteCommand() > 0;
             });
             return res;
         }
@@ -298,7 +298,7 @@ namespace Luo.Core.Repository
         /// </summary>
         /// <param name="menuIds"></param>
         /// <returns></returns>
-        public CommonDto DeleteMenuInfoByIds(List<int> menuIds) 
+        public CommonDto DeleteMenuInfoByIds(List<int> menuIds)
         {
             CommonDto res = new CommonDto();
             Factory.GetDbContext((db) =>
@@ -316,8 +316,33 @@ namespace Luo.Core.Repository
                 catch (Exception ex)
                 {
                     db.RollbackTran();
-                    res.Message=ex.Message;
+                    res.Message = ex.Message;
                 }
+            });
+            return res;
+        }
+
+
+        /// <summary>
+        /// 查询角色信息
+        /// </summary>
+        /// <param name="menuIds"></param>
+        /// <returns></returns>
+        public CommonPageDto<List<RoleInfoDto>> QueryRoleInfo(QueryRoleInfoDto req)
+        {
+            CommonPageDto<List<RoleInfoDto>> res = new CommonPageDto<List<RoleInfoDto>>();
+
+            Factory.GetDbContext((db) =>
+            {
+                int totalCount = 0;
+                res.ResultData = db.Queryable<Basic_Role>()
+                .WhereIF(!string.IsNullOrWhiteSpace(req.RoleName), x => x.RoleName.Contains(req.RoleName))
+                .Select(x => new RoleInfoDto
+                 {
+                     RoleId = x.Id,
+                     RoleName = x.RoleName
+                 }).ToPageList(req.PageIndex, req.PageCount, ref totalCount);
+                res.TotalCount = totalCount;
             });
             return res;
         }

@@ -79,7 +79,13 @@ namespace Luo.Core.Utility.AutoMapper
             CreateMap<MenuInfoInput, EditMenuInfoDto>()
            .ForMember(dest => dest.MenuType, opts => opts.MapFrom(x => x.MenuType.ObjToInt()));
 
-            
+
+            CreateMap<RoleInfoDto, RoleInfoList>();
+
+
+            CreateMap(typeof(CommonPageDto<>), typeof(CommonPageViewModel<>))
+               .ConvertUsing(typeof(CommonPageTypeConverter<,>));
+            CreateMap<RoleInfoPageQuery, QueryRoleInfoDto>();
 
             //CreateMap<SysUserInfoDto, SysUserInfo>()
             //    .ForMember(a => a.Id, o => o.MapFrom(d => d.uID))
@@ -131,7 +137,25 @@ namespace Luo.Core.Utility.AutoMapper
 
           
         }
+        public class CommonPageTypeConverter<T,T2> : ITypeConverter<CommonPageDto<T>, CommonPageViewModel<T2>>
+        {
+            public CommonPageViewModel<T2> Convert(CommonPageDto<T> source, CommonPageViewModel<T2> destination, ResolutionContext context)
+            {
+                destination = new CommonPageViewModel<T2>()
+                {
+                    Status = source.Status,
+                    StatusCode = source.StatusCode,
+                    Msg = source.Message,
+                    ResultData = context.Mapper.Map<T2>(source.ResultData),
+                    TotalCount=source.TotalCount
+                };
+                return destination;
+            }
 
+
+        }
+
+        
 
     }
 }

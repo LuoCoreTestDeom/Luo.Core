@@ -20,4 +20,9 @@ namespace Luo.Core.Models.Dtos
         public string Message { get; set; }
         public T ResultData { get; set; }
     }
+
+    public class CommonPageDto<T>: CommonDto<T>
+    {
+        public int TotalCount { get; set; }
+    }
 }

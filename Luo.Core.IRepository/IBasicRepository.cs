@@ -78,6 +78,12 @@ namespace Luo.Core.IRepository
         /// <param name="menuIds"></param>
         /// <returns></returns>
         public CommonDto DeleteMenuInfoByIds(List<int> menuIds);
+        /// <summary>
+        /// 查询角色信息
+        /// </summary>
+        /// <param name="menuIds"></param>
+        /// <returns></returns>
+        public CommonPageDto<List<RoleInfoDto>> QueryRoleInfo(QueryRoleInfoDto req);
 
     }
 }

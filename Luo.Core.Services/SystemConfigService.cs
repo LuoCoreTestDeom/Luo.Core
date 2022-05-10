@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Luo.Core.Common;
 using Luo.Core.Models.Dtos.Response;
 using Luo.Core.Models.Dtos.Request;
+using Luo.Core.Models.Dtos;
 
 namespace Luo.Core.Services
 {
@@ -38,7 +39,7 @@ namespace Luo.Core.Services
             CommonViewModel<UserInfoList> res = new CommonViewModel<UserInfoList>();
             try
             {
-                var userList = _Rep.QueryUserInfoList(_Mapper.Map<Models.Dtos.Request.QueryUserInfoDto>(req));
+                var userList = _Rep.QueryUserInfoList(_Mapper.Map<QueryUserInfoDto>(req));
                 res.Status = true;
                 res.StatusCode = 200;
                 res.ResultData = _Mapper.Map<UserInfoList>(userList);
@@ -225,6 +226,30 @@ namespace Luo.Core.Services
             {
                var resData=_Rep.DeleteMenuInfoByIds(req);
                 res = _Mapper.Map<CommonViewModel>(resData);
+            }
+            catch (Exception ex)
+            {
+                res.Msg = ex.Message;
+            }
+            return res;
+        }
+
+
+        /// <summary>
+        /// 查询角色信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonPageViewModel<List<RoleInfoList>> QueryRolePage(RoleInfoPageQuery req)
+        {
+            CommonPageViewModel<List<RoleInfoList>> res = new CommonPageViewModel<List<RoleInfoList>>();
+            try
+            {
+                var reqData = _Mapper.Map<QueryRoleInfoDto>(req);
+                var resData = _Rep.QueryRoleInfo(reqData);
+               
+                res = _Mapper.Map<CommonPageViewModel<List<RoleInfoList>>>(resData);
+                res.StatusCode = 200;
             }
             catch (Exception ex)
             {

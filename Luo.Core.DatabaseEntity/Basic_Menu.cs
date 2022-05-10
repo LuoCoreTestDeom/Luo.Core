@@ -28,14 +28,16 @@ namespace Luo.Core.DatabaseEntity
         /// Desc:
         /// Default:
         /// Nullable:False
-        /// </summary>           
+        /// </summary>       
+        [SugarColumn(Length =50)]
         public string MenuName { get; set; }
 
         /// <summary>
         /// Desc:
         /// Default:
         /// Nullable:False
-        /// </summary>           
+        /// </summary>     
+        [SugarColumn(IsNullable = true)]
         public string? MenuAddress { get; set; }
         /// <summary>
         /// Desc: 0目录，1菜单，2按钮

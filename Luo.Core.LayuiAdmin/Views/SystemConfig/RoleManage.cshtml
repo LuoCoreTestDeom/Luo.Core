@@ -1,0 +1,248 @@
+﻿@using Luo.Core.Utility;
+@{
+    List<Luo.Core.Models.ViewModels.Response.MenuInfoList> _userBtn = this.Context.GetMenuButton("/SystemConfig/UserManage");
+
+}
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">角色名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="RoleName" id="RoleName" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <table class="layui-hide" id="currentTable" lay-filter="currentTableFilter"></table>
+        <script type="text/html" id="toolbarEvent">
+            <div class="layui-btn-container">
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-normal" lay-event="btnQuery"><i class="layui-icon"></i> 搜 索</button>
+                </div>
+                @{ if (_userBtn != null)
+                    {
+                        if (_userBtn.Any(x => x.MenuName.Contains("添加")))
+                        {
+                            <button class="layui-btn layui-btn-radius  data-add-btn" lay-event="btnAdd"> 添加 </button>
+                        }
+                        if (_userBtn.Any(x => x.MenuName.Contains("删除")))
+                        {
+                            <button class="layui-btn layui-btn-radius layui-btn-danger data-delete-btn" lay-event="btnDelete"> 删除 </button>
+                        }
+                    }
+
+                }
+
+
+            </div>
+        </script>
+        <script type="text/html" id="currentTableBar">
+            @{
+                if (_userBtn != null)
+                {
+                    if (_userBtn.Any(x => x.MenuName.Contains("修改")))
+                    {
+                        <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+                    }
+                    if (_userBtn.Any(x => x.MenuName.Contains("删除")))
+                    {
+                        <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+                    }
+                }
+            }
+        </script>
+    </div>
+
+</div>
+
+@section  Scripts {
+    <script>
+        layui.use(['form', 'table', 'laydate', 'layer'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                table = layui.table,
+                laydate = layui.laydate;
+
+            const tempDataTable = table.render({
+                elem: '#currentTable',
+                toolbar: '#toolbarEvent',
+                defaultToolbar: ['filter'],
+                cellMinWidth: 80,
+                loading: false,
+                cols: [[
+                    { type: "checkbox", width: '10%' },
+                    { field: 'roleId', width: '30%', title: 'ID', sort: true },
+                    { field: 'roleName', width: '40%', title: '用户名' },
+                    { title: '操作', width: '20%', toolbar: '#currentTableBar', align: "center" }
+                ]],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 15,
+                page: true,
+                skin: 'row',
+                text: {
+                    none: '暂无相关数据' //默认：无数据。
+                },
+                request: {
+                    pageName: 'PageIndex',//页码的参数名称，默认：page
+                    limitName: 'PageCount' //每页数据量的参数名，默认：limit
+                },
+                response: {
+                    statusCode: 200 //规定成功的状态码，默认：0
+                }
+            });
+
+
+            //头工具栏事件
+            table.on('toolbar(currentTableFilter)', function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'btnQuery':
+                        getDataTable();
+                        break;
+                    case 'btnAdd':
+                        layer.open({
+                            title: "添加用户",
+                            area: ['450px', '500px'],
+                            anim: 1,//弹出动画
+                            resize: false,//是否允许拉伸
+                            type: 2,
+                            content: '/SystemConfig/UserInfo',
+                            success: function (layero, index) {
+                                //对加载后的iframe进行宽高度自适应
+                                layer.iframeAuto(index)
+                            }
+                        });
+                        break;
+                    case 'btnDelete':
+                        if (checkStatus.data.length <= 0) {
+                            layer.msg('最少选择一行');
+                            return;
+                        }
+                        layer.confirm('真的删除行么', function (index) {
+                            let userIds = [];
+                            checkStatus.data.forEach(function (item) {
+                                userIds.push(item.userId)
+                            });
+                            deleteUser(userIds);
+                            layer.close(index);
+
+                            let tableDT = table.cache.currentTable
+                            tableDT.filter(x => x.LAY_CHECKED).splice(1);
+
+                            table.reload("currentTable", {
+                                data: tableDT   // 将新数据重新载入表格
+                            });
+                        });
+                        break;
+                };
+            });
+            //监听行工具事件
+            table.on('tool(currentTableFilter)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'delete') {
+                    layer.confirm('真的删除行么', function (index) {
+                        let userIds = [];
+                        userIds.push(data.userId)
+                        deleteUser(userIds);
+                        layer.close(index);
+                        obj.del();
+                    });
+                } else if (obj.event === 'edit') {
+                    layer.open({
+                        title: "添加用户",
+                        area: ['450px', '500px'],
+                        anim: 1,//弹出动画
+                        resize: false,//是否允许拉伸
+                        type: 2,
+                        content: '/SystemConfig/UserInfo',
+                        success: function (layero, index) {
+                            //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                            var iframe = window[layero.find('iframe')[0]['name']];
+                            iframe.ParentSetValue(obj.data);
+                            //对加载后的iframe进行宽高度自适应
+                            layer.iframeAuto(index);
+                        }
+                    });
+                }
+            });
+
+            //查询
+            function getDataTable() {
+
+                const loadingIndex = layer.msg('查询中，请稍等.....', { shade: 0.3, icon: 16 });
+                tempDataTable.reload({
+                    parseData: function (res) { //res 即为原始返回的数据
+                        return {
+                            "code": res.statusCode, //解析接口状态
+                            "msg": res.msg, //解析提示文本
+                            "count": res.totalCount, //解析数据长度
+                            "data": res.resultData //解析数据列表
+                        };
+                    },
+                    url: "/SystemConfig/GetPageRoleInfo",
+                    method: "Post",
+                    where: {
+                        RoleName: $('#RoleName').val()
+                    },
+                    done: function (res, curr, count) {
+                        //如果是异步请求数据方式，res即为你接口返回的信息。
+                        //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+                        console.log(res);
+                        //得到当前页码
+                        console.log(curr);
+                        //得到数据总量
+                        console.log(count);
+                        layer.close(loadingIndex);
+                    },
+                    error: function (errorObj, context) {
+                        //得到当前页码
+                        console.log(errorObj);
+                        //得到数据总量
+                        console.log(context);
+                        layer.close(loadingIndex);
+                    }
+                }, true);
+            }
+
+            function deleteUser(reqData) {
+
+                const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
+                $.ajax({
+                    type: "Delete",
+                    url: "/SystemConfig/DeleteUser",
+                    data: { req: reqData },
+                    success: function (res) {
+                        layer.close(msgDialogIndex);
+                        if (res.status) {
+                            layer.msg('删除成功', { icon: 6 });
+                        }
+                        else {
+                            layer.msg(data.msg, { icon: 5 });
+                        }
+                    },
+                    error: function (jqXHR) {
+                        layer.close(msgDialogIndex);
+                        layer.msg("发生错误：" + jqXHR.status, {
+                            time: 0,  //不自动关闭
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                            }
+                        });
+                    }
+                });
+            }
+
+
+        });
+    </script>
+
+}

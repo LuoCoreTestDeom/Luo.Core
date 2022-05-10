@@ -13,9 +13,5 @@ namespace Luo.Core.Models.Dtos.Response
         public List<RoleInfoDto> RoleInfos { get; set; }
 
     }
-    public class RoleInfoDto
-    {
-        public int RoleId { get; set; }
-        public string RoleName { get; set; }
-    }
+ 
 }

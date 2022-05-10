@@ -66,5 +66,12 @@ namespace Luo.Core.IServices
         /// <param name="req"></param>
         /// <returns></returns>
         public CommonViewModel DeleteMenuInfoByIds(List<int> req);
+
+        /// <summary>
+        /// 查询角色信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonPageViewModel<List<RoleInfoList>> QueryRolePage(RoleInfoPageQuery req);
     }
 }

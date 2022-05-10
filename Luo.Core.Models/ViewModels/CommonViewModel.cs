@@ -21,4 +21,10 @@ namespace Luo.Core.Models.ViewModels
         public string Msg { get; set; }
         public T ResultData { get; set; }
     }
+
+
+    public class CommonPageViewModel<T>: CommonViewModel<T>
+    {
+       public int TotalCount { get; set; }
+    }
 }
