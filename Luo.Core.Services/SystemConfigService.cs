@@ -254,7 +254,7 @@ namespace Luo.Core.Services
                 var reqData = req.MapTo<QueryRoleInfoDto>();
                 CommonPageDto<List<RoleInfoDto>> resData = _Rep.QueryRoleInfo(reqData);
                
-                res = _Mapper.Map<CommonPageViewModel<List<RoleInfoList>>>(resData);
+                res = _Mapper.Map<CommonPageDto<List<RoleInfoDto>>, CommonPageViewModel<List<RoleInfoList>>>(resData);
                 res.StatusCode = 200;
             }
             catch (Exception ex)

@@ -18,7 +18,6 @@ using Luo.Core.Models.ViewModels.Response;
 using Luo.Core.DatabaseEntity;
 using MySqlX.XDevAPI.Common;
 using Renci.SshNet.Common;
-using Google.Protobuf.WellKnownTypes;
 
 namespace Luo.Core.Utility.AutoMapper
 {
@@ -112,26 +111,25 @@ namespace Luo.Core.Utility.AutoMapper
         {
             public CommonPageViewModel<T2> Convert(CommonPageDto<T> source, CommonPageViewModel<T2> destination, ResolutionContext context)
             {
-                //var sourceObjType = source.ResultData.GetType();
-                //var IsGenericType = sourceObjType.IsGenericType;
-                //var sourceObjList = sourceObjType.GetInterface("IEnumerable", false);
-                //if (IsGenericType && sourceObjList != null)
-                //{
-                //   
-                //    
-                //    listVal.MapToList <ssss> ();
-                //}
-                destination = new CommonPageViewModel<T2>();
-                var sourceListVal = source.ResultData as IEnumerable<object>;
-                var ssss = sourceListVal.GetType().GetGenericArguments()[0];
-                var destListVal = destination.ResultData as IEnumerable<object>;
-                var ssss2 = destListVal.GetType().GetGenericArguments()[0];
-                new MapperConfiguration(a => a.CreateMap(ssss, ssss2)).CreateMapper();
+               
+                IMapper mapper=null;
+                var typeSoure = typeof(T);
+                var typeDest = typeof(T2);
+                if(typeDest.IsGenericType) 
+                {
+                    Type[] typeParametersSoure = typeSoure.GetGenericArguments();
+                    Type[] typeParametersDest = typeDest.GetGenericArguments();
+                    mapper = new MapperConfiguration(a => a.CreateMap(typeParametersSoure[0], typeParametersDest[0])).CreateMapper();
+                 
+                }
+                if (mapper == null) return default(CommonPageViewModel<T2>);
 
+
+                destination = new CommonPageViewModel<T2>();
                 destination.Status = source.Status;
                 destination.StatusCode = source.StatusCode;
                 destination.Msg = source.Message;
-                destination.ResultData = context.Mapper.Map<T, T2>(source.ResultData);
+                destination.ResultData = mapper.Map<T,T2>(source.ResultData);
                 destination.TotalCount = source.TotalCount;
                 return destination;
             }
