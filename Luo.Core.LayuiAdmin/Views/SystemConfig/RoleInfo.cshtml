@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewData["Title"] = "RoleInfo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+
+<div class="card">
+
+    <div class="card-body">
+        <form class="row gx-3 gy-2 align-items-center layui-form">
+            <div class="col-sm-3">
+                <label class="input-group-text">角色名称</label>
+                <input id="menuName" class="layui-input" placeholder="请输入菜单名称" lay-verType="tips" lay-verify="required" required />
+            </div>
+            <div class="col-sm-3">
+                <label class="input-group-text">菜单权限</label>
+                <div id="menuSelectBox" class="ew-xmselect-tree"></div>
+            </div>
+
+
+            <div class="col-sm-3">
+                <label class="input-group-text">菜单类型</label>
+
+                <select id="menuType" lay-verify="">
+
+                    @{
+                        Type enumType = typeof(Luo.Core.EnumModels.MenuTypeEnum);
+                        Array values = Enum.GetValues(enumType);
+                        if (values.Length > 0)
+                        {
+                            foreach (int item in values)
+                            {
+                                <option value="@item.ToString()">@Enum.GetName(enumType, item)</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <label class="input-group-text">菜单链接</label>
+                <input id="menuUrl" class="layui-input" placeholder="请输入菜单链接" lay-verType="tips" lay-verify="required" required />
+            </div>
+
+            <div class="col-sm-3">
+                <label class="input-group-text">菜单图标</label>
+                <div class="card ">
+                    <div class="card-body bd-example">
+                        <div class="row">
+                            <div class="col-6" style="width:fit-content">
+                                <input type="text" id="iconPicker" value="layui-icon-heart-fill" lay-filter="iconPicker" class="hide">
+                            </div>
+                            <div class="col-6">
+                                <label id="menuIcon" class="col-form-label">layui-icon-heart-fill</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <label class="input-group-text">排序</label>
+                <input id="menuSort" class="layui-input" type="number" placeholder="请输入排序" lay-verType="tips" lay-verify="required" required />
+            </div>
+            <div class="col-sm-3">
+                <label class="input-group-text">是否禁用</label>
+                <div class="card text-center">
+                    <div class="card-body">
+                        <input type="checkbox" id="menuEnable" value="true" title="禁用">
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+
+    </div>
+    <div class="card-footer text-muted  text-center">
+        <div class="col-auto">
+            <button type="button" name="btn-save" class="btn btn-primary btn-lg">保存</button>
+        </div>
+    </div>
+</div>
+

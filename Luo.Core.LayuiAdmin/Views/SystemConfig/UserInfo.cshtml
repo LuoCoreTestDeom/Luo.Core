@@ -71,7 +71,7 @@
             const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
             $.ajax({
                 type: "Post",
-                url: "/SystemConfig/DeleteMenuInfoByIds/",
+                url: userEditUrl,
                 data: {
                     UserId: userId,
                     UserName: $("#userName").val(),

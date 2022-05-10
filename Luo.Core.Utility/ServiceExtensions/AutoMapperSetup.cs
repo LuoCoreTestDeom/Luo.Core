@@ -16,6 +16,8 @@ namespace Luo.Core.Utility.ServiceExtensions
         public static void AddAutoMapperSetup(this IServiceCollection services)
         {
             if (services == null) throw new ArgumentNullException(nameof(services));
+            //添加AutoMapper 扩展方法需要
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddAutoMapper(typeof(AutoMapperConfig));
             AutoMapperConfig.RegisterMappings();

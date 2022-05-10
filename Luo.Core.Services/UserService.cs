@@ -8,6 +8,7 @@ using Luo.Core.Models.Dtos.Response;
 using Luo.Core.Models.ViewModels;
 using Luo.Core.Models.ViewModels.Request;
 using Luo.Core.Models.ViewModels.Response;
+using Luo.Core.Utility.AutoMapper;
 
 namespace Luo.Core.Services
 {
@@ -29,7 +30,7 @@ namespace Luo.Core.Services
         public CommonViewModel<LoginUserInfoDto> UserLogin(LoginUserForm req)
         {
             CommonViewModel<LoginUserInfoDto> res = new CommonViewModel<LoginUserInfoDto>();
-            var reqData = _Mapper.Map<LoginUserDto>(req);
+            var reqData = req.AutoMapTo<LoginUserDto>();
             try
             {
                 reqData.Password = CommonUtil.EncryptString(reqData.Password);
@@ -52,6 +53,7 @@ namespace Luo.Core.Services
         /// <returns></returns>
         public List<MenuInfoList> GetUserMenuInfos(int userId)
         {
+           
            var resData= _Rep.QueryMenuInfoListUserId(userId);
             return _Mapper.Map<List<MenuInfoList>>(resData);
         }
@@ -67,7 +69,7 @@ namespace Luo.Core.Services
             List<UserMenuInfoOutput> res = new List<UserMenuInfoOutput>();
             foreach (var item in resData)
             {
-                var menuInfo = _Mapper.Map<UserMenuInfoOutput>(item);
+                var menuInfo = item.MapTo<UserMenuInfoOutput>();
                 menuInfo.ChildrenMeuns = RecursionMenu(sourceData.Where(x => x.ParentMenuId == item.MenuId).ToList(), sourceData);
                 res.Add(menuInfo);
             }

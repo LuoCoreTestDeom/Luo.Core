@@ -121,5 +121,10 @@ namespace Luo.Core.LayuiAdmin.Controllers
             var res = _systemConfigService.QueryRolePage(req);
             return Json(res);
         }
+
+        public IActionResult RoleInfo()
+        {
+            return View();
+        }
     }
 }

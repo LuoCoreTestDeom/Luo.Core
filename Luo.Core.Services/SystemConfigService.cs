@@ -14,6 +14,8 @@ using Luo.Core.Common;
 using Luo.Core.Models.Dtos.Response;
 using Luo.Core.Models.Dtos.Request;
 using Luo.Core.Models.Dtos;
+using Luo.Core.Utility.AutoMapper;
+
 
 namespace Luo.Core.Services
 {
@@ -39,10 +41,11 @@ namespace Luo.Core.Services
             CommonViewModel<UserInfoList> res = new CommonViewModel<UserInfoList>();
             try
             {
-                var userList = _Rep.QueryUserInfoList(_Mapper.Map<QueryUserInfoDto>(req));
+                UserInfoListDto userList = _Rep.QueryUserInfoList(req.MapTo<QueryUserInfoDto>());
+                res.ResultData = _Mapper.Map<UserInfoList>(userList);
                 res.Status = true;
                 res.StatusCode = 200;
-                res.ResultData = _Mapper.Map<UserInfoList>(userList);
+               
             }
             catch (Exception ex)
             {
@@ -71,8 +74,11 @@ namespace Luo.Core.Services
                 var reqData = _Mapper.Map<AddUserDto>(req);
              
                 reqData.CreateName = _accessor.HttpContext.User.Claims.SingleOrDefault(x => x.Type == "UserName").Value;
-                var resData = _Rep.AddUser(reqData);
-                res = _Mapper.Map<CommonViewModel>(resData);
+                CommonDto resData = _Rep.AddUser(reqData);
+                res = resData.AutoMapForMemberTo<CommonDto, CommonViewModel>(fm => 
+                {
+                    fm.ForMember(dest => dest.Msg, opts => opts.MapFrom(x => x.Message));
+                });
             }
             catch (Exception ex)
             {
@@ -245,8 +251,8 @@ namespace Luo.Core.Services
             CommonPageViewModel<List<RoleInfoList>> res = new CommonPageViewModel<List<RoleInfoList>>();
             try
             {
-                var reqData = _Mapper.Map<QueryRoleInfoDto>(req);
-                var resData = _Rep.QueryRoleInfo(reqData);
+                var reqData = req.MapTo<QueryRoleInfoDto>();
+                CommonPageDto<List<RoleInfoDto>> resData = _Rep.QueryRoleInfo(reqData);
                
                 res = _Mapper.Map<CommonPageViewModel<List<RoleInfoList>>>(resData);
                 res.StatusCode = 200;
