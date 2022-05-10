@@ -90,17 +90,40 @@
 
             //提交
             form.on('submit(LAY-user-login-submit)', function (obj) {
-
-
-                LuoAjax('/User/Login', "Post", obj.field, function (res) {
-                    if (res.Status) {
-                        top.window.location.href = '/'; //后台主页
+                var msgDialogIndex = layer.msg('正在登录，请稍等.....', { shade: 0.3, icon: 16 });
+                $.ajax({
+                    type: "Post",
+                    url: '/User/Login',
+                    async: true,
+                    data: obj.field,
+                    dataType: "jsonp",
+                    success: function (res) {
+                        layer.close(msgDialogIndex);
+                        if (res.Status) {
+                            layer.msg('登录成功', {
+                                icon: 6,
+                                time: 500 //（如果不配置，默认是3秒）
+                            }, function () {
+                                top.window.location.href = '/'; //后台主页
+                            });
+                        }
+                        else {
+                            layer.msg('登录失败'+res.Msg, { shift: 6 });
+                            RefreshCerCode();
+                        }
+                    },
+                    error: function (jqXHR) {
+                        layer.close(msgDialogIndex);
+                        layer.msg("发生错误：" + jqXHR.status, {
+                            time: 0,  //不自动关闭
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                            }
+                        });
                     }
-                    else {
-                        layer.msg(res.Msg, { shift: 6 });
-                        RefreshCerCode();
-                    }
-                }, false, "jsonp");
+                });
+               
 
             });
 
