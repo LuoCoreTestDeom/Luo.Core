@@ -46,6 +46,7 @@ namespace Luo.Core.DatabaseFactory
                 catch (Exception ex)
                 {
                     Debug.WriteLine("SQL报错:" + ex);
+                    throw new Exception("SQL报错:" + ex);
                 }
             }
         }

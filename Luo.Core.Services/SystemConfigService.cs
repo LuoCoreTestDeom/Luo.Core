@@ -212,5 +212,26 @@ namespace Luo.Core.Services
             return res;
         }
 
+
+        /// <summary>
+        /// 通过IDs删除菜单信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel DeleteMenuInfoByIds(List<int> req)
+        {
+            CommonViewModel res = new CommonViewModel();
+            try
+            {
+               var resData=_Rep.DeleteMenuInfoByIds(req);
+                res = _Mapper.Map<CommonViewModel>(resData);
+            }
+            catch (Exception ex)
+            {
+                res.Msg = ex.Message;
+            }
+            return res;
+        }
+
     }
 }

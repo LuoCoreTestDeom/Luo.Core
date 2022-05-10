@@ -149,40 +149,59 @@
                 
 
                 let menuParentSelect;
-                LuoAjax('/SystemConfig/GetAllMenuInfos', "post", {}, function (res) {
-                    menuParentSelect = xmSelect.render({
-                        el: '#menuSelectBox',
-                        name: 'parentMenuId',
-                        height: '250px',
-                        layVerify: 'required',
-                        layVerType: 'tips',
-                        //initValue: [],//选中 的优先级大于选项中的selected
-                        data: res,
-                        model: { icon: 'hidden', label: { type: 'text' } },
-                        prop: {
-                            name: 'menuName',
-                            value: 'menuId',
-                            selected: "selectedCheck"
-                        },
-                        radio: true,
-                        clickClose: true,
-                        filterable: true,//是否开启搜索
-                        searchTips: "请输入菜单名称",//搜索提示
 
-                        tree: {
-                            show: true,
-                            indent: 15,//间距
-                            strict: false,//是否严格遵守父子模式
-                            expandedKeys: true,// 默认展开的节点数组, 为true时展开所有节点
-                            clickCheck: true,//点击节点是否选中, false时点击复选框进行选中操作
-                            showLine: true, //是否显示虚线
-                            clickExpand: false//点击节点是否展开, false时点击三角箭头进行展开操作
-                        },
-                        tips: '请选择上级菜单'
-                    });
-                    menuParentSelect.setValue([{ menuName: "顶级", menuId: 0, selectedCheck: true }]);//
-                }, false);
+                const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
+                $.ajax({
+                    type: "post",
+                    url: "/SystemConfig/GetAllMenuInfos",
+                    success: function (res) {
+                        menuParentSelect = xmSelect.render({
+                            el: '#menuSelectBox',
+                            name: 'parentMenuId',
+                            height: '250px',
+                            layVerify: 'required',
+                            layVerType: 'tips',
+                            //initValue: [],//选中 的优先级大于选项中的selected
+                            data: res,
+                            model: { icon: 'hidden', label: { type: 'text' } },
+                            prop: {
+                                name: 'menuName',
+                                value: 'menuId',
+                                selected: "selectedCheck"
+                            },
+                            radio: true,
+                            clickClose: true,
+                            filterable: true,//是否开启搜索
+                            searchTips: "请输入菜单名称",//搜索提示
 
+                            tree: {
+                                show: true,
+                                indent: 15,//间距
+                                strict: false,//是否严格遵守父子模式
+                                expandedKeys: true,// 默认展开的节点数组, 为true时展开所有节点
+                                clickCheck: true,//点击节点是否选中, false时点击复选框进行选中操作
+                                showLine: true, //是否显示虚线
+                                clickExpand: false//点击节点是否展开, false时点击三角箭头进行展开操作
+                            },
+                            tips: '请选择上级菜单'
+                        });
+                        menuParentSelect.setValue([{ menuName: "顶级", menuId: 0, selectedCheck: true }]);
+                        layer.close(msgDialogIndex);
+                    },
+                    error: function (jqXHR) {
+                        layer.close(msgDialogIndex);
+                        layer.msg("发生错误：" + jqXHR.status, {
+                            time: 0,  //不自动关闭
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                            }
+                        });
+                    }
+                });
+
+
+             
 
                 $('button[name="btn-save"]').click(function () {
 
@@ -191,31 +210,51 @@
                         layer.msg("请选择父级菜单！");
                         return;
                     }
-                  
-                    LuoAjax("/SystemConfig/AddEditMenuInfo", "post", {
-                        MenuId: menuId,
-                        MenuName: $('#menuName').val(),
-                        MenuAddress: $('#menuUrl').val(),
-                        MenuIcon: $('#menuIcon').html(),
-                        MenuSort: $('#menuSort').val(),
-                        MenuType: $('#menuType').val(),
-                        ParentMenuId: menuParientId[0].menuId,
-                        MenuEnable: $('#menuEnable:checked').val()
-                    }, function (res) {
-                        if (res.status) {
-                            layer.msg(menuId > 0 ? '修改成功' : '添加成功', {
-                                time: 2000,
-                                end: function () {
-                                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-                                    parent.layer.close(index);
+
+                    const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
+                    $.ajax({
+                        type: "post",
+                        url: "/SystemConfig/AddEditMenuInfo",
+                        data: {
+                            MenuId: menuId,
+                            MenuName: $('#menuName').val(),
+                            MenuAddress: $('#menuUrl').val(),
+                            MenuIcon: $('#menuIcon').html(),
+                            MenuSort: $('#menuSort').val(),
+                            MenuType: $('#menuType').val(),
+                            ParentMenuId: menuParientId[0].menuId,
+                            MenuEnable: $('#menuEnable:checked').val()
+                        },
+                        success: function (res) {
+                            layer.close(msgDialogIndex);
+                            if (res.status) {
+                                layer.msg(menuId > 0 ? '修改成功' : '添加成功', {
+                                    time: 2000,
+                                    end: function () {
+                                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                        parent.layer.close(index);
+                                    }
+                                });
+                            }
+                            else {
+                                layer.msg(res.msg, { icon: 5 });
+                            }
+                          
+                        },
+                        error: function (jqXHR) {
+                            layer.close(msgDialogIndex);
+                            layer.msg("发生错误：" + jqXHR.status, {
+                                time: 0,  //不自动关闭
+                                btn: ['确定'],
+                                yes: function (index) {
+                                    layer.close(index);
                                 }
                             });
-
-                        }
-                        else {
-                            layer.msg(data.msg, { icon: 5 });
                         }
                     });
+
+
+                 
 
                 })
 

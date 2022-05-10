@@ -36,7 +36,7 @@ namespace Luo.Core.DatabaseEntity
         /// Default:
         /// Nullable:False
         /// </summary>           
-        public string MenuAddress { get; set; }
+        public string? MenuAddress { get; set; }
         /// <summary>
         /// Desc: 0目录，1菜单，2按钮
         /// Default:

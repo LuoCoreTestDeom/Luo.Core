@@ -65,7 +65,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
         /// 删除用户
         /// </summary>
         /// <returns></returns>
-        [HttpPost]
+        [HttpDelete]
         public IActionResult DeleteUser(List<int> req)
         {
             var res = _systemConfigService.DeleteUserByUserIds(req);
@@ -74,25 +74,25 @@ namespace Luo.Core.LayuiAdmin.Controllers
 
         public IActionResult MenuManage()
         {
-         
+
             return View();
         }
         [HttpPost]
-        public IActionResult GetMenuInfos() 
+        public IActionResult GetMenuInfos()
         {
-           var res= _systemConfigService.GetMenuInfoList();
+            var res = _systemConfigService.GetMenuInfoList();
             return Json(res);
         }
 
-        public IActionResult MenuInfo() 
+        public IActionResult MenuInfo()
         {
             return View();
         }
         [HttpPost]
-        public IActionResult GetAllMenuInfos() 
+        public IActionResult GetAllMenuInfos()
         {
-            var res= _systemConfigService.GetMenuInfos();
-            
+            var res = _systemConfigService.GetMenuInfos();
+
             return Json(res);
         }
 
@@ -103,6 +103,11 @@ namespace Luo.Core.LayuiAdmin.Controllers
             var res = _systemConfigService.AddEditMenuInfo(req);
             return Json(res);
         }
-       
+        [HttpDelete]
+        public IActionResult DeleteMenuInfoByIds(List<int> ids)
+        {
+           var res= _systemConfigService.DeleteMenuInfoByIds(ids);
+            return Json(res);
+        }
     }
 }

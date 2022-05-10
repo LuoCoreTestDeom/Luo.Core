@@ -72,6 +72,12 @@ namespace Luo.Core.IRepository
         /// <param name="userId"></param>
         /// <returns></returns>
         public bool EditMenuInfo(EditMenuInfoDto req);
+        /// <summary>
+        /// 通过菜单ID 删除菜单信息
+        /// </summary>
+        /// <param name="menuIds"></param>
+        /// <returns></returns>
+        public CommonDto DeleteMenuInfoByIds(List<int> menuIds);
 
     }
 }

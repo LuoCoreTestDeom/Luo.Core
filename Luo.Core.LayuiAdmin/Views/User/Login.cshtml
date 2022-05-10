@@ -90,7 +90,7 @@
 
             //提交
             form.on('submit(LAY-user-login-submit)', function (obj) {
-                var msgDialogIndex = layer.msg('正在登录，请稍等.....', { shade: 0.3, icon: 16 });
+                let msgDialogIndex = layer.msg('正在登录，请稍等.....', { shade: 0.3, icon: 16 });
                 $.ajax({
                     type: "Post",
                     url: '/User/Login',

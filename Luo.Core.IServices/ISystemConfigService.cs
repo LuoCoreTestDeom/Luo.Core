@@ -60,5 +60,11 @@ namespace Luo.Core.IServices
         /// <param name="req"></param>
         /// <returns></returns>
         public CommonViewModel AddEditMenuInfo(MenuInfoInput req);
+        /// <summary>
+        /// 通过IDs删除菜单信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel DeleteMenuInfoByIds(List<int> req);
     }
 }

@@ -292,5 +292,34 @@ namespace Luo.Core.Repository
             });
             return res;
         }
+
+        /// <summary>
+        /// 通过菜单ID 删除菜单信息
+        /// </summary>
+        /// <param name="menuIds"></param>
+        /// <returns></returns>
+        public CommonDto DeleteMenuInfoByIds(List<int> menuIds) 
+        {
+            CommonDto res = new CommonDto();
+            Factory.GetDbContext((db) =>
+            {
+                try
+                {
+                    db.BeginTran();
+                    foreach (var item in menuIds)
+                    {
+                        db.Deleteable<Basic_Menu>().Where(x => x.Id == item).ExecuteCommand();
+                    }
+                    db.CommitTran();
+                    res.Status = true;
+                }
+                catch (Exception ex)
+                {
+                    db.RollbackTran();
+                    res.Message=ex.Message;
+                }
+            });
+            return res;
+        }
     }
 }

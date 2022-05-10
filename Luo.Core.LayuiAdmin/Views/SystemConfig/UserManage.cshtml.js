@@ -95,6 +95,7 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
 
                     let tableDT = table.cache.currentTable
                     tableDT.filter(x => x.LAY_CHECKED).splice(1);
+                
                     table.reload("currentTable", {
                         data: tableDT   // 将新数据重新载入表格
                     });
@@ -135,7 +136,7 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
     //查询
     function getDataTable() {
 
-        var msgDialogIndex = layer.msg('查询中，请稍等.....', { shade: 0.3,icon: 16 });
+        const msgDialogIndex = layer.msg('查询中，请稍等.....', { shade: 0.3, icon: 16 });
         tempDataTable.reload({
             parseData: function (res) { //res 即为原始返回的数据
                 return {
@@ -179,12 +180,30 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
 
     function deleteUser(reqData)
     {
-        LuoAjax("/SystemConfig/DeleteUser", "Post", { req: reqData }, function (res) {
-            if (res.status) {
-                layer.msg('删除成功', { icon: 6 });
-            }
-            else {
-                layer.msg(data.msg, { icon: 5 });
+
+        const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
+        $.ajax({
+            type: "Delete",
+            url: "/SystemConfig/DeleteUser",
+            data: { req: reqData },
+            success: function (res) {
+                layer.close(msgDialogIndex);
+                if (res.status) {
+                    layer.msg('删除成功', { icon: 6 });
+                }
+                else {
+                    layer.msg(data.msg, { icon: 5 });
+                }
+            },
+            error: function (jqXHR) {
+                layer.close(msgDialogIndex);
+                layer.msg("发生错误：" + jqXHR.status, {
+                    time: 0,  //不自动关闭
+                    btn: ['确定'],
+                    yes: function (index) {
+                        layer.close(index);
+                    }
+                });
             }
         });
     }

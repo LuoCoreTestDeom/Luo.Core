@@ -138,7 +138,7 @@ layui.define(['layer', 'table'], function (exports) {
 			    $tds.css('background-color', 'transparent');
 			    layer.msg("请输入关键字", {icon: 5});
 			    return;
-			}
+            }
 			var searchCount = 0;
 			$tds.each(function () {
 			    $(this).css('background-color', 'transparent');

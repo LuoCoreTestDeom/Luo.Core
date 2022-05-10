@@ -68,26 +68,45 @@
                 userEditUrl = "/SystemConfig/UpdateUser";
             }
 
-            LuoAjax(userEditUrl, "Post", {
-                UserId: userId,
-                UserName: $("#userName").val(),
-                Password: $("#userPassword").val(),
-                ConfirmPassword: $("#userConfirmPassword").val(),
-                UserSex: $("input[name='userSex']:checked").val(),
-            }, function (res) {
-                if (res.status) {
-                    layer.msg(userId > 0 ? '修改成功' : '添加成功', {
-                        time: 2000,
-                        end: function () {
-                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-                            parent.layer.close(index);
+            const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
+            $.ajax({
+                type: "Post",
+                url: "/SystemConfig/DeleteMenuInfoByIds/",
+                data: {
+                    UserId: userId,
+                    UserName: $("#userName").val(),
+                    Password: $("#userPassword").val(),
+                    ConfirmPassword: $("#userConfirmPassword").val(),
+                    UserSex: $("input[name='userSex']:checked").val(),
+                },
+                success: function (res) {
+                    layer.close(msgDialogIndex);
+                    if (res.status) {
+                        layer.msg(userId > 0 ? '修改成功' : '添加成功', {
+                            time: 2000,
+                            end: function () {
+                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                parent.layer.close(index);
+                            }
+                        });
+                    }
+                    else {
+                        layer.msg(res.msg, { icon: 5 });
+                    }
+                },
+                error: function (jqXHR) {
+                    layer.close(msgDialogIndex);
+                    layer.msg("发生错误：" + jqXHR.status, {
+                        time: 0,  //不自动关闭
+                        btn: ['确定'],
+                        yes: function (index) {
+                            layer.close(index);
                         }
                     });
                 }
-                else {
-                    layer.msg(res.msg, { icon: 5 });
-                }
             });
+
+        
 
 
 

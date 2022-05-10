@@ -12,14 +12,6 @@
                 <div class="layui-input-inline">
                     <input type="text" name="keyword" placeholder="" class="layui-input">
                 </div>
-                <button class="layui-btn layui-btn-md layui-btn-primary" lay-submit lay-filter="power-query">
-                    <i class="layui-icon layui-icon-search"></i>
-                    查询
-                </button>
-                <button type="reset" class="layui-btn layui-btn-md">
-                    <i class="layui-icon layui-icon-refresh"></i>
-                    重置
-                </button>
             </div>
         </form>
     </div>
@@ -131,47 +123,49 @@
                     ]
                 ]
             });
-
+            //表格按钮
             table.on('tool(tableFilter)', function (obj) {
-                if (obj.event === 'remove') {
-                    window.remove(obj);
-                } else if (obj.event === 'edit') {
-                    window.edit(obj);
+                if (obj.event === 'edit') {
+                    DialogShowBox({ title: "修改菜单信息", data: obj.data })
                 }
+                else if (obj.event === 'remove') {
+                    CurrentRemove(obj);
+                }  
             })
-
+            //顶部头按钮
             table.on('toolbar(tableFilter)', function (obj) {
-                if (obj.event === 'add') {
-                    window.add();
-                } else if (obj.event === 'btnQuery') {
-                    treetable.reload("#tableData", "/SystemConfig/GetMenuInfos")
-
-                } else if (obj.event === 'batchRemove') {
-                    window.batchRemove(obj);
+                if (obj.event === 'btnQuery') {
+                    
+                    const keyword = $("input[name='keyword']").val();
+                    debugger;
+                    if (keyword != "") {
+                        treetable.search('#tableData', keyword);
+                    }
+                    else {
+                        treetable.reload("#tableData", "/SystemConfig/GetMenuInfos");
+                    } 
+                   
+                }
+                else if (obj.event === 'add') {
+                    DialogShowBox({ title: "新增菜单信息", data: null })
+                }
+                else if (obj.event === 'batchRemove') {
+                    batchRemove(obj);
                 } else if (obj.event === 'expandAll') {
-                    treetable.expandAll("#power-table");
+                    treetable.expandAll("#tableData");
                 } else if (obj.event === 'foldAll') {
-                    treetable.foldAll("#power-table");
+                    treetable.foldAll("#tableData");
                 } else if (obj.event === 'reload') {
-                    treetable.reload("#power-table");
+                    treetable.reload("#tableData");
                 }
             });
 
             form.on('submit(power-query)', function (data) {
-                var keyword = data.field.keyword;
-                treetable.search('#power-table', keyword);
+             
                 return false;
             });
 
-            window.add = function () {
-                DialogShowBox({ title: "新增菜单信息", data: null })
-            }
-
-            window.edit = function (obj) {
-
-                DialogShowBox({ title: "修改菜单信息", data: obj.data })
-            }
-
+            //弹框
             const DialogShowBox = (obj) => {
                 layer.open({
                     type: 2,
@@ -188,30 +182,50 @@
                 });
             }
 
-
-            window.remove = function (obj) {
-                layer.confirm('确定要删除该权限', { icon: 3, title: '提示' }, function (index) {
+            //删除当前的
+            const CurrentRemove = function (obj) {
+                layer.confirm('确定要删除该菜单？', { icon: 3, title: '提示' }, function (index) {
                     layer.close(index);
-                    let loading = layer.load();
+
+                    let idsData = [];
+                    idsData.push(obj.data.menuId)
+                    const loadingIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
                     $.ajax({
-                        url: MODULE_PATH + "remove/" + obj.data['powerId'],
+                        url: '/SystemConfig/DeleteMenuInfoByIds/',
                         dataType: 'json',
                         type: 'delete',
-                        success: function (result) {
-                            layer.close(loading);
-                            if (result.success) {
-                                layer.msg(result.msg, { icon: 1, time: 1000 }, function () {
+                        data: { ids: idsData},
+                        success: function (res) {
+                            layer.close(loadingIndex);
+                            if (res.status) {
+                                layer.msg("删除成功", { icon: 1, time: 1000 }, function () {
                                     obj.del();
                                 });
                             } else {
-                                layer.msg(result.msg, { icon: 2, time: 1000 });
+                                layer.msg("删除失败！\r\n"+res.msg, {
+                                    icon: 2,
+                                    time: 0,  //不自动关闭
+                                    btn: ['确定'],
+                                    yes: function (index) {
+                                        layer.close(index);
+                                    }
+                                });
                             }
+                        },error: function (jqXHR) {
+                            layer.close(loadingIndex);
+                            layer.msg("发生错误：" + jqXHR.status, {
+                                time: 0,  //不自动关闭
+                                btn: ['确定'],
+                                yes: function (index) {
+                                    layer.close(index);
+                                }
+                            });
                         }
                     })
                 });
             }
-
-            window.batchRemove = function (obj) {
+            //批量删除
+            const batchRemove = function (obj) {
                 let data = table.checkStatus(obj.config.id).data;
                 if (data.length === 0) {
                     layer.msg("未选中数据", {
@@ -220,38 +234,60 @@
                     });
                     return false;
                 }
-                let ids = "";
+                let idsData = [];
                 for (let i = 0; i < data.length; i++) {
-                    ids += data[i].powerId + ",";
+                    idsData.push(data[i].menuId)
                 }
-                ids = ids.substr(0, ids.length - 1);
+           
                 layer.confirm('确定要删除这些数据', {
                     icon: 3,
                     title: '提示'
                 }, function (index) {
                     layer.close(index);
-                    let loading = layer.load();
+                 
+                    const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
                     $.ajax({
-                        url: MODULE_PATH + "batchRemove/" + ids,
-                        dataType: 'json',
-                        type: 'delete',
-                        success: function (result) {
-                            layer.close(loading);
-                            if (result.success) {
-                                layer.msg(result.msg, {
+                        type: "delete",
+                        url: "/SystemConfig/DeleteMenuInfoByIds/",
+                        data: { ids: idsData },
+                        success: function (res) {
+                            layer.close(msgDialogIndex);
+                            if (res.status) {
+                                layer.msg("删除成功！", {
                                     icon: 1,
                                     time: 1000
                                 }, function () {
-                                    table.reload('user-table');
+                                   
+                                    let tableDT = table.cache.tableData;
+                                   var currData= tableDT.filter(x => !x.LAY_CHECKED);
+                                    console.log(currData);
+                                    table.reload("tableData", {
+                                        data: currData   // 将新数据重新载入表格
+                                    });
                                 });
                             } else {
-                                layer.msg(result.msg, {
+                                layer.msg(res.msg, {
                                     icon: 2,
-                                    time: 1000
+                                    time: 0,  //不自动关闭
+                                    btn: ['确定'],
+                                    yes: function (index) {
+                                        layer.close(index);
+                                    }
                                 });
                             }
+                        },
+                        error: function (jqXHR) {
+                            layer.close(msgDialogIndex);
+                            layer.msg("发生错误：" + jqXHR.status, {
+                                time: 0,  //不自动关闭
+                                btn: ['确定'],
+                                yes: function (index) {
+                                    layer.close(index);
+                                }
+                            });
                         }
-                    })
+                    });
+                  
                 });
             }
         })
