@@ -138,6 +138,26 @@ namespace Luo.Core.Services
         }
 
         /// <summary>
+        /// 获取用户的角色
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<UserRoleInfoResult> GetUserRoleByUserId(int userId)
+        {
+            List<UserRoleInfoResult> res = new List<UserRoleInfoResult>();
+            var roleResData = _Rep.QueryAllRoleInfos();
+            res = roleResData.MapToList<UserRoleInfoResult>();
+            var userRoleData = _Rep.GetUserRoleIdsByUserId(userId);
+            var checkRoles = res.Where(x => userRoleData.Contains(x.RoleId)).ToList();
+            foreach (var item in checkRoles)
+            {
+                item.SelectCheck = true;
+            }
+            return res;
+        }
+
+
+        /// <summary>
         /// 获取菜单信息
         /// </summary>
         /// <returns></returns>
@@ -297,10 +317,10 @@ namespace Luo.Core.Services
             foreach (var item in resData)
             {
                 var menuInfo = _Mapper.Map<TreeRoleMenuResult>(item);
-                
+
                 menuInfo.Spread = true;
                 menuInfo.Children = RecursionRoleMenu(sourceData.Where(x => x.ParentMenuId == item.MenuId).ToList(), sourceData, roleMenuIds);
-                if (menuInfo.Children==null||menuInfo.Children.Count<1) 
+                if (menuInfo.Children == null || menuInfo.Children.Count < 1)
                 {
                     if (roleMenuIds.Any(x => x == menuInfo.Id))
                     {
@@ -355,16 +375,16 @@ namespace Luo.Core.Services
             {
                 foreach (var item in roleMenuInfos)
                 {
-                    if (item.Id > 0) 
+                    if (item.Id > 0)
                     {
                         res.Add(item.Id);
                     }
-                    
-                    if (item.Children != null&& item.Children.Count>0) 
+
+                    if (item.Children != null && item.Children.Count > 0)
                     {
                         res.AddRange(GetMenuIdsByRoleMenuInfos(item.Children));
                     }
-                 
+
                 }
             }
             return res;
@@ -374,9 +394,9 @@ namespace Luo.Core.Services
         /// </summary>
         /// <param name="roleIds"></param>
         /// <returns></returns>
-        public CommonViewModel DeleteRoleInfoByIds(List<int> roleIds) 
+        public CommonViewModel DeleteRoleInfoByIds(List<int> roleIds)
         {
-            var resData= _Rep.DeleteRoleInfoByIds(roleIds);
+            var resData = _Rep.DeleteRoleInfoByIds(roleIds);
             return _Mapper.Map<CommonViewModel>(resData);
         }
     }

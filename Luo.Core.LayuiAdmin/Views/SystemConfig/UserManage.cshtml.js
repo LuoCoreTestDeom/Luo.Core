@@ -67,18 +67,7 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
                 getDataTable();
                 break;
             case 'btnAdd':
-                layer.open({
-                    title:"添加用户",
-                    area: ['450px', '500px'],
-                    anim: 1,//弹出动画
-                    resize: false,//是否允许拉伸
-                    type: 2,
-                    content: '/SystemConfig/UserInfo',
-                    success: function (layero, index) {
-                        //对加载后的iframe进行宽高度自适应
-                        layer.iframeAuto(index)
-                    }
-                });
+                ShowDailogBox(obj.data);
                 break;
             case 'btnDelete':
                 if (checkStatus.data.length <= 0) {
@@ -120,23 +109,28 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
                
             });
         } else if (obj.event === 'edit') {
-            layer.open({
-                title: "添加用户",
-                area: ['450px', '500px'],
-                anim: 1,//弹出动画
-                resize: false,//是否允许拉伸
-                type: 2,
-                content: '/SystemConfig/UserInfo',
-                success: function (layero, index) {
-                    //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-                    var iframe = window[layero.find('iframe')[0]['name']]; 
-                    iframe.ParentSetValue(obj.data);
-                    //对加载后的iframe进行宽高度自适应
-                    layer.iframeAuto(index);
-                }
-            });
+            ShowDailogBox(obj.data);
         }
     });
+   
+    function ShowDailogBox(data) {
+
+        layer.open({
+            title: "添加用户",
+            area: ['450px', '500px'],
+            anim: 1,//弹出动画
+            resize: false,//是否允许拉伸
+            type: 2,
+            content: '/SystemConfig/UserInfo',
+            success: function (layero, index) {
+                //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                var iframe = window[layero.find('iframe')[0]['name']];
+                iframe.ShowDialog_Load(data);
+                //对加载后的iframe进行宽高度自适应
+                layer.iframeAuto(index);
+            }
+        });
+    }
 
     //查询
     function getDataTable() {

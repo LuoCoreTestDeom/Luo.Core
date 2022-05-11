@@ -97,18 +97,39 @@ namespace Luo.Core.Repository
             CommonDto res = new CommonDto();
             Factory.GetDbContext((db) =>
             {
-                if (db.Queryable<Basic_User>().Any(x => x.UserName == req.UserName))
+
+                try
                 {
-                    res.Message = "用户名已存在";
-                    return;
+                    db.BeginTran();
+                    if (db.Queryable<Basic_User>().Any(x => x.UserName == req.UserName))
+                    {
+                        res.Message = "用户名已存在";
+                        return;
+                    }
+                    var userId = db.Insertable<Basic_User>(new
+                    {
+                        UserName = req.UserName,
+                        Password = req.Password,
+                        CreateName = req.CreateName,
+                        CreateTime = DateTime.Now
+                    }).ExecuteReturnIdentity();
+                    foreach (var item in req.RoleIds)
+                    {
+                        db.Insertable<Basic_UserRole>(new 
+                        {
+                            UserId = userId,
+                            RoleId = item
+                        }).ExecuteCommand();
+                    }
+                    db.CommitTran();
+                    res.Status = true;
                 }
-                res.Status = db.Insertable<Basic_User>(new
+                catch (Exception ex)
                 {
-                    UserName = req.UserName,
-                    Password = req.Password,
-                    CreateName = req.CreateName,
-                    CreateTime = DateTime.Now
-                }).ExecuteCommand() > 0;
+                    db.RollbackTran();
+                    res.Message=ex.Message;
+                }
+
 
             });
             return res;
@@ -124,10 +145,32 @@ namespace Luo.Core.Repository
             CommonDto res = new CommonDto();
             Factory.GetDbContext((db) =>
             {
-                res.Status = db.Updateable<Basic_User>(new
+
+                try
                 {
-                    UserName = req.UserName,
-                }).Where(x => x.Id == req.UserId).ExecuteCommand() > 0;
+                    db.BeginTran();
+                    db.Updateable<Basic_User>(new
+                    {
+                        UserName = req.UserName,
+                    }).Where(x => x.Id == req.UserId).ExecuteCommand();
+                    db.Deleteable<Basic_UserRole>().Where(x => x.UserId == req.UserId).ExecuteCommand();
+                    foreach (var item in req.RoleIds)
+                    {
+                        db.Insertable<Basic_UserRole>(new
+                        {
+                            UserId = req.UserId,
+                            RoleId = item
+                        }).ExecuteCommand();
+                    }
+                    db.CommitTran();
+                    res.Status = true;
+                }
+                catch (Exception ex)
+                {
+                    db.RollbackTran();
+                    res.Message = ex.Message;
+                }
+
 
             });
             return res;
@@ -161,6 +204,27 @@ namespace Luo.Core.Repository
             });
             return res;
         }
+
+        /// <summary>
+        /// 获取用户绑定的所有角色
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<int> GetUserRoleIdsByUserId(int userId)
+        {
+            List<int> res = new List<int>();
+            Factory.GetDbContext((db) =>
+            {
+                res = db.Queryable<Basic_UserRole>()
+                .Where(a => a.UserId == userId)
+                 .Select(a => a.RoleId).ToList();
+            });
+            return res;
+        }
+
+
+
+
         /// <summary>
         /// 查询菜单列表信息
         /// </summary>
@@ -338,10 +402,10 @@ namespace Luo.Core.Repository
                 res.ResultData = db.Queryable<Basic_Role>()
                 .WhereIF(!string.IsNullOrWhiteSpace(req.RoleName), x => x.RoleName.Contains(req.RoleName))
                 .Select(x => new RoleInfoDto
-                 {
-                     RoleId = x.Id,
-                     RoleName = x.RoleName
-                 }).ToPageList(req.PageIndex, req.PageCount, ref totalCount);
+                {
+                    RoleId = x.Id,
+                    RoleName = x.RoleName
+                }).ToPageList(req.PageIndex, req.PageCount, ref totalCount);
                 res.TotalCount = totalCount;
             });
             return res;
@@ -352,39 +416,59 @@ namespace Luo.Core.Repository
         /// </summary>
         /// <param name="roleId"></param>
         /// <returns></returns>
-        public List<int> QueryRoleMenuIds(int roleId) 
+        public List<int> QueryRoleMenuIds(int roleId)
         {
             List<int> res = new List<int>();
             Factory.GetDbContext((db) =>
             {
                 res = db.Queryable<Basic_MenuRole>()
-                .Where(a=>a.RoleId==roleId)
-                 .Select(a =>a.MenuId).ToList();
+                .Where(a => a.RoleId == roleId)
+                 .Select(a => a.MenuId).ToList();
             });
             return res;
         }
+
+        /// <summary>
+        /// 查询所有角色信息
+        /// </summary>
+        /// <returns></returns>
+        public List<QueryAllRoleInfoDto> QueryAllRoleInfos()
+        {
+            List<QueryAllRoleInfoDto> res = new List<QueryAllRoleInfoDto>();
+            Factory.GetDbContext((db) =>
+            {
+                res = db.Queryable<Basic_Role>()
+                .Select(x => new QueryAllRoleInfoDto
+                {
+                    RoleId = x.Id,
+                    RoleName = x.RoleName
+                }).ToList();
+            });
+            return res;
+        }
+
         /// <summary>
         /// 新增一个角色
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonDto AddRoleInfo(AddRoleInfoDto req) 
+        public CommonDto AddRoleInfo(AddRoleInfoDto req)
         {
             CommonDto res = new CommonDto();
             Factory.GetDbContext((db) =>
             {
-               
+
                 try
                 {
                     db.BeginTran();
                     var roleId = db.Insertable<Basic_Role>(new { RoleName = req.RoleName }).ExecuteReturnIdentity();
-                    
+
                     foreach (var item in req.MenuIds)
                     {
-                        db.Insertable<Basic_MenuRole>(new 
+                        db.Insertable<Basic_MenuRole>(new
                         {
-                            MenuId=item,
-                            RoleId=roleId
+                            MenuId = item,
+                            RoleId = roleId
                         }).ExecuteCommand();
                     }
                     db.CommitTran();
@@ -408,15 +492,15 @@ namespace Luo.Core.Repository
             CommonDto res = new CommonDto();
             Factory.GetDbContext((db) =>
             {
-             
+
                 try
                 {
                     db.BeginTran();
-                    db.Updateable<Basic_Role>(new { RoleName = req.RoleName }).Where(x=>x.Id==req.RoleId).ExecuteCommand();
+                    db.Updateable<Basic_Role>(new { RoleName = req.RoleName }).Where(x => x.Id == req.RoleId).ExecuteCommand();
                     db.Deleteable<Basic_MenuRole>().Where(x => x.RoleId == req.RoleId).ExecuteCommand();
                     foreach (var item in req.MenuIds)
                     {
-                        db.Insertable<Basic_MenuRole>(new 
+                        db.Insertable<Basic_MenuRole>(new
                         {
                             MenuId = item,
                             RoleId = req.RoleId

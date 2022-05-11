@@ -38,6 +38,15 @@ namespace Luo.Core.IRepository
         /// <param name="userIds"></param>
         /// <returns></returns>
         public CommonDto DeleteUserByUserIds(List<int> userIds);
+        /// <summary>
+        /// 获取用户绑定的所有角色
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<int> GetUserRoleIdsByUserId(int userId);
+
+
+
 
         /// <summary>
         /// 查询菜单列表信息
@@ -112,6 +121,11 @@ namespace Luo.Core.IRepository
         /// <param name="req"></param>
         /// <returns></returns>
         public CommonDto DeleteRoleInfoByIds(List<int> roleIds);
+        /// <summary>
+        /// 查询所有角色信息
+        /// </summary>
+        /// <returns></returns>
+        public List<QueryAllRoleInfoDto> QueryAllRoleInfos();
 
     }
 }

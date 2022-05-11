@@ -25,3 +25,6 @@ https://www.cnblogs.com/jackyfei/p/12145569.html
 
 ## 使用SqlSugar 版本号为：5.0.6.7
 https://www.donet5.com/Home/Doc
+
+
+# 完成了后台管理模块的，用户管理 2022-05-11

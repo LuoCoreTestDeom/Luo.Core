@@ -12,5 +12,6 @@ namespace Luo.Core.Models.Dtos.Request
         public string Password { get; set; }
         public int Sex { get; set; }
         public string CreateName { get; set; }
+        public List<int> RoleIds { get; set; }
     }
 }

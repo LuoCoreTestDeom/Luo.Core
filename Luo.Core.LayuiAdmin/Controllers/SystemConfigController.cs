@@ -7,6 +7,7 @@ using Luo.Core.Models.ViewModels.Request;
 using MySqlX.XDevAPI.Common;
 using Luo.Core.Models.Dtos.Response;
 using Org.BouncyCastle.Ocsp;
+using Luo.Core.Models.ViewModels.Response;
 
 namespace Luo.Core.LayuiAdmin.Controllers
 {
@@ -78,6 +79,19 @@ namespace Luo.Core.LayuiAdmin.Controllers
             var res = _systemConfigService.DeleteUserByUserIds(req);
             return Json(res);
         }
+
+        /// <summary>
+        /// 获取用户的角色
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult GetUserRoleInfo(int req) 
+        {
+            var res = _systemConfigService.GetUserRoleByUserId(req);
+            return Json(res);
+        }
+
+
         /// <summary>
         /// 菜单管理
         /// </summary>

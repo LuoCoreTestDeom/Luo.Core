@@ -40,6 +40,16 @@ namespace Luo.Core.IServices
         /// <param name="req"></param>
         /// <returns></returns>
         public CommonViewModel DeleteUserByUserIds(List<int> userIds);
+        /// <summary>
+        /// 获取用户的角色
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<UserRoleInfoResult> GetUserRoleByUserId(int userId);
+
+
+
+
 
         /// <summary>
         /// 获取菜单信息

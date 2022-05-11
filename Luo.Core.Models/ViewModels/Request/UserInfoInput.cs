@@ -13,6 +13,8 @@ namespace Luo.Core.Models.ViewModels.Request
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public int UserSex { get; set; }
+
+        public List<int> RoleIds { get; set; }
       
     }
 }
