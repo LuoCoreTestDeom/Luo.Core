@@ -90,15 +90,18 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
                     checkStatus.data.forEach(function (item) {
                         userIds.push(item.userId)
                     });
-                    deleteUser(userIds);
+                    if (deleteUser(userIds)) {
+                        let tableDT = table.cache.currentTable
+                        tableDT.filter(x => x.LAY_CHECKED).splice(1);
+
+                        table.reload("currentTable", {
+                            data: tableDT   // 将新数据重新载入表格
+                        });
+                    }
+                   
                     layer.close(index);
 
-                    let tableDT = table.cache.currentTable
-                    tableDT.filter(x => x.LAY_CHECKED).splice(1);
-                
-                    table.reload("currentTable", {
-                        data: tableDT   // 将新数据重新载入表格
-                    });
+                    
                 });
                 break;
         };
@@ -110,9 +113,11 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
             layer.confirm('真的删除行么', function (index) {
                 let userIds = [];
                 userIds.push(data.userId)
-                deleteUser(userIds);
+                if (deleteUser(userIds)) {
+                    obj.del();
+                }
                 layer.close(index);
-                obj.del();
+               
             });
         } else if (obj.event === 'edit') {
             layer.open({
@@ -180,16 +185,18 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
 
     function deleteUser(reqData)
     {
-
+        let delStart = false;
         const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
         $.ajax({
             type: "Delete",
             url: "/SystemConfig/DeleteUser",
             data: { req: reqData },
+            async: false,
             success: function (res) {
                 layer.close(msgDialogIndex);
                 if (res.status) {
                     layer.msg('删除成功', { icon: 6 });
+                    delStart = true;
                 }
                 else {
                     layer.msg(data.msg, { icon: 5 });
@@ -206,6 +213,7 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
                 });
             }
         });
+        return delStart;
     }
 
 

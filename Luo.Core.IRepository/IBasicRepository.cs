@@ -85,5 +85,33 @@ namespace Luo.Core.IRepository
         /// <returns></returns>
         public CommonPageDto<List<RoleInfoDto>> QueryRoleInfo(QueryRoleInfoDto req);
 
+        /// <summary>
+        /// 通过角色ID 获取菜单Ids
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public List<int> QueryRoleMenuIds(int roleId);
+
+
+        /// <summary>
+        /// 新增一个角色
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonDto AddRoleInfo(AddRoleInfoDto req);
+        /// <summary>
+        /// 修改角色
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonDto EditRoleInfo(UpdateRoleInfoDto req);
+
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonDto DeleteRoleInfoByIds(List<int> roleIds);
+
     }
 }

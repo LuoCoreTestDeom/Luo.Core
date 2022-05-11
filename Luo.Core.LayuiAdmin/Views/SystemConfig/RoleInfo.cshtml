@@ -10,68 +10,18 @@
 
     <div class="card-body">
         <form class="row gx-3 gy-2 align-items-center layui-form">
-            <div class="col-sm-3">
+            <div class="col-12 col-sm-6">
                 <label class="input-group-text">角色名称</label>
-                <input id="menuName" class="layui-input" placeholder="请输入菜单名称" lay-verType="tips" lay-verify="required" required />
+                <input id="roleName" class="layui-input" placeholder="请输入角色名称" lay-verType="tips" lay-verify="required" required />
             </div>
-            <div class="col-sm-3">
+            <div class="col-12 col-sm-6">
                 <label class="input-group-text">菜单权限</label>
-                <div id="menuSelectBox" class="ew-xmselect-tree"></div>
+                <div id="roleMenu" class="demo-tree-more"></div>
             </div>
 
 
-            <div class="col-sm-3">
-                <label class="input-group-text">菜单类型</label>
+          
 
-                <select id="menuType" lay-verify="">
-
-                    @{
-                        Type enumType = typeof(Luo.Core.EnumModels.MenuTypeEnum);
-                        Array values = Enum.GetValues(enumType);
-                        if (values.Length > 0)
-                        {
-                            foreach (int item in values)
-                            {
-                                <option value="@item.ToString()">@Enum.GetName(enumType, item)</option>
-                            }
-                        }
-                    }
-                </select>
-            </div>
-            <div class="col-sm-3">
-                <label class="input-group-text">菜单链接</label>
-                <input id="menuUrl" class="layui-input" placeholder="请输入菜单链接" lay-verType="tips" lay-verify="required" required />
-            </div>
-
-            <div class="col-sm-3">
-                <label class="input-group-text">菜单图标</label>
-                <div class="card ">
-                    <div class="card-body bd-example">
-                        <div class="row">
-                            <div class="col-6" style="width:fit-content">
-                                <input type="text" id="iconPicker" value="layui-icon-heart-fill" lay-filter="iconPicker" class="hide">
-                            </div>
-                            <div class="col-6">
-                                <label id="menuIcon" class="col-form-label">layui-icon-heart-fill</label>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-3">
-                <label class="input-group-text">排序</label>
-                <input id="menuSort" class="layui-input" type="number" placeholder="请输入排序" lay-verType="tips" lay-verify="required" required />
-            </div>
-            <div class="col-sm-3">
-                <label class="input-group-text">是否禁用</label>
-                <div class="card text-center">
-                    <div class="card-body">
-                        <input type="checkbox" id="menuEnable" value="true" title="禁用">
-                    </div>
-                </div>
-            </div>
         </form>
 
 
@@ -84,3 +34,114 @@
     </div>
 </div>
 
+@section Scripts {
+    <script src="~/layui_extend/xm-select.js"></script>
+    <script>
+
+        function ShowDialog_Load(reqData) {
+
+
+            let roleId = 0;
+
+
+            layui.use(['layer', 'tree', 'form', 'xmSelect'], function () {
+
+                var $ = layui.jquery;
+                var layer = layui.layer;
+                var form = layui.form;
+                var xmSelect = layui.xmSelect;
+                const tree = layui.tree;
+          
+             
+                if (reqData != null) {
+                    roleId = reqData.roleId;
+                    document.getElementById("roleName").value = reqData.roleName;
+                }
+
+
+                $.ajax({
+                    type: "post",
+                    url: "/SystemConfig/GetRoleMenuInfo",
+                    data: { roleId },
+                    success: function (res) {
+                        tree.render({
+                            elem: '#roleMenu',
+                            data: res,
+                            spread: true,//节点是否初始展开，默认 false
+                            showCheckbox: true, //是否显示复选框
+                            id: 'roleMenu',
+                            click: function (obj) {
+                                var data = obj.data;  //获取当前点击的节点数据
+                                layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
+                            }
+                        });
+                    },
+                    error: function (jqXHR) {
+                        layer.close(msgDialogIndex);
+                        layer.msg("发生错误：" + jqXHR.status, {
+                            time: 0,  //不自动关闭
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
+                            }
+                        });
+                    }
+                });
+
+
+                $('button[name="btn-save"]').click(function () {
+
+
+                    //获得选中的节点
+                    var checkRoleMenuData = tree.getChecked('roleMenu');
+                   
+
+                    const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
+                    $.ajax({
+                        type: "post",
+                        url: "/SystemConfig/AddEditRoleInfo",
+                        data: {
+                            RoleId: roleId,
+                            RoleName: $('#roleName').val(),
+                            RoleMenuInfos: checkRoleMenuData
+                        },
+                        success: function (res) {
+                            layer.close(msgDialogIndex);
+                       
+                            if (res.status) {
+                                layer.msg(roleId > 0 ? '修改成功' : '添加成功', {
+                                    time: 2000,
+                                    end: function () {
+                                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                        parent.layer.close(index);
+                                    }
+                                });
+                            }
+                            else {
+                                layer.msg(res.msg, { icon: 5 });
+                            }
+
+                        },
+                        error: function (jqXHR) {
+                            layer.close(msgDialogIndex);
+                            layer.msg("发生错误：" + jqXHR.status, {
+                                time: 0,  //不自动关闭
+                                btn: ['确定'],
+                                yes: function (index) {
+                                    layer.close(index);
+                                }
+                            });
+                        }
+                    });
+
+
+
+
+                })
+
+            });
+        }
+
+    </script>
+
+}

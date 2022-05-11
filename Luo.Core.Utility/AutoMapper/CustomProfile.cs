@@ -69,6 +69,10 @@ namespace Luo.Core.Utility.AutoMapper
            .ForMember(dest => dest.MenuType, opts => opts.MapFrom(x => x.MenuType.ObjToInt()));
 
 
+            CreateMap<MenuInfoDto, TreeRoleMenuResult>()
+          .ForMember(dest => dest.Id, opts => opts.MapFrom(x => x.MenuId))
+           .ForMember(dest => dest.Title, opts => opts.MapFrom(x => x.MenuName));
+
 
 
 
@@ -111,16 +115,20 @@ namespace Luo.Core.Utility.AutoMapper
         {
             public CommonPageViewModel<T2> Convert(CommonPageDto<T> source, CommonPageViewModel<T2> destination, ResolutionContext context)
             {
-               
-                IMapper mapper=null;
+
+                IMapper mapper = null;
                 var typeSoure = typeof(T);
                 var typeDest = typeof(T2);
-                if(typeDest.IsGenericType) 
+                if (typeDest.IsGenericType)
                 {
                     Type[] typeParametersSoure = typeSoure.GetGenericArguments();
                     Type[] typeParametersDest = typeDest.GetGenericArguments();
                     mapper = new MapperConfiguration(a => a.CreateMap(typeParametersSoure[0], typeParametersDest[0])).CreateMapper();
-                 
+
+                }
+                else
+                {
+                    mapper = new MapperConfiguration(a => a.CreateMap<T, T2>()).CreateMapper();
                 }
                 if (mapper == null) return default(CommonPageViewModel<T2>);
 
@@ -129,7 +137,7 @@ namespace Luo.Core.Utility.AutoMapper
                 destination.Status = source.Status;
                 destination.StatusCode = source.StatusCode;
                 destination.Msg = source.Message;
-                destination.ResultData = mapper.Map<T,T2>(source.ResultData);
+                destination.ResultData = mapper.Map<T, T2>(source.ResultData);
                 destination.TotalCount = source.TotalCount;
                 return destination;
             }

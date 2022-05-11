@@ -110,8 +110,6 @@
                 var icon = layui.icon;
 
                
-
-                debugger;
                 if (reqData != null) {
                     menuId = reqData.menuId;
                     menuParWinObj = reqData;
@@ -126,7 +124,7 @@
                     $('#menuIcon').html(menuParWinObj.menuIcon);
                     document.getElementById("iconPicker").value = menuParWinObj.menuIcon;
                     $('#menuEnable').prop('checked', !reqData.menuEnable)
-                    //debugger;
+          
                     //$('#menuType').find("option[value=" + menuParWinObj.menuType + "]").attr("selected", true);
                     form.render();
                 }

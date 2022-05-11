@@ -346,5 +346,121 @@ namespace Luo.Core.Repository
             });
             return res;
         }
+
+        /// <summary>
+        /// 通过角色ID 获取菜单Ids
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public List<int> QueryRoleMenuIds(int roleId) 
+        {
+            List<int> res = new List<int>();
+            Factory.GetDbContext((db) =>
+            {
+                res = db.Queryable<Basic_MenuRole>()
+                .Where(a=>a.RoleId==roleId)
+                 .Select(a =>a.MenuId).ToList();
+            });
+            return res;
+        }
+        /// <summary>
+        /// 新增一个角色
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonDto AddRoleInfo(AddRoleInfoDto req) 
+        {
+            CommonDto res = new CommonDto();
+            Factory.GetDbContext((db) =>
+            {
+               
+                try
+                {
+                    db.BeginTran();
+                    var roleId = db.Insertable<Basic_Role>(new { RoleName = req.RoleName }).ExecuteReturnIdentity();
+                    
+                    foreach (var item in req.MenuIds)
+                    {
+                        db.Insertable<Basic_MenuRole>(new 
+                        {
+                            MenuId=item,
+                            RoleId=roleId
+                        }).ExecuteCommand();
+                    }
+                    db.CommitTran();
+                    res.Status = true;
+                }
+                catch (Exception ex)
+                {
+                    res.Message = ex.Message;
+                    db.RollbackTran();
+                }
+            });
+            return res;
+        }
+        /// <summary>
+        /// 修改角色
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonDto EditRoleInfo(UpdateRoleInfoDto req)
+        {
+            CommonDto res = new CommonDto();
+            Factory.GetDbContext((db) =>
+            {
+             
+                try
+                {
+                    db.BeginTran();
+                    db.Updateable<Basic_Role>(new { RoleName = req.RoleName }).Where(x=>x.Id==req.RoleId).ExecuteCommand();
+                    db.Deleteable<Basic_MenuRole>().Where(x => x.RoleId == req.RoleId).ExecuteCommand();
+                    foreach (var item in req.MenuIds)
+                    {
+                        db.Insertable<Basic_MenuRole>(new 
+                        {
+                            MenuId = item,
+                            RoleId = req.RoleId
+                        }).ExecuteCommand();
+                    }
+                    db.CommitTran();
+                    res.Status = true;
+                }
+                catch (Exception ex)
+                {
+                    res.Message = ex.Message;
+                    db.RollbackTran();
+                }
+            });
+            return res;
+        }
+
+
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonDto DeleteRoleInfoByIds(List<int> roleIds)
+        {
+            CommonDto res = new CommonDto();
+            Factory.GetDbContext((db) =>
+            {
+
+                try
+                {
+                    db.BeginTran();
+                    db.Deleteable<Basic_Role>().Where(x => roleIds.Contains(x.Id)).ExecuteCommand();
+                    db.Deleteable<Basic_MenuRole>().Where(x => roleIds.Contains(x.RoleId)).ExecuteCommand();
+                    db.CommitTran();
+                    res.Status = true;
+                }
+                catch (Exception ex)
+                {
+                    res.Message = ex.Message;
+                    db.RollbackTran();
+                }
+            });
+            return res;
+        }
     }
 }

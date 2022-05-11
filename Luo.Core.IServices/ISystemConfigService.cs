@@ -73,5 +73,25 @@ namespace Luo.Core.IServices
         /// <param name="req"></param>
         /// <returns></returns>
         public CommonPageViewModel<List<RoleInfoList>> QueryRolePage(RoleInfoPageQuery req);
+
+        /// <summary>
+        /// 查询角色菜单
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public List<TreeRoleMenuResult> QueryRoleMenuInfo(int roleId);
+        /// <summary>
+        /// 编辑或新增一个角色
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel AddEditRoleInfo(AddEditRoleInfoInput req);
+
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        /// <param name="roleIds"></param>
+        /// <returns></returns>
+        public CommonViewModel DeleteRoleInfoByIds(List<int> roleIds);
     }
 }

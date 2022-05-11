@@ -22,7 +22,7 @@ layui.define(function(exports){
   
   //退出
     admin.events.logout = function () {
-        debugger;
+  
         var msgDialogIndex = layer.msg('正在执行退出，请稍等.....', { shade: 0.3, icon: 16 });
     //执行退出接口
         $.ajax({
