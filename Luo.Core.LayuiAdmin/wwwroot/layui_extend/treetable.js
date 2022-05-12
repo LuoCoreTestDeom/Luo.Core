@@ -39,7 +39,6 @@ layui.define(['layer', 'table'], function (exports) {
             const doneCallback = param.done;
             if (data != null || data != undefined) {
                 let mData = [];
-                debugger;
                 const tNodes = data;
                 for (let i = 0; i < tNodes.length; i++) {
                     const tt = tNodes[i];

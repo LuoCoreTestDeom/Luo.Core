@@ -38,6 +38,15 @@ namespace Luo.Core.IRepository
         /// <param name="userIds"></param>
         /// <returns></returns>
         public CommonDto DeleteUserByUserIds(List<int> userIds);
+        /// <summary>
+        /// 获取用户绑定的所有角色
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        public List<int> GetUserRoleIdsByUserId(int userId);
+
+
+
 
         /// <summary>
         /// 查询菜单列表信息
@@ -84,6 +93,39 @@ namespace Luo.Core.IRepository
         /// <param name="menuIds"></param>
         /// <returns></returns>
         public CommonPageDto<List<RoleInfoDto>> QueryRoleInfo(QueryRoleInfoDto req);
+
+        /// <summary>
+        /// 通过角色ID 获取菜单Ids
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        public List<int> QueryRoleMenuIds(int roleId);
+
+
+        /// <summary>
+        /// 新增一个角色
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonDto AddRoleInfo(AddRoleInfoDto req);
+        /// <summary>
+        /// 修改角色
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonDto EditRoleInfo(UpdateRoleInfoDto req);
+
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonDto DeleteRoleInfoByIds(List<int> roleIds);
+        /// <summary>
+        /// 查询所有角色信息
+        /// </summary>
+        /// <returns></returns>
+        public List<QueryAllRoleInfoDto> QueryAllRoleInfos();
 
     }
 }

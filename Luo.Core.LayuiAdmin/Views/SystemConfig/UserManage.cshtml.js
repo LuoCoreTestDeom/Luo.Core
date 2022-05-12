@@ -67,18 +67,7 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
                 getDataTable();
                 break;
             case 'btnAdd':
-                layer.open({
-                    title:"添加用户",
-                    area: ['450px', '500px'],
-                    anim: 1,//弹出动画
-                    resize: false,//是否允许拉伸
-                    type: 2,
-                    content: '/SystemConfig/UserInfo',
-                    success: function (layero, index) {
-                        //对加载后的iframe进行宽高度自适应
-                        layer.iframeAuto(index)
-                    }
-                });
+                ShowDailogBox(obj.data);
                 break;
             case 'btnDelete':
                 if (checkStatus.data.length <= 0) {
@@ -90,15 +79,18 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
                     checkStatus.data.forEach(function (item) {
                         userIds.push(item.userId)
                     });
-                    deleteUser(userIds);
+                    if (deleteUser(userIds)) {
+                        let tableDT = table.cache.currentTable
+                        tableDT.filter(x => x.LAY_CHECKED).splice(1);
+
+                        table.reload("currentTable", {
+                            data: tableDT   // 将新数据重新载入表格
+                        });
+                    }
+                   
                     layer.close(index);
 
-                    let tableDT = table.cache.currentTable
-                    tableDT.filter(x => x.LAY_CHECKED).splice(1);
-                
-                    table.reload("currentTable", {
-                        data: tableDT   // 将新数据重新载入表格
-                    });
+                    
                 });
                 break;
         };
@@ -110,28 +102,35 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
             layer.confirm('真的删除行么', function (index) {
                 let userIds = [];
                 userIds.push(data.userId)
-                deleteUser(userIds);
+                if (deleteUser(userIds)) {
+                    obj.del();
+                }
                 layer.close(index);
-                obj.del();
+               
             });
         } else if (obj.event === 'edit') {
-            layer.open({
-                title: "添加用户",
-                area: ['450px', '500px'],
-                anim: 1,//弹出动画
-                resize: false,//是否允许拉伸
-                type: 2,
-                content: '/SystemConfig/UserInfo',
-                success: function (layero, index) {
-                    //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-                    var iframe = window[layero.find('iframe')[0]['name']]; 
-                    iframe.ParentSetValue(obj.data);
-                    //对加载后的iframe进行宽高度自适应
-                    layer.iframeAuto(index);
-                }
-            });
+            ShowDailogBox(obj.data);
         }
     });
+   
+    function ShowDailogBox(data) {
+
+        layer.open({
+            title: "添加用户",
+            area: ['450px', '500px'],
+            anim: 1,//弹出动画
+            resize: false,//是否允许拉伸
+            type: 2,
+            content: '/SystemConfig/UserInfo',
+            success: function (layero, index) {
+                //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                var iframe = window[layero.find('iframe')[0]['name']];
+                iframe.ShowDialog_Load(data);
+                //对加载后的iframe进行宽高度自适应
+                layer.iframeAuto(index);
+            }
+        });
+    }
 
     //查询
     function getDataTable() {
@@ -180,16 +179,18 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
 
     function deleteUser(reqData)
     {
-
+        let delStart = false;
         const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
         $.ajax({
             type: "Delete",
             url: "/SystemConfig/DeleteUser",
             data: { req: reqData },
+            async: false,
             success: function (res) {
                 layer.close(msgDialogIndex);
                 if (res.status) {
                     layer.msg('删除成功', { icon: 6 });
+                    delStart = true;
                 }
                 else {
                     layer.msg(data.msg, { icon: 5 });
@@ -206,6 +207,7 @@ layui.use(['form', 'table', 'laydate', 'layer'], function () {
                 });
             }
         });
+        return delStart;
     }
 
 

@@ -7,6 +7,7 @@ using Luo.Core.Models.ViewModels.Request;
 using MySqlX.XDevAPI.Common;
 using Luo.Core.Models.Dtos.Response;
 using Org.BouncyCastle.Ocsp;
+using Luo.Core.Models.ViewModels.Response;
 
 namespace Luo.Core.LayuiAdmin.Controllers
 {
@@ -19,7 +20,10 @@ namespace Luo.Core.LayuiAdmin.Controllers
         {
             this._systemConfigService = systemConfigService;
         }
-
+        /// <summary>
+        /// 用户管理
+        /// </summary>
+        /// <returns></returns>
         public IActionResult UserManage()
         {
             return View();
@@ -36,7 +40,10 @@ namespace Luo.Core.LayuiAdmin.Controllers
 
             return Json(res);
         }
-
+        /// <summary>
+        /// 用户信息弹框
+        /// </summary>
+        /// <returns></returns>
         public IActionResult UserInfo()
         {
             return View();
@@ -73,22 +80,49 @@ namespace Luo.Core.LayuiAdmin.Controllers
             return Json(res);
         }
 
+        /// <summary>
+        /// 获取用户的角色
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult GetUserRoleInfo(int req) 
+        {
+            var res = _systemConfigService.GetUserRoleByUserId(req);
+            return Json(res);
+        }
+
+
+        /// <summary>
+        /// 菜单管理
+        /// </summary>
+        /// <returns></returns>
         public IActionResult MenuManage()
         {
 
             return View();
         }
+        /// <summary>
+        /// 查询所有菜单信息
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult GetMenuInfos()
         {
             var res = _systemConfigService.GetMenuInfoList();
             return Json(res);
         }
-
+        /// <summary>
+        /// 菜单信息弹框
+        /// </summary>
+        /// <returns></returns>
         public IActionResult MenuInfo()
         {
             return View();
         }
+        /// <summary>
+        /// 获取所有菜单--递归
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult GetAllMenuInfos()
         {
@@ -96,7 +130,11 @@ namespace Luo.Core.LayuiAdmin.Controllers
 
             return Json(res);
         }
-
+       /// <summary>
+       /// 添加编辑菜单
+       /// </summary>
+       /// <param name="req"></param>
+       /// <returns></returns>
         [HttpPost]
         public IActionResult AddEditMenuInfo(MenuInfoInput req)
         {
@@ -104,27 +142,80 @@ namespace Luo.Core.LayuiAdmin.Controllers
             var res = _systemConfigService.AddEditMenuInfo(req);
             return Json(res);
         }
+        /// <summary>
+        /// 删除菜单
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
         [HttpDelete]
         public IActionResult DeleteMenuInfoByIds(List<int> ids)
         {
             var res = _systemConfigService.DeleteMenuInfoByIds(ids);
             return Json(res);
         }
-
+       /// <summary>
+       /// 角色管理
+       /// </summary>
+       /// <returns></returns>
         public IActionResult RoleManage()
         {
             return View();
         }
+       /// <summary>
+       /// 查询角色信息
+       /// </summary>
+       /// <param name="req"></param>
+       /// <returns></returns>
         [HttpPost]
         public IActionResult GetPageRoleInfo(RoleInfoPageQuery req)
         {
             var res = _systemConfigService.QueryRolePage(req);
             return Json(res);
         }
-
+        /// <summary>
+        /// 角色信息弹框
+        /// </summary>
+        /// <returns></returns>
         public IActionResult RoleInfo()
         {
             return View();
+        }
+        /// <summary>
+        /// 获取角色菜单明细
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult GetRoleMenuInfo(int roleId)
+        {
+            var res = _systemConfigService.QueryRoleMenuInfo(roleId);
+            return Json(res);
+        }
+
+
+        /// <summary>
+        /// 修改增加角色
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult AddEditRoleInfo(AddEditRoleInfoInput req)
+        {
+            var res = _systemConfigService.AddEditRoleInfo(req);
+            return Json(res);
+        }
+
+
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public IActionResult DeleteRoleInfoByIds(List<int> req)
+        {
+            var res = _systemConfigService.DeleteRoleInfoByIds(req);
+            return Json(res);
         }
     }
 }

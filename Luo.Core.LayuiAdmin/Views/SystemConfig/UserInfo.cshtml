@@ -49,6 +49,14 @@
                     </div>
                 </div>
             </div>
+
+
+            <div class="col-sm-3">
+                <label class="input-group-text">角色</label>
+                <div id="roleSelectBox" class="ew-xmselect-tree"></div>
+            </div>
+
+
         </form>
     </div>
     <div class="card-footer text-muted">
@@ -58,64 +66,115 @@
     </div>
 </div>
 
-<script src="~/lib/jquery/dist/jquery.js"></script>
-@section Scripts {
-    <script>
-        let userId = 0;
-        $('button[name="btn-save"]').click(function () {
-            let userEditUrl = "/SystemConfig/AddUser";
-            if (userId > 0) {
-                userEditUrl = "/SystemConfig/UpdateUser";
-            }
 
-            const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
-            $.ajax({
-                type: "Post",
-                url: userEditUrl,
-                data: {
-                    UserId: userId,
-                    UserName: $("#userName").val(),
-                    Password: $("#userPassword").val(),
-                    ConfirmPassword: $("#userConfirmPassword").val(),
-                    UserSex: $("input[name='userSex']:checked").val(),
-                },
-                success: function (res) {
-                    layer.close(msgDialogIndex);
-                    if (res.status) {
-                        layer.msg(userId > 0 ? '修改成功' : '添加成功', {
-                            time: 2000,
-                            end: function () {
-                                var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-                                parent.layer.close(index);
+@section Scripts {
+
+    <script src="~/layui_extend/xm-select.js"></script>
+    <script>
+
+        function ShowDialog_Load(reqData) {
+
+            let userId = 0;
+            
+
+
+            layui.use(['layer', 'form', 'xmSelect'], function () {
+                var $ = layui.jquery;
+                var layer = layui.layer;
+                var form = layui.form;
+                var xmSelect = layui.xmSelect;
+
+                if (reqData != null) {
+                    userId = reqData.userId;
+                    document.getElementById("userName").value = reqData.userName;
+                    $("#Luo-user-Password").hide();
+                    form.render();
+                }
+              
+                let roleSelectBox;
+                $.ajax({
+                    type: "post",
+                    url: "/SystemConfig/GetUserRoleInfo",
+                    async: false,
+                    data: { req: userId },
+                    success: function (res) {
+                        roleSelectBox = xmSelect.render({
+                            el: '#roleSelectBox',
+                            data: res,
+                            prop: {
+                                name: 'roleName',
+                                value: 'roleId',
+                                selected: "selectCheck"
+                            },
+                        });
+                    },
+                    error: function (jqXHR) {
+                        layer.close(msgDialogIndex);
+                        layer.msg("发生错误：" + jqXHR.status, {
+                            time: 0,  //不自动关闭
+                            btn: ['确定'],
+                            yes: function (index) {
+                                layer.close(index);
                             }
                         });
                     }
-                    else {
-                        layer.msg(res.msg, { icon: 5 });
+                });
+                
+                
+
+
+
+                $('button[name="btn-save"]').click(function () {
+                    let userEditUrl = "/SystemConfig/AddUser";
+                    if (userId > 0) {
+                        userEditUrl = "/SystemConfig/UpdateUser";
                     }
-                },
-                error: function (jqXHR) {
-                    layer.close(msgDialogIndex);
-                    layer.msg("发生错误：" + jqXHR.status, {
-                        time: 0,  //不自动关闭
-                        btn: ['确定'],
-                        yes: function (index) {
-                            layer.close(index);
+                    const selectRoleInfos = roleSelectBox.getValue();
+                    let roleIds = [];
+                    selectRoleInfos.forEach(function (item) {
+                        roleIds.push(item.roleId)
+                    });
+                    debugger;
+                    const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
+                    $.ajax({
+                        type: "Post",
+                        url: userEditUrl,
+                        data: {
+                            UserId: userId,
+                            UserName: $("#userName").val(),
+                            Password: $("#userPassword").val(),
+                            ConfirmPassword: $("#userConfirmPassword").val(),
+                            UserSex: $("input[name='userSex']:checked").val(),
+                            RoleIds: roleIds
+                        },
+                        success: function (res) {
+                            layer.close(msgDialogIndex);
+                            if (res.status) {
+                                layer.msg(userId > 0 ? '修改成功' : '添加成功', {
+                                    time: 2000,
+                                    end: function () {
+                                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+                                        parent.layer.close(index);
+                                    }
+                                });
+                            }
+                            else {
+                                layer.msg(res.msg, { icon: 5 });
+                            }
+                        },
+                        error: function (jqXHR) {
+                            layer.close(msgDialogIndex);
+                            layer.msg("发生错误：" + jqXHR.status, {
+                                time: 0,  //不自动关闭
+                                btn: ['确定'],
+                                yes: function (index) {
+                                    layer.close(index);
+                                }
+                            });
                         }
                     });
-                }
+                });
             });
-
-        
-
-
-
-        });
-        function ParentSetValue(reqData) {
-          
-            userId = reqData.userId;
-            document.getElementById("userName").value = reqData.userName;
-            $("#Luo-user-Password").hide();
         }
     </script>
 
