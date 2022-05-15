@@ -1,12 +1,13 @@
-﻿using Luo.Core.FiltersExtend.JsonWebToken.Dto;
+﻿
 using Luo.Core.FiltersExtend.PolicysHandlers;
+using Luo.Core.Utility.JsonWebToken.Dto;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Luo.Core.FiltersExtend.JsonWebToken;
+namespace Luo.Core.Utility.JsonWebToken;
 
 public interface IJwtAppService
 {

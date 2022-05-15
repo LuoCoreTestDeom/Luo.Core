@@ -1,8 +1,8 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Luo.Core.Common;
 using Luo.Core.FiltersExtend;
-using Luo.Core.FiltersExtend.JsonWebToken;
 using Luo.Core.FiltersExtend.PolicysHandlers;
+using Luo.Core.Utility.JsonWebToken;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -81,7 +81,7 @@ namespace Luo.Core.Utility.ServiceExtensions
         {
             services.AddTransient<IJwtAppService, JwtAppService>();
            
-            var jwtToken = Appsettings.GetObject<TokenConfig>("JwtConfig");
+          
 
             AuthenticationBuilder authBuilder = services.AddAuthentication(x =>
             {
@@ -93,7 +93,7 @@ namespace Luo.Core.Utility.ServiceExtensions
             #region 参数
 
 
-            var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtToken.SecurityKey)), SecurityAlgorithms.HmacSha256);
+            var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenConfig.JwtData.Secret)), SecurityAlgorithms.HmacSha256);
 
             // 如果要数据库动态绑定，这里先留个空，后边处理器里动态赋值
             var permission = new List<PermissionItem>();
@@ -128,15 +128,15 @@ namespace Luo.Core.Utility.ServiceExtensions
                 {
                     ValidateIssuerSigningKey = true,
                     //获取或设置要使用的Microsoft.IdentityModel.Tokens.SecurityKey用于签名验证。
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtToken.SecurityKey)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenConfig.JwtData.Secret)),
                     ValidateIssuer = true,//验证颁发者
                     //获取或设置一个System.String，它表示将使用的有效发行者检查代币的发行者。
-                    ValidIssuer = jwtToken.Issuer,
+                    ValidIssuer = TokenConfig.JwtData.Issuer,
                     ValidateAudience = true,//验证使用者
                     //获取或设置一个字符串，该字符串表示将用于检查的有效受众反对令牌的观众。
-                    ValidAudience = jwtToken.Audience,
+                    ValidAudience = TokenConfig.JwtData.Audience,
                     //缓冲过期时间，总的有效时间等于这个时间加上jwt的过期时间，如果不配置，默认是5分钟
-                    ClockSkew = TimeSpan.FromMinutes(Convert.ToDouble(jwtToken.AccessExpiration)),
+                    ClockSkew = TimeSpan.FromSeconds(Convert.ToDouble(TokenConfig.JwtData.ExpirationSeconds)),
                     ValidateLifetime = true//验证使用时限
                 };
                 x.Events = new JwtBearerEvents
@@ -154,12 +154,12 @@ namespace Luo.Core.Utility.ServiceExtensions
                         {
                             var jwtObj = jwtHandler.ReadJwtToken(token);
 
-                            if (jwtObj.Issuer != jwtToken.Issuer)
+                            if (jwtObj.Issuer != TokenConfig.JwtData.Issuer)
                             {
                                 context.Response.Headers.Add("Token-Error-Iss", "issuer is wrong!");
                             }
 
-                            if (jwtObj.Audiences.FirstOrDefault() != jwtToken.Audience)
+                            if (jwtObj.Audiences.FirstOrDefault() != TokenConfig.JwtData.Audience)
                             {
                                 context.Response.Headers.Add("Token-Error-Aud", "Audience is wrong!");
                             }

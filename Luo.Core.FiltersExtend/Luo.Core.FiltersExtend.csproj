@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="AuthorizationFilters\" />
     <Folder Include="ResourceFilters\" />
     <Folder Include="ActionFilters\" />
     <Folder Include="ExceptionFilters\" />
@@ -27,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Luo.Core.Common\Luo.Core.Common.csproj" />
+    <ProjectReference Include="..\Luo.Core.Models\Luo.Core.Models.csproj" />
   </ItemGroup>
 
 </Project>

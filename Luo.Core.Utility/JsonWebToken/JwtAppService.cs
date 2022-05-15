@@ -1,7 +1,6 @@
-﻿
-using Luo.Core.Common;
-using Luo.Core.FiltersExtend.JsonWebToken.Dto;
+﻿using Luo.Core.Common;
 using Luo.Core.FiltersExtend.PolicysHandlers;
+using Luo.Core.Utility.JsonWebToken.Dto;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -16,7 +15,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
-namespace Luo.Core.FiltersExtend.JsonWebToken;
+namespace Luo.Core.Utility.JsonWebToken;
+
 
 public class JwtAppService : IJwtAppService
 {
@@ -62,12 +62,12 @@ public class JwtAppService : IJwtAppService
     /// <returns></returns>
     public JwtAuthorizationDto Create(PermissionItem dto)
     {
-        var jwtToken = Appsettings.GetObject<TokenConfig>("JwtConfig");
+     
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtToken.SecurityKey));
+        SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenConfig.JwtData.Secret));
 
         DateTime authTime = DateTime.UtcNow;
-        DateTime expiresAt = authTime.AddMinutes(Convert.ToDouble(jwtToken.AccessExpiration));
+        DateTime expiresAt = authTime.AddSeconds(Convert.ToDouble(TokenConfig.JwtData.ExpirationSeconds));
 
         //将用户信息添加到 Claim 中
         var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme);
@@ -86,8 +86,8 @@ public class JwtAppService : IJwtAppService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),//创建声明信息
-            Issuer = jwtToken.Issuer,//Jwt token 的签发者
-            Audience = jwtToken.Audience,//Jwt token 的接收者
+            Issuer = TokenConfig.JwtData.Issuer,//Jwt token 的签发者
+            Audience = TokenConfig.JwtData.Audience,//Jwt token 的接收者
             Expires = expiresAt,//过期时间
             SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256)//创建 token
         };

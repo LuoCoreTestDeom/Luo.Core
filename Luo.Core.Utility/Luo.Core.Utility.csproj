@@ -19,6 +19,9 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.17.0" />
     <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
 	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.2" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.3.1" />
+	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.3.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,10 +31,6 @@
     <ProjectReference Include="..\Luo.Core.FiltersExtend\Luo.Core.FiltersExtend.csproj" />
     <ProjectReference Include="..\Luo.Core.IServices\Luo.Core.IServices.csproj" />
     <ProjectReference Include="..\Luo.Core.Models\Luo.Core.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ApplicationExtend\" />
   </ItemGroup>
 
 </Project>
