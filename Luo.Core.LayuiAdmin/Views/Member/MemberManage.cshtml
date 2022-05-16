@@ -16,7 +16,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">会员姓名</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="UserName" id="UserName" autocomplete="off" class="layui-input">
+                                <input type="text" name="memberName" id="memberName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-inline">
@@ -141,7 +141,7 @@
                     limitName: 'PageCount' //每页数据量的参数名，默认：limit
                 },
                 response: {
-                    statusCode: 200 //规定成功的状态码，默认：0
+                    statusCode: 0 //规定成功的状态码，默认：0
                 }
             });
 
@@ -208,7 +208,7 @@
                     anim: 1,//弹出动画
                     resize: false,//是否允许拉伸
                     type: 2,
-                    content: '/SystemConfig/UserInfo',
+                    content: '/Member/QueryMemberInfo',
                     success: function (layero, index) {
                         //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
                         var iframe = window[layero.find('iframe')[0]['name']];
@@ -232,10 +232,10 @@
                             "data": res.resultData.userInfos //解析数据列表
                         };
                     },
-                    url: "/SystemConfig/QueryUserList",
+                    url: "/Member/QueryMemberInfo",
                     method: "Post",
                     where: {
-                        UserName: $('#UserName').val(),
+                        UserName: $('#memberName').val(),
                         TimeEnable: $('#TimeEnable').prop("checked"),
                         TimeStart: $('#TimeStart').val(),
                         TimeEnd: $('#TimeEnd').val(),

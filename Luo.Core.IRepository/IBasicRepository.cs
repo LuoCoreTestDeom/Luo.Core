@@ -127,5 +127,12 @@ namespace Luo.Core.IRepository
         /// <returns></returns>
         public List<QueryAllRoleInfoDto> QueryAllRoleInfos();
 
+        /// <summary>
+        /// 查询会员信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonPageDto<List<MemberInfoListDto>> QueryMemberInfoPageList(QueryMemberInfoPageDto req);
+
     }
 }

@@ -568,7 +568,11 @@ namespace Luo.Core.Repository
             return res;
         }
 
-      
+      /// <summary>
+      /// 查询会员信息
+      /// </summary>
+      /// <param name="req"></param>
+      /// <returns></returns>
         public CommonPageDto<List<MemberInfoListDto>> QueryMemberInfoPageList(QueryMemberInfoPageDto req) 
         {
             CommonPageDto<List<MemberInfoListDto>> res = new CommonPageDto<List<MemberInfoListDto>>();
