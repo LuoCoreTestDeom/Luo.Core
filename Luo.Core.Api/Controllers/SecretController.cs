@@ -36,7 +36,7 @@ namespace Luo.Core.Api.Controllers
             //Todo：获取用户信息
             var permission = new PermissionItem()
             {
-                Role = "Luo",
+                Role = dto.Account,
                 Url = "luocore.com"
             };
 
@@ -75,7 +75,7 @@ namespace Luo.Core.Api.Controllers
         /// <param name="dto">刷新授权用户信息</param>
         /// <returns></returns>
         [HttpPost("refresh")]
-        public async Task<IActionResult> RefreshAccessTokenAsync([FromBody] SecretDto dto)
+        public async Task<IActionResult> RefreshAccessTokenAsync([FromBody]SecretDto dto)
         {
             //Todo：获取用户信息
             var permission = new PermissionItem()

@@ -1,4 +1,5 @@
 ﻿using Luo.Core.Common;
+using Luo.Core.Common.SecurityEncryptDecrypt;
 using Luo.Core.FiltersExtend.PolicysHandlers;
 using Luo.Core.Utility.JsonWebToken.Dto;
 using Microsoft.AspNetCore.Authentication;
@@ -12,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 
@@ -67,15 +69,18 @@ public class JwtAppService : IJwtAppService
         SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenConfig.JwtData.Secret));
 
         DateTime authTime = DateTime.UtcNow;
-        DateTime expiresAt = authTime.AddSeconds(Convert.ToDouble(TokenConfig.JwtData.ExpirationSeconds));
+        DateTime expiresAt = authTime.AddHours(Convert.ToDouble(TokenConfig.JwtData.ExpirationHours));
+
+        
 
         //将用户信息添加到 Claim 中
         var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme);
 
+    
         IEnumerable<Claim> claims = new Claim[] {
-            new Claim(ClaimTypes.Name,dto.Role),
-            new Claim(ClaimTypes.Role,dto.Role.ToString()),
-            new Claim(ClaimTypes.Email,dto.Url),
+            new Claim(ClaimTypes.Name,dto.Role.ToString()),
+            new Claim(ClaimTypes.Role,CommonUtil.EncryptString(dto.Id.ToString())),
+            new Claim(ClaimTypes.Uri,dto.Url),
             new Claim(ClaimTypes.Expiration,expiresAt.ToString())
         };
         identity.AddClaims(claims);

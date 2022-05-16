@@ -79,10 +79,11 @@ namespace Luo.Core.FiltersExtend.PolicysHandlers
                         //
                         var url = httpContext.Request.Path.Value.ToLower();
                         var role = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault().Value;
-                        
 
+
+                        var exptime = httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration).Value;
                         //判断是否过期
-                        if (DateTime.Parse(httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration).Value) >= DateTime.UtcNow)
+                        if (DateTime.Parse(exptime) >= DateTime.UtcNow)
                         {
                             context.Succeed(requirement);
                         }

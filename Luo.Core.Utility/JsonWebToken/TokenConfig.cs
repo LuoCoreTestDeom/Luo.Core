@@ -13,7 +13,7 @@ public class JsonWebTokenModel
     public string Issuer { get; set; }
     public string Audience { get; set; }
     public string DeniedAction { get; set; }
-    public double ExpirationSeconds { get; set; }
+    public double ExpirationHours { get; set; }
 }
 
 

@@ -135,8 +135,8 @@ namespace Luo.Core.Utility.ServiceExtensions
                     ValidateAudience = true,//验证使用者
                     //获取或设置一个字符串，该字符串表示将用于检查的有效受众反对令牌的观众。
                     ValidAudience = TokenConfig.JwtData.Audience,
-                    //缓冲过期时间，总的有效时间等于这个时间加上jwt的过期时间，如果不配置，默认是5分钟
-                    ClockSkew = TimeSpan.FromSeconds(Convert.ToDouble(TokenConfig.JwtData.ExpirationSeconds)),
+                    //缓冲过期时间，总的有效时间等于这个时间加上jwt的过期时间，如果不配置，默认是5分钟 ,
+                    ClockSkew = TimeSpan.FromSeconds(Convert.ToDouble(30)),//过期时间容错值，解决服务器端时间不同步问题（秒）
                     ValidateLifetime = true//验证使用时限
                 };
                 x.Events = new JwtBearerEvents

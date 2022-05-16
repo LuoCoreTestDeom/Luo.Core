@@ -18,7 +18,7 @@ namespace Luo.Core.Api.Controllers.V1
       {
         "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
     };
-        [HttpGet(Name = "GetWeatherForecast2222")]
+        [HttpGet("GetWeatherForecast2222")]
         public IEnumerable<WeatherForecast> Get13123123()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
