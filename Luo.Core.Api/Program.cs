@@ -25,10 +25,10 @@ builder.Services.AddDistributedCacheSteup();
 builder.Services.AddSqlSugarSetup();
 builder.Services.AddBatchService("Luo.Core.Services");
 builder.Services.AddBatchService("Luo.Core.Repository");
-builder.Services.AddAuthCookieSetup();
+
 builder.Services.AddAutoMapperSetup();
 builder.Services.AddJWTService();
-builder.Services.AddScoped<IAuthorizationHandler, JwtPolicyHandler>();
+
 builder.Services.AddSession(options =>
 {
     var sessTime = Appsettings.GetObject<double>("SessionIdleTimeoutMinutes");
@@ -54,7 +54,6 @@ app.UseCors();
 //    app.UseSwagger();
 //    app.UseSwaggerUI();
 //}
-
 app.UseSwaggerMiddle<ApiVersionEnum>();
 
 app.UseHttpsRedirection();

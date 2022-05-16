@@ -26,6 +26,7 @@ namespace Luo.Core.FiltersExtend.PolicysHandlers
         /// </summary>
         public IAuthenticationSchemeProvider Schemes { get; set; }
         private readonly IHttpContextAccessor _accessor;
+        readonly IJwtAppService _jwtApp;
 
         /// <summary>
         /// 构造函数注入
@@ -33,15 +34,17 @@ namespace Luo.Core.FiltersExtend.PolicysHandlers
         /// <param name="schemes"></param>
         /// <param name="roleModulePermissionServices"></param>
         /// <param name="accessor"></param>
-        public JwtPolicyHandler(IAuthenticationSchemeProvider schemes, IHttpContextAccessor accessor)
+        public JwtPolicyHandler(IAuthenticationSchemeProvider schemes, IHttpContextAccessor accessor,IJwtAppService jwtService)
         {
             _accessor = accessor;
             Schemes = schemes;
+            _jwtApp = jwtService;
         }
 
         // 重写异步处理程序
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, JwtAutoRequirement requirement)
         {
+          
             var httpContext = _accessor.HttpContext;
 
             // 获取系统中所有的角色和菜单的关系集合
@@ -55,87 +58,42 @@ namespace Luo.Core.FiltersExtend.PolicysHandlers
 
             if (httpContext != null)
             {
-                var questUrl = httpContext.Request.Path.Value.ToLower();
-
-                // 整体结构类似认证中间件UseAuthentication的逻辑，具体查看开源地址
-                // https://github.com/dotnet/aspnetcore/blob/master/src/Security/Authentication/Core/src/AuthenticationMiddleware.cs
-                httpContext.Features.Set<IAuthenticationFeature>(new AuthenticationFeature
-                {
-                    OriginalPath = httpContext.Request.Path,
-                    OriginalPathBase = httpContext.Request.PathBase
-                });
-
-           
-
-
-                //判断请求是否拥有凭据，即有没有登录
+                //获取授权方式
                 var defaultAuthenticate = await Schemes.GetDefaultAuthenticateSchemeAsync();
                 if (defaultAuthenticate != null)
                 {
+                    //验证签发的用户信息
                     var result = await httpContext.AuthenticateAsync(defaultAuthenticate.Name);
-
-                 
-
-                    //result?.Principal不为空即登录成功
-                    if (result?.Principal != null)
+                    if (result.Succeeded)
                     {
-
-                      httpContext.User = result.Principal;
-
-                        // 获取当前用户的角色信息
-                        var currentUserRoles = new List<string>();
-                        // jwt
-                        currentUserRoles = (from item in httpContext.User.Claims
-                                            where item.Type == requirement.ClaimType
-                                            select item.Value).ToList();
-
-                        var isMatchRole = false;
-                        var permisssionRoles = requirement.Permissions.Where(w => currentUserRoles.Contains(w.Role));
-                        foreach (var item in permisssionRoles)
-                        {
-                            try
-                            {
-                                if (Regex.Match(questUrl, item.Url?.ObjToString().ToLower())?.Value == questUrl)
-                                {
-                                    isMatchRole = true;
-                                    break;
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                // ignored
-                            }
-                        }
-
-                        //验证权限
-                        if (currentUserRoles.Count <= 0 || !isMatchRole)
+                        //判断是否为已停用的 Token
+                        if (!await _jwtApp.IsCurrentActiveTokenAsync())
                         {
                             context.Fail();
-return;
-}
-var isExp = false;
-                        // ids4和jwt切换
-                        // ids4
-                        // jwt
-                        isExp = (httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value) != null && DateTime.Parse(httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration)?.Value) >= DateTime.Now;
-                        if (isExp)
+                            return;
+                        }
+
+                        httpContext.User = result.Principal;
+
+                        //判断角色与 Url 是否对应
+                        //
+                        var url = httpContext.Request.Path.Value.ToLower();
+                        var role = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault().Value;
+                        
+
+                        //判断是否过期
+                        if (DateTime.Parse(httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration).Value) >= DateTime.UtcNow)
                         {
                             context.Succeed(requirement);
                         }
                         else
                         {
                             context.Fail();
-                            return;
                         }
                         return;
                     }
                 }
-                //判断没有登录时，是否访问登录的url,并且是Post请求，并且是form表单提交类型，否则为失败
-                if (!(questUrl.Equals(requirement.LoginPath.ToLower(), StringComparison.Ordinal) && (!httpContext.Request.Method.Equals("POST") || !httpContext.Request.HasFormContentType)))
-                {
-                    context.Fail();
-                    return;
-                }
+                context.Fail();
             }
 
             //context.Succeed(requirement);

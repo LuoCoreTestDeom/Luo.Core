@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,92 +22,105 @@ namespace Luo.Core.Utility.ServiceExtensions
         public static void AddJWTService(this IServiceCollection services)
         {
 
-            if (services == null)
+           if (services == null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
             var jwtKeySecret = TokenConfig.JwtData?.Secret;
-            if (!string.IsNullOrWhiteSpace(jwtKeySecret))
+            var keyByteArray = Encoding.UTF8.GetBytes(jwtKeySecret);
+            var signingKey = new SymmetricSecurityKey(keyByteArray);
+            var Issuer = TokenConfig.JwtData?.Issuer;
+            var Audience = TokenConfig.JwtData?.Audience;
+            var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+
+            #region  注册认证服务
+            // 如果要数据库动态绑定，这里先留个空，后边处理器里动态赋值
+            var permission = new List<PermissionItem>();
+
+            // 角色与接口的权限要求参数
+            var permissionRequirement = new JwtAutoRequirement(
+                "/api/denied",// 拒绝授权的跳转地址（目前无用）
+                permission,
+                ClaimTypes.Role,//基于角色的授权
+                Issuer,//发行人
+                Audience,//听众
+                signingCredentials,//签名凭据
+                expiration: TimeSpan.FromSeconds(60 * 60)//接口的过期时间
+                );
+            services.AddAuthorization(opt =>
             {
-                var keyByteArray = Encoding.UTF8.GetBytes(jwtKeySecret);
-                var signingKey = new SymmetricSecurityKey(keyByteArray);
-                var Issuer = TokenConfig.JwtData.Issuer;
-                var Audience = TokenConfig.JwtData.Audience;
-                var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
-
-
-
-                // 开启Bearer认证
-                services.AddAuthentication(o =>
+                opt.AddPolicy("Permission", policy => policy.Requirements.Add(permissionRequirement));
+            })
+            .AddAuthentication(options =>
+            {
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = nameof(JwtAuthHandler);
+                options.DefaultForbidScheme = nameof(JwtAuthHandler);
+            })
+            .AddJwtBearer(options =>
+            {
+                // 令牌验证参数
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                    o.DefaultChallengeScheme = nameof(JwtAuthHandler);
-                    o.DefaultForbidScheme = nameof(JwtAuthHandler);
-                }) // 添加JwtBearer服务
-                .AddJwtBearer(o =>
+                    ValidateIssuerSigningKey = true,//是否验证密钥
+                    IssuerSigningKey = signingKey,//指定密钥
+                    ValidateIssuer = true,//是否验证颁发者
+                    ValidIssuer = Issuer,//证颁发者
+                    ValidateAudience = true,//是否验证接受者
+                    ValidAudience = Audience,//接受者
+                    ValidateLifetime = true,//设置必须验证超时
+                    RequireExpirationTime = true,//设置必须要有超时时间
+                    ClockSkew = TimeSpan.FromSeconds(30)//将其赋值为0时，即设置有效时间到期，就马上失效
+                };
+                #region 认证的时候可以添加事件
+                //认证的时候可以添加事件
+                options.Events = new JwtBearerEvents
                 {
-                    // 令牌验证参数
-                    o.TokenValidationParameters = new TokenValidationParameters
+                    OnAuthenticationFailed = context =>
                     {
-                        ValidateIssuerSigningKey = true,//是否验证密钥
-                        IssuerSigningKey = signingKey,//指定密钥
-                        ValidateIssuer = true,//是否验证颁发者
-                        ValidIssuer = Issuer,//证颁发者
-                        ValidateAudience = true,//是否验证接受者
-                        ValidAudience = Audience,//接受者
-                        ValidateLifetime = true,//设置必须验证超时
-                        RequireExpirationTime = true,//设置必须要有超时时间
-                        ClockSkew = TimeSpan.FromSeconds(30)//将其赋值为0时，即设置有效时间到期，就马上失效
-                    };
-                    //认证的时候可以添加事件
-                    o.Events = new JwtBearerEvents
-                    {
-                        OnChallenge = context =>
+                        var jwtHandler = new JwtSecurityTokenHandler();
+                        var token = context.Request.Headers["Authorization"].ObjToString().Replace("Bearer ", "");
+
+                        if (token.IsNotEmptyOrNull() && jwtHandler.CanReadToken(token))
                         {
-                            context.Response.Headers.Add("Token-Error", context.ErrorDescription);
-                            return Task.CompletedTask;
-                        },
-                        OnAuthenticationFailed = context =>
-                        {
-                            var jwtHandler = new JwtSecurityTokenHandler();
-                            var token = context.Request.Headers["Authorization"].ObjToString().Replace("Bearer ", "");
+                            var jwtToken = jwtHandler.ReadJwtToken(token);
 
-                            if (token.IsNotEmptyOrNull() && jwtHandler.CanReadToken(token))
+                            if (jwtToken.Issuer != Issuer)
                             {
-                                var jwtToken = jwtHandler.ReadJwtToken(token);
-
-                                if (jwtToken.Issuer != Issuer)
-                                {
-                                    context.Response.Headers.Add("Token-Error-Iss", "issuer is wrong!");
-                                }
-
-                                if (jwtToken.Audiences.FirstOrDefault() != Audience)
-                                {
-                                    context.Response.Headers.Add("Token-Error-Aud", "Audience is wrong!");
-                                }
+                                context.Response.Headers.Add("Token-Error-Iss", "issuer is wrong!");
                             }
-                            // 如果过期，则把<是否过期>添加到，返回头信息中
-                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+
+                            if (jwtToken.Audiences.FirstOrDefault() != Audience)
                             {
-                                context.Response.Headers.Add("Token-Expired", "true");
+                                context.Response.Headers.Add("Token-Error-Aud", "Audience is wrong!");
                             }
-                            return Task.CompletedTask;
                         }
-                    };
-                })
-                .AddScheme<AuthenticationSchemeOptions, JwtAuthHandler>(nameof(JwtAuthHandler), o =>
-                {
+                        // 如果过期，则把<是否过期>添加到，返回头信息中
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            context.Response.Headers.Add("Token-Expired", "true");
+                        }
+                        return Task.CompletedTask;
+                    },
+                    OnChallenge = context =>
+                    {
+                        context.Response.Headers.Add("Token-Error", context.ErrorDescription);
+                        return Task.CompletedTask;
+                    }
+                };
+                #endregion 认证的时候可以添加事件
+            }).AddScheme<AuthenticationSchemeOptions, JwtAuthHandler>(nameof(JwtAuthHandler), o =>
+            {
 
-                });
+            });
+            #endregion  注册认证服务
+            services.AddSingleton<IAuthorizationHandler, JwtPolicyHandler>();
+            services.AddSingleton<IJwtAppService, JwtAppService>();
 
-                services.AddScoped<IJwtAppService, JwtAppService>();
-            }
+
 
         }
 
-
-       
-        
     }
 }

@@ -72,7 +72,19 @@ namespace Luo.Core.Utility.ServiceExtensions
                     sgo.OperationFilter<SecurityRequirementsOperationFilter>();
                     #endregion 开启加权小锁
                 }
+                //Show the api version in url address
+                //sgo.DocInclusionPredicate((version, apiDescription) =>
+                //{
+                //    if (!version.Equals(apiDescription.GroupName))
+                //        return false;
 
+                //    var values = apiDescription.RelativePath
+                //        .Split('/')
+                //        .Select(v => v.Replace("v{version}", apiDescription.GroupName));
+
+                //    apiDescription.RelativePath = string.Join("/", values);
+                //    return true;
+                //});
                 //定义JwtBearer认证方式一
                 sgo.AddSecurityDefinition("JwtBearer", new OpenApiSecurityScheme()
                 {

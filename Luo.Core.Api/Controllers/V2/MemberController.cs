@@ -1,17 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Luo.Core.Api.Version1
+namespace Luo.Core.Api.Controllers.V2
 {
-    [ApiExplorerSettings(GroupName = "V1")]
+    [ApiExplorerSettings(GroupName = "V2")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class MemberController : ControllerBase
     {
-        [HttpGet(Name = "GetWeatherForecast2222")]
-        [Authorize]
-        public IEnumerable<WeatherForecast> Get13123123()
+        [HttpGet(Name = "GetWeatherForecast111111")]
+        public IEnumerable<WeatherForecast> Get2222()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
