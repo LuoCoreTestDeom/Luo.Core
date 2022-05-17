@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Luo.Core.FiltersExtend.PolicysHandlers;
+using Luo.Core.IServices;
 using Luo.Core.Utility.JsonWebToken;
 using Luo.Core.Utility.JsonWebToken.Dto;
 using Microsoft.AspNetCore.Authorization;
@@ -11,9 +12,11 @@ namespace Luo.Core.Api.Controllers
     public class SecretController : ControllerBase
     {
         readonly IJwtAppService _jwtService;
-        public SecretController(IJwtAppService jwtService)
+        readonly IMemberService _service;
+        public SecretController(IJwtAppService jwtService, IMemberService service)
         {
             _jwtService = jwtService;
+            _service = service;
         }
         /// <summary>
         /// 停用 Jwt 授权数据
@@ -33,7 +36,8 @@ namespace Luo.Core.Api.Controllers
         [AllowAnonymous]
         public IActionResult Login([FromBody] SecretDto dto)
         {
-            //Todo：获取用户信息
+
+            _service.
             var permission = new PermissionItem()
             {
                 Role = dto.Account,

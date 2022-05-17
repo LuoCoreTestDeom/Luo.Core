@@ -29,11 +29,11 @@ namespace Luo.Core.Services
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonPageViewModel<MemberInfoPageList> QueryMemberInfoPageList(MemberInfoPageQuery req)
+        public CommonPageViewModel<List<MemberInfoResult>> QueryMemberInfoPageList(MemberInfoPageQuery req)
         {
             var resData = _Rep.QueryMemberInfoPageList(req.AutoMapTo<QueryMemberInfoPageDto>());
-            CommonPageViewModel<MemberInfoPageList> res = new CommonPageViewModel<MemberInfoPageList>();
-            res = _Mapper.Map<CommonPageDto<List<MemberInfoListDto>>, CommonPageViewModel<MemberInfoPageList>>(resData);
+            CommonPageViewModel<List<MemberInfoResult>> res = new CommonPageViewModel<List<MemberInfoResult>>();
+            res = _Mapper.Map<CommonPageDto<List<MemberInfoListDto>>, CommonPageViewModel<List<MemberInfoResult>>>(resData);
             return res;
         }
         /// <summary>
@@ -57,7 +57,7 @@ namespace Luo.Core.Services
                     res.Msg = "密码不能为空！";
                     return res;
                 }
-                if (req.Password.Equals(req.MemberConfirmPassword)) 
+                if (!req.Password.Equals(req.MemberConfirmPassword)) 
                 {
                     res.Msg = "两次密码不对应！";
                     return res;
@@ -77,6 +77,27 @@ namespace Luo.Core.Services
             
         }
 
-       
+
+        /// <summary>
+        /// 查询会员信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel<JwtMemberInfoResult> JwtQueryMemberInfo(JwtMemberInfoQuery req)
+        {
+            CommonViewModel<JwtMemberInfoResult> res = new CommonViewModel<JwtMemberInfoResult>();
+            try
+            {
+                JwtLoginMemberInfoDto resData = _Rep.QueryJwtMemberInfo(req.AutoMapTo<JwtQueryMemberInfoDto>());
+                res.ResultData = resData.MapTo<JwtMemberInfoResult>();
+                res.Status = true;
+            }
+            catch (Exception ex)
+            {
+                res.Msg=ex.Message;
+            }
+            return res;
+        }
+
     }
 }

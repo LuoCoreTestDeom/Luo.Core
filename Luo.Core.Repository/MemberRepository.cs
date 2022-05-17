@@ -37,6 +37,7 @@ namespace Luo.Core.Repository
                 .Where(x => x.MemberName == req.MemberName && x.Password == req.MemberPassword)
                 .Select(x => new JwtLoginMemberInfoDto
                 {
+                    MemberId=x.Id,
                     MemberName = x.MemberName
                 })
                 .First();
@@ -57,7 +58,7 @@ namespace Luo.Core.Repository
                 int totalCount = 0;
                 res.ResultData = db.Queryable<MemberInfo>()
                 .WhereIF(!string.IsNullOrWhiteSpace(req.MemberName), x => x.MemberName == req.MemberName)
-                .WhereIF(req.TimeEnable, x => SqlFunc.Between(x.CreateTime, req.TimeStrart, req.TimeEnd))
+                .WhereIF(req.TimeEnable, x => SqlFunc.Between(x.CreateTime, req.TimeStart, req.TimeEnd))
                 .Select(x => new MemberInfoListDto
                 {
                     MemberId = x.Id,

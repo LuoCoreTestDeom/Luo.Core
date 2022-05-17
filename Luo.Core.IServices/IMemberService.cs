@@ -16,7 +16,7 @@ namespace Luo.Core.IServices
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonPageViewModel<MemberInfoPageList> QueryMemberInfoPageList(MemberInfoPageQuery req);
+        public CommonPageViewModel<List<MemberInfoResult>> QueryMemberInfoPageList(MemberInfoPageQuery req);
    
         /// <summary>
         /// 添加编辑会员信息

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Luo.Core.Models.ViewModels.Response
 {
-    public class MemberInfoPageList
+    public class JwtMemberInfoResult
     {
-        public List<MemberInfoResult> MemberInfos { get; set; }
-        public int TotalCount { get; set; }
+        public int MemberId { get; set; }
+        public string MemberName { get; set; }
     }
 }

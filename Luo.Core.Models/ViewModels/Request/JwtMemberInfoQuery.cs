@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Luo.Core.Models.Dtos.Response
+namespace Luo.Core.Models.ViewModels.Request
 {
-    public class JwtLoginMemberInfoDto
+    public class JwtMemberInfoQuery
     {
-        public int MemberId { get; set; }
         public string MemberName { get; set; }
+        public string MemberPassword { get; set; }
     }
 }

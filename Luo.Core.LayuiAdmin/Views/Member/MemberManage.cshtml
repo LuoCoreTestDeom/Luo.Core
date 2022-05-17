@@ -122,7 +122,7 @@
                 cols: [[
                     { type: "checkbox", width: '5%' },
                     { field: 'memberId', width: '10%', title: 'ID', sort: true },
-                    { field: 'memberId', width: '15%', title: '会员名' },
+                    { field: 'memberName', width: '15%', title: '会员名' },
                     { field: 'createTime', width: '30%', title: '创建时间', sort: true },
                     { field: 'createName', width: '20%', title: '创建人', sort: true },
                     { title: '操作', width: '20%', toolbar: '#currentTableBar', align: "center" }
@@ -202,6 +202,7 @@
 
             function ShowDailogBox(data) {
 
+                debugger;
                 layer.open({
                     title: "会员信息",
                     area: ['450px', '500px'],
@@ -228,14 +229,14 @@
                         return {
                             "code": res.statusCode, //解析接口状态
                             "msg": res.msg, //解析提示文本
-                            "count": res.resultData.totalCount, //解析数据长度
-                            "data": res.resultData.userInfos //解析数据列表
+                            "count": res.totalCount, //解析数据长度
+                            "data": res.resultData //解析数据列表
                         };
                     },
                     url: "/Member/QueryMemberInfo",
                     method: "Post",
                     where: {
-                        UserName: $('#memberName').val(),
+                        MemberName: $('#memberName').val(),
                         TimeEnable: $('#TimeEnable').prop("checked"),
                         TimeStart: $('#TimeStart').val(),
                         TimeEnd: $('#TimeEnd').val(),
