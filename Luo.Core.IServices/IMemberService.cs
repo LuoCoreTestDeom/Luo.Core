@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Luo.Core.Models.ViewModels.Request;
 
 namespace Luo.Core.IServices
 {
@@ -15,6 +16,13 @@ namespace Luo.Core.IServices
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonPageViewModel<MemberInfoPageList> QueryMemberInfoPageList(Models.ViewModels.Request.MemberInfoPageQuery req);
+        public CommonPageViewModel<MemberInfoPageList> QueryMemberInfoPageList(MemberInfoPageQuery req);
+   
+        /// <summary>
+        /// 添加编辑会员信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel AddEditMemberInfo(AddEditMemberInfoInput req);
     }
 }

@@ -15,10 +15,22 @@ namespace Luo.Core.LayuiAdmin.Controllers
         {
             return View();
         }
+        public IActionResult MemberInfo()
+        {
+            return View();
+        }
         [HttpPost]
         public IActionResult QueryMemberInfo(MemberInfoPageQuery req) 
         {
            var res= _service.QueryMemberInfoPageList(req);
+            return Json(res);
+        }
+
+        [HttpPost]
+        public IActionResult AddEditMemberInfo(AddEditMemberInfoInput req)
+        {
+            
+            var res = _service.AddEditMemberInfo(req);
             return Json(res);
         }
     }

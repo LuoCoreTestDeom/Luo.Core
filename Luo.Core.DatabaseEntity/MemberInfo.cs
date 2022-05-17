@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Luo.Core.DatabaseEntity
 {
-    public class Basic_Member
+    public class MemberInfo
     {
         /// <summary>
         /// Desc:

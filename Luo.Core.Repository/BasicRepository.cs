@@ -546,54 +546,7 @@ namespace Luo.Core.Repository
             });
             return res;
         }
-        /// <summary>
-        /// 获取JWT登录会员信息
-        /// </summary>
-        /// <param name="req"></param>
-        /// <returns></returns>
-        public JwtLoginMemberInfoDto QueryJwtMemberInfo(JwtQueryMemberInfoDto req) 
-        {
-            JwtLoginMemberInfoDto res = new JwtLoginMemberInfoDto();
-            Factory.GetDbContext((db) =>
-            {
-
-                db.Queryable<Basic_Member>()
-                .Where(x => x.MemberName == req.MemberName && x.Password == req.MemberPassword)
-                .Select(x=>new JwtLoginMemberInfoDto 
-                {
-                    MemberName=x.MemberName
-                })
-                .First();
-            });
-            return res;
-        }
-
-      /// <summary>
-      /// 查询会员信息
-      /// </summary>
-      /// <param name="req"></param>
-      /// <returns></returns>
-        public CommonPageDto<List<MemberInfoListDto>> QueryMemberInfoPageList(QueryMemberInfoPageDto req) 
-        {
-            CommonPageDto<List<MemberInfoListDto>> res = new CommonPageDto<List<MemberInfoListDto>>();
-            Factory.GetDbContext((db) =>
-            {
-                int totalCount = 0;
-                res.ResultData= db.Queryable<Basic_Member>()
-                .WhereIF(!string.IsNullOrWhiteSpace(req.MemberName),x=>x.MemberName==req.MemberName)
-                .WhereIF(req.TimeEnable, x => SqlFunc.Between(x.CreateTime,req.TimeStrart,req.TimeEnd))
-                .Select(x => new MemberInfoListDto
-                {
-                    MemberId=x.Id,
-                   MemberName=x.MemberName,
-                   CreateTime=x.CreateTime,
-                   CreateName=x.CreateName
-                })
-                .ToPageList(req.PageIndex, req.PageCount, ref totalCount);
-                res.TotalCount = totalCount;
-            });
-            return res;
-        }
+       
 
     }
 }
