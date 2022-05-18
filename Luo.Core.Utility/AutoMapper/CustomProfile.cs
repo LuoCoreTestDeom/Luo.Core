@@ -18,6 +18,7 @@ using Luo.Core.Models.ViewModels.Response;
 using Luo.Core.DatabaseEntity;
 using MySqlX.XDevAPI.Common;
 using Renci.SshNet.Common;
+using Luo.Core.Utility.JsonWebToken.Dto;
 
 namespace Luo.Core.Utility.AutoMapper
 {
@@ -74,8 +75,9 @@ namespace Luo.Core.Utility.AutoMapper
            .ForMember(dest => dest.Title, opts => opts.MapFrom(x => x.MenuName));
 
 
-
-
+            CreateMap<SecretDto, JwtMemberInfoQuery>()
+                 .ForMember(dest => dest.MemberName, opts => opts.MapFrom(x => x.Account))
+                 .ForMember(dest => dest.MemberPassword, opts => opts.MapFrom(x =>  Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.EncryptString(x.Password)));
 
 
 

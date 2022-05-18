@@ -34,7 +34,7 @@ builder.Services.AddBatchService("Luo.Core.Services");
 builder.Services.AddBatchService("Luo.Core.Repository");
 builder.Services.AddAuthCookieSetup();
 builder.Services.AddAutoMapperSetup();
-builder.Services.InitEntityData();
+//builder.Services.InitEntityData();
 var app = builder.Build();
 app.UseCors();
 // Configure the HTTP request pipeline.

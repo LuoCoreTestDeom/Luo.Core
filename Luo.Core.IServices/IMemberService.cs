@@ -24,5 +24,12 @@ namespace Luo.Core.IServices
         /// <param name="req"></param>
         /// <returns></returns>
         public CommonViewModel AddEditMemberInfo(AddEditMemberInfoInput req);
+
+        /// <summary>
+        /// 查询会员信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel<JwtMemberInfoResult> JwtQueryMemberInfo(JwtMemberInfoQuery req);
     }
 }

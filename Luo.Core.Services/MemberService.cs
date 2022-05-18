@@ -63,13 +63,25 @@ namespace Luo.Core.Services
                     return res;
                 }
                 var reqData = req.MapTo<AddMemberInfoDto>();
+                reqData.Password = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.EncryptString(reqData.Password);
                 reqData.CreateName = _accessor.HttpContext.User.Claims.SingleOrDefault(x => x.Type == "UserName").Value;
                 var resData = _Rep.AddMemberInfo(reqData);
                 res= _Mapper.Map<CommonViewModel>(resData);
             }
             else 
             {
+                if (string.IsNullOrWhiteSpace(req.Password))
+                {
+                    res.Msg = "密码不能为空！";
+                    return res;
+                }
+                if (!req.Password.Equals(req.MemberConfirmPassword))
+                {
+                    res.Msg = "两次密码不对应！";
+                    return res;
+                }
                 var reqData = req.MapTo<UpdateMemberInfoDto>();
+                reqData.Password = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.EncryptString(reqData.Password);
                 var resData = _Rep.UpdateMemberInfo(reqData);
                 res = _Mapper.Map<CommonViewModel>(resData);
             }

@@ -10,5 +10,6 @@ namespace Luo.Core.Models.Dtos.Request
     {
         public int MemberId { get; set; }
         public string MemberName { get; set; }
+        public string Password { get; set; }
     }
 }

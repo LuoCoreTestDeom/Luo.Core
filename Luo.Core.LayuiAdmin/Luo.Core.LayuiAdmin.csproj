@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\lib\bootstrap\fonts\bootstrap-icons.woff2" />
     <None Include="wwwroot\font\iconfont.js" />
     <None Include="wwwroot\font\iconfont.woff2" />
     <None Include="wwwroot\lib\layui\font\iconfont.svg" />

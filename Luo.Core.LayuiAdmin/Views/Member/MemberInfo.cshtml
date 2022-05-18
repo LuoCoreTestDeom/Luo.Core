@@ -5,7 +5,7 @@
 }
 
 <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-
+<link href="~/lib/bootstrap/dist/css/bootstrap-icons.css" rel="stylesheet" />
 <div class="card text-center">
 
     <div class="card-body">
@@ -30,18 +30,22 @@
                 </div>
             </div>
 
-
+            
             <div class="col-sm-3" id="Luo-member-Password">
                 <div class="input-group-text">密码</div>
                 <div class="card">
                     <div class="card-body">
                         <fieldset>
-                            <div class="mb-3">
-                                <input type="password" class="form-control" id="memberPassword" placeholder="请输入密码">
+                            <div class="mb-3 input-group">
+                                <input type="password" style="line-height: 3;" class="form-control" id="memberPassword" placeholder="请输入密码">
+                                <i class="input-group-text  bi-eye-slash" style="font-size: 2rem;" title="显示密码" onclick="seePwdBootstrap(this)"></i>
                             </div>
                             <div class="mb-3" style="text-align: left !important; ">
                                 <label for="disabledSelect" class="form-label">确认密码</label>
-                                <input type="password" class="form-control" id="memberConfirmPassword" placeholder="请确认您输入的密码">
+                                <div class="input-group">
+                                    <input type="password"  style="line-height: 3;" class="form-control" id="memberConfirmPassword" placeholder="请确认您输入的密码">
+                                    <i class="input-group-text  bi-eye-slash" style="font-size: 2rem;" title="显示密码" onclick="seePwdBootstrap(this)"></i>
+                                </div>
                             </div>
                         </fieldset>
                     </div>
@@ -63,6 +67,7 @@
     <script src="~/layui_extend/xm-select.js"></script>
     <script>
 
+        
         function ShowDialog_Load(reqData) {
 
             let memberId = 0;
@@ -75,10 +80,32 @@
                 if (reqData != null) {
                     memberId = reqData.memberId;
                     document.getElementById("memberName").value = reqData.memberName;
-                    $("#Luo-member-Password").hide();
+                     document.getElementById("memberPassword").value = reqData.memberPassword;
+                    document.getElementById("memberConfirmPassword").value = reqData.memberPassword;
                     form.render();
                 }
 
+
+                //密码隐藏显示
+                window.seePwdBootstrap=   function (obj) {
+                    debugger;
+                    var pwdValue = $(obj).parent().children('input:first-child').val();//获取密码值
+                    var _type = $(obj).parent().children('input:first-child').attr('type');//获取input的type类型
+                    if (_type == 'password') {
+                        $(obj).parent().children('input:first-child').attr('type', 'text');
+                        $(obj).attr('class', 'input-group-text  bi-eye');
+                        $(obj).attr('title', '隐藏密码');
+                    } else if (_type == 'text') {
+                        $(obj).parent().children('input:first-child').attr('type', 'password');
+                        $(obj).attr('class', 'input-group-text  bi-eye-slash');
+                        $(obj).attr('title', '显示密码');
+                    }
+                    $(obj).parent().children('input:first-child').val(pwdValue);
+                }
+
+               
+               
+               
                
 
                 $('button[name="btn-save"]').click(function () {

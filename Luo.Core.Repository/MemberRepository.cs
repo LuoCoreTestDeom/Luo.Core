@@ -63,6 +63,7 @@ namespace Luo.Core.Repository
                 {
                     MemberId = x.Id,
                     MemberName = x.MemberName,
+                    MemberPassword=x.Password,
                     CreateTime = x.CreateTime,
                     CreateName = x.CreateName
                 })

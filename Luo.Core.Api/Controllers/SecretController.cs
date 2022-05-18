@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Luo.Core.FiltersExtend.PolicysHandlers;
 using Luo.Core.IServices;
+using Luo.Core.Models.ViewModels.Request;
 using Luo.Core.Utility.JsonWebToken;
 using Luo.Core.Utility.JsonWebToken.Dto;
 using Microsoft.AspNetCore.Authorization;
@@ -13,10 +14,12 @@ namespace Luo.Core.Api.Controllers
     {
         readonly IJwtAppService _jwtService;
         readonly IMemberService _service;
-        public SecretController(IJwtAppService jwtService, IMemberService service)
+         readonly IMapper _Mapper;
+        public SecretController(IJwtAppService jwtService, IMemberService service, IMapper mapper)
         {
             _jwtService = jwtService;
             _service = service;
+            _Mapper = mapper;
         }
         /// <summary>
         /// 停用 Jwt 授权数据
@@ -34,28 +37,20 @@ namespace Luo.Core.Api.Controllers
         /// <param name="dto">授权用户信息</param>
         [HttpPost("token")]
         [AllowAnonymous]
-        public IActionResult Login([FromBody] SecretDto dto)
+        public IActionResult Login([FromBody] SecretDto req)
         {
-
-            _service.
+            JwtResponseDto res = new JwtResponseDto() { Type = "Bearer" };
+           var resData= _service.JwtQueryMemberInfo(_Mapper.Map<JwtMemberInfoQuery>(req));
+            if (resData.Status) 
+            {
+                res.Access = "账号密码不正确，无权访问。" + resData.Msg;
+                return Ok(res);
+            }
             var permission = new PermissionItem()
             {
-                Role = dto.Account,
-                Url = "luocore.com"
+                Role = resData.ResultData.MemberId.ToString(),
+                Url = resData.ResultData.MemberName
             };
-
-            if (permission == null)
-                return Ok(new JwtResponseDto
-                {
-                    Access = "无权访问",
-                    Type = "Bearer",
-                    Profile = new JwtProfile
-                    {
-                        Name = dto.Account,
-                        Auths = 0,
-                        Expires = 0
-                    }
-                });
 
             var jwt = _jwtService.Create(permission);
 
