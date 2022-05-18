@@ -32,7 +32,7 @@
 
             
             <div class="col-sm-3" id="Luo-member-Password">
-                <div class="input-group-text">密码</div>
+                <div id="textPassword" class="input-group-text">密码</div>
                 <div class="card">
                     <div class="card-body">
                         <fieldset>
@@ -70,6 +70,7 @@
         
         function ShowDialog_Load(reqData) {
 
+            debugger;
             let memberId = 0;
 
             layui.use(['layer', 'form', 'xmSelect'], function () {
@@ -80,15 +81,15 @@
                 if (reqData != null) {
                     memberId = reqData.memberId;
                     document.getElementById("memberName").value = reqData.memberName;
-                     document.getElementById("memberPassword").value = reqData.memberPassword;
-                    document.getElementById("memberConfirmPassword").value = reqData.memberPassword;
+                    document.getElementById("textPassword").innerHTML = "新密码";
+                    //document.getElementById("memberPassword").value = reqData.memberPassword
+                    //document.getElementById("memberConfirmPassword").value = reqData.memberPassword;
                     form.render();
                 }
 
 
                 //密码隐藏显示
                 window.seePwdBootstrap=   function (obj) {
-                    debugger;
                     var pwdValue = $(obj).parent().children('input:first-child').val();//获取密码值
                     var _type = $(obj).parent().children('input:first-child').attr('type');//获取input的type类型
                     if (_type == 'password') {
