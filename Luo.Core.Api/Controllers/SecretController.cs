@@ -40,8 +40,9 @@ namespace Luo.Core.Api.Controllers
         public IActionResult Login([FromBody] SecretDto req)
         {
             JwtResponseDto res = new JwtResponseDto() { Type = "Bearer" };
-           var resData= _service.JwtQueryMemberInfo(_Mapper.Map<JwtMemberInfoQuery>(req));
-            if (resData.Status) 
+            var reqMap = _Mapper.Map<JwtMemberInfoQuery>(req);
+           var resData= _service.JwtQueryMemberInfo(reqMap);
+            if (!resData.Status) 
             {
                 res.Access = "账号密码不正确，无权访问。" + resData.Msg;
                 return Ok(res);

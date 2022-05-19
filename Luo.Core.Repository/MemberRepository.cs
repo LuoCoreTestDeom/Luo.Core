@@ -34,7 +34,7 @@ namespace Luo.Core.Repository
             Factory.GetDbContext((db) =>
             {
 
-                db.Queryable<MemberInfo>()
+                res= db.Queryable<MemberInfo>()
                 .Where(x => x.MemberName == req.MemberName && x.Password == req.MemberPassword)
                 .Select(x => new JwtLoginMemberInfoDto
                 {

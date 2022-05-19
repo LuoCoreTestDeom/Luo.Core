@@ -46,7 +46,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.LayuiAdmin", "Luo.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.FiltersExtend", "Luo.Core.FiltersExtend\Luo.Core.FiltersExtend.csproj", "{258F85FB-0321-4992-9664-608DCB399881}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Luo.Core.BlazorWebAssembly", "Luo.Core.BlazorWebAssembly\Luo.Core.BlazorWebAssembly.csproj", "{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.BlazorWebAssembly", "Luo.Core.BlazorWebAssembly\Luo.Core.BlazorWebAssembly.csproj", "{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

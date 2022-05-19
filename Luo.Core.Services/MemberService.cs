@@ -120,8 +120,15 @@ namespace Luo.Core.Services
             try
             {
                 JwtLoginMemberInfoDto resData = _Rep.QueryJwtMemberInfo(req.AutoMapTo<JwtQueryMemberInfoDto>());
-                res.ResultData = resData.MapTo<JwtMemberInfoResult>();
-                res.Status = true;
+                if (resData.MemberId > 0) 
+                {
+                    res.ResultData = resData.MapTo<JwtMemberInfoResult>();
+                    res.Status = true;
+                }
+                else 
+                {
+                    res.Status=false;
+                }
             }
             catch (Exception ex)
             {
