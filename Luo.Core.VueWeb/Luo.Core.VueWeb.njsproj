@@ -12,7 +12,6 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>89567269-a5a9-4521-ba03-b69c0a73ebce</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>node_modules\@vue\cli-service\bin\vue-cli-service.js</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
