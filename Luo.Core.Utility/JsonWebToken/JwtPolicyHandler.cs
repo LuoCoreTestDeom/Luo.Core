@@ -1,4 +1,5 @@
 ﻿using Luo.Core.Common;
+using Luo.Core.Common.SecurityEncryptDecrypt;
 using Luo.Core.Utility.JsonWebToken;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -78,7 +79,18 @@ namespace Luo.Core.FiltersExtend.PolicysHandlers
                         //判断角色与 Url 是否对应
                         //
                         var url = httpContext.Request.Path.Value.ToLower();
-                        var role = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault().Value;
+                        var role = httpContext.User.Claims.Where(c => c.Type == ClaimTypes.Role).FirstOrDefault()?.Value;
+                        if (string.IsNullOrWhiteSpace(role)) 
+                        {
+                            context.Fail();
+                            return;
+                        }
+                        string roleGuid= CommonUtil.DecryptString(role);
+                        if (!roleGuid.IsGuidByParse()) 
+                        {
+                            context.Fail();
+                            return;
+                        }
 
 
                         var exptime = httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration).Value;

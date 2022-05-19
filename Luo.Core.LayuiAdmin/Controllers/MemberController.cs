@@ -26,11 +26,19 @@ namespace Luo.Core.LayuiAdmin.Controllers
             return Json(res);
         }
 
-        [HttpPost]
+        [HttpPut]
         public IActionResult AddEditMemberInfo(AddEditMemberInfoInput req)
         {
             
             var res = _service.AddEditMemberInfo(req);
+            return Json(res);
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteMemberByMemberIds(List<int> req)
+        {
+
+            var res = _service.DeleteMemberByMemberId(req);
             return Json(res);
         }
     }

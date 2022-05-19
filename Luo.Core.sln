@@ -48,8 +48,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.FiltersExtend", "L
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.BlazorWebAssembly", "Luo.Core.BlazorWebAssembly\Luo.Core.BlazorWebAssembly.csproj", "{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "Luo.Core.Vue", "Luo.Core.Vue\Luo.Core.Vue.njsproj", "{33EF6C25-A7A5-4EE5-9D92-795A84DEEC2C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -116,10 +114,6 @@ Global
 		{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{33EF6C25-A7A5-4EE5-9D92-795A84DEEC2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33EF6C25-A7A5-4EE5-9D92-795A84DEEC2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33EF6C25-A7A5-4EE5-9D92-795A84DEEC2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33EF6C25-A7A5-4EE5-9D92-795A84DEEC2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,7 +134,6 @@ Global
 		{BA750598-2C42-4FAF-905D-F6727B0985DC} = {A6538087-0123-426D-A48C-2DE96C628777}
 		{258F85FB-0321-4992-9664-608DCB399881} = {F12C2A14-A21E-4636-9FB7-716D53151FEE}
 		{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE} = {A6538087-0123-426D-A48C-2DE96C628777}
-		{33EF6C25-A7A5-4EE5-9D92-795A84DEEC2C} = {A6538087-0123-426D-A48C-2DE96C628777}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C5C35DD9-1130-49FF-87A4-38A0AF1C1785}

@@ -49,26 +49,8 @@ namespace Luo.Core.Services
                 res.Msg = "用户名称不能为空！";
                 return res;
             }
-             
-            if (req.MemberId < 1) 
-            {
-                if (string.IsNullOrWhiteSpace(req.Password))
-                {
-                    res.Msg = "密码不能为空！";
-                    return res;
-                }
-                if (!req.Password.Equals(req.MemberConfirmPassword)) 
-                {
-                    res.Msg = "两次密码不对应！";
-                    return res;
-                }
-                var reqData = req.MapTo<AddMemberInfoDto>();
-                reqData.Password = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.EncryptString(reqData.Password);
-                reqData.CreateName = _accessor.HttpContext.User.Claims.SingleOrDefault(x => x.Type == "UserName").Value;
-                var resData = _Rep.AddMemberInfo(reqData);
-                res= _Mapper.Map<CommonViewModel>(resData);
-            }
-            else 
+
+            if (req.MemberId < 1)
             {
                 if (string.IsNullOrWhiteSpace(req.Password))
                 {
@@ -80,13 +62,50 @@ namespace Luo.Core.Services
                     res.Msg = "两次密码不对应！";
                     return res;
                 }
-                var reqData = req.MapTo<UpdateMemberInfoDto>();
+                var reqData = req.MapTo<AddMemberInfoDto>();
                 reqData.Password = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.EncryptString(reqData.Password);
+                reqData.CreateName = _accessor.HttpContext.User.Claims.SingleOrDefault(x => x.Type == "UserName").Value;
+                var resData = _Rep.AddMemberInfo(reqData);
+                res = _Mapper.Map<CommonViewModel>(resData);
+            }
+            else
+            {
+                var memberPassword = _Rep.GetMemberPasswordByMemberId(req.MemberId);
+                if (string.IsNullOrWhiteSpace(memberPassword))
+                {
+                    res.Msg = "无法获取会员信息！";
+                    return res;
+                }
+                memberPassword = Common.SecurityEncryptDecrypt.CommonUtil.DecryptString(memberPassword);
+
+                var reqData = req.MapTo<UpdateMemberInfoDto>();
+                if (!string.IsNullOrWhiteSpace(req.Password))
+                {
+                    if (!memberPassword.Equals(req.MemberConfirmPassword))
+                    {
+                        res.Msg = "原密码不正确!";
+                        return res;
+                    }
+                    reqData.Password = Luo.Core.Common.SecurityEncryptDecrypt.CommonUtil.EncryptString(reqData.Password);
+                }
                 var resData = _Rep.UpdateMemberInfo(reqData);
                 res = _Mapper.Map<CommonViewModel>(resData);
             }
             return res;
-            
+
+        }
+
+        /// <summary>
+        /// 删除会员信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel DeleteMemberByMemberId(List<int> req)
+        {
+            CommonViewModel res = new CommonViewModel();
+            var resData = _Rep.DeleteMemberByMemberIds(req);
+            res = _Mapper.Map<CommonViewModel>(resData);
+            return res;
         }
 
 
@@ -101,12 +120,19 @@ namespace Luo.Core.Services
             try
             {
                 JwtLoginMemberInfoDto resData = _Rep.QueryJwtMemberInfo(req.AutoMapTo<JwtQueryMemberInfoDto>());
-                res.ResultData = resData.MapTo<JwtMemberInfoResult>();
-                res.Status = true;
+                if (resData.MemberId > 0) 
+                {
+                    res.ResultData = resData.MapTo<JwtMemberInfoResult>();
+                    res.Status = true;
+                }
+                else 
+                {
+                    res.Status=false;
+                }
             }
             catch (Exception ex)
             {
-                res.Msg=ex.Message;
+                res.Msg = ex.Message;
             }
             return res;
         }

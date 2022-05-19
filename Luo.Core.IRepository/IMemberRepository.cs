@@ -36,7 +36,20 @@ namespace Luo.Core.IRepository
         /// <param name="req"></param>
         /// <returns></returns>
         CommonPageDto<List<MemberInfoListDto>> QueryMemberInfoPageList(QueryMemberInfoPageDto req);
+        /// <summary>
+        /// 删除会员通过ids
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonDto DeleteMemberByMemberIds(List<int> req);
+        /// <summary>
+        /// 获取会员密码 通过 会员ID
+        /// </summary>
+        /// <param name="memberId"></param>
+        /// <returns></returns>
+        public string GetMemberPasswordByMemberId(int memberId);
 
-        
+
+
     }
 }

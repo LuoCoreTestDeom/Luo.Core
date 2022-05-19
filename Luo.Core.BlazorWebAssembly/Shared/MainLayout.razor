@@ -1,10 +1,10 @@
 ﻿@inherits LayoutComponentBase
-
-
+@inject NavigationManager navigationManager
+@inject IJSRuntime JSRuntime
 
 <div class="page">
     <NavMenu />
-   
+
     <div class="navbar-expand-md">
         <div class="collapse navbar-collapse" id="navbar-menu">
             <div class="navbar navbar-light">
@@ -530,3 +530,14 @@
         </div>
     </div>
 </div>
+
+@code{
+    protected override async Task OnInitializedAsync()
+    {
+        LocalStorageHelper localStorageHelper = new LocalStorageHelper(JSRuntime);
+        if (string.IsNullOrEmpty(await localStorageHelper.GetLocalStorage("email")))
+        {
+            navigationManager.NavigateTo("Login");
+        }
+    }
+}

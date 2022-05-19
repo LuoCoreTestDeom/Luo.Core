@@ -35,7 +35,7 @@ namespace Luo.Core.Common.HttpPolly
 
                 var stringContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(url, stringContent);
-                
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string result = await response.Content.ReadAsStringAsync();
@@ -72,7 +72,7 @@ namespace Luo.Core.Common.HttpPolly
 
                 var stringContent = new StringContent(request, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(url, stringContent);
-                
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string result = await response.Content.ReadAsStringAsync();
@@ -96,21 +96,22 @@ namespace Luo.Core.Common.HttpPolly
         {
             try
             {
+                var aaaaaaa = _clientFactory.CreateClient(httpEnum.ToString());
                 var client = _clientFactory.CreateClient(httpEnum.ToString());
-                if (headers != null)
-                {
-                    foreach (var header in headers)
-                    {
-                        if (!client.DefaultRequestHeaders.Contains(header.Key))
-                        {
-                            client.DefaultRequestHeaders.Add(header.Key, header.Value);
-                        }
-                    }
-                }
+                //if (headers != null)
+                //{
+                //    foreach (var header in headers)
+                //    {
+                //        if (!client.DefaultRequestHeaders.Contains(header.Key))
+                //        {
+                //            client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                //        }
+                //    }
+                //}
 
                 var stringContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(url, stringContent);
-                
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     return await response.Content.ReadAsStringAsync();
@@ -120,10 +121,9 @@ namespace Luo.Core.Common.HttpPolly
                     throw new Exception($"Http Error StatusCode:{response.StatusCode}");
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                throw ex;
             }
 
         }
@@ -146,7 +146,7 @@ namespace Luo.Core.Common.HttpPolly
 
                 var stringContent = new StringContent(request, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(url, stringContent);
-                
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     return await response.Content.ReadAsStringAsync();
@@ -182,7 +182,7 @@ namespace Luo.Core.Common.HttpPolly
                 }
 
                 var response = await client.GetAsync(url);
-                
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string result = await response.Content.ReadAsStringAsync();
@@ -219,7 +219,7 @@ namespace Luo.Core.Common.HttpPolly
                 }
 
                 var response = await client.GetAsync(url);
-                
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     return await response.Content.ReadAsStringAsync(); ;
@@ -256,7 +256,7 @@ namespace Luo.Core.Common.HttpPolly
 
                 var stringContent = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
                 var response = await client.PutAsync(url, stringContent);
-                
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string result = await response.Content.ReadAsStringAsync();
@@ -294,7 +294,7 @@ namespace Luo.Core.Common.HttpPolly
 
                 var stringContent = new StringContent(request, Encoding.UTF8, "application/json");
                 var response = await client.PutAsync(url, stringContent);
-                
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string result = await response.Content.ReadAsStringAsync();
@@ -331,7 +331,7 @@ namespace Luo.Core.Common.HttpPolly
                 }
 
                 var response = await client.DeleteAsync(url);
-                
+
                 if (response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
                     string result = await response.Content.ReadAsStringAsync();
