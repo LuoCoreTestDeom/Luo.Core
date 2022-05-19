@@ -35,6 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.Common", "Luo.Core
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{950440DB-9EC2-48B5-A504-DA04F4E9FCE0}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -45,10 +46,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.LayuiAdmin", "Luo.Core.LayuiAdmin\Luo.Core.LayuiAdmin.csproj", "{BA750598-2C42-4FAF-905D-F6727B0985DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.FiltersExtend", "Luo.Core.FiltersExtend\Luo.Core.FiltersExtend.csproj", "{258F85FB-0321-4992-9664-608DCB399881}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.BlazorWebAssembly", "Luo.Core.BlazorWebAssembly\Luo.Core.BlazorWebAssembly.csproj", "{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Luo.Core.BlazorWasm", "Luo.Core.BlazorWasm\Luo.Core.BlazorWasm.csproj", "{7948813D-6BC2-4DF6-B5EA-2B65DCCA6D62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -112,14 +109,6 @@ Global
 		{258F85FB-0321-4992-9664-608DCB399881}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{258F85FB-0321-4992-9664-608DCB399881}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{258F85FB-0321-4992-9664-608DCB399881}.Release|Any CPU.Build.0 = Release|Any CPU
-		{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7948813D-6BC2-4DF6-B5EA-2B65DCCA6D62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7948813D-6BC2-4DF6-B5EA-2B65DCCA6D62}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7948813D-6BC2-4DF6-B5EA-2B65DCCA6D62}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7948813D-6BC2-4DF6-B5EA-2B65DCCA6D62}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,8 +128,6 @@ Global
 		{D5DD7F03-A7B5-4E49-980F-A40594CBCC2B} = {25C7FDC4-1AD7-4EF7-805D-38042EC7DBF8}
 		{BA750598-2C42-4FAF-905D-F6727B0985DC} = {A6538087-0123-426D-A48C-2DE96C628777}
 		{258F85FB-0321-4992-9664-608DCB399881} = {F12C2A14-A21E-4636-9FB7-716D53151FEE}
-		{56583CF5-10FE-42D0-9F6F-E2FBA5067BAE} = {A6538087-0123-426D-A48C-2DE96C628777}
-		{7948813D-6BC2-4DF6-B5EA-2B65DCCA6D62} = {A6538087-0123-426D-A48C-2DE96C628777}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C5C35DD9-1130-49FF-87A4-38A0AF1C1785}
