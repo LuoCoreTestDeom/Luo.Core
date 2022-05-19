@@ -30,30 +30,6 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
-  <ItemGroup>
-    <Content Include="public\favicon.ico" />
-    <Content Include="public\index.html" />
-    <Content Include="src\App.vue" />
-    <Content Include="src\components\Home.vue" />
-    <Content Include="tsconfig.json" />
-    <Content Include="package.json" />
-    <Content Include="README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="dist\" />
-    <Folder Include="public\" />
-    <Folder Include="src\" />
-    <Folder Include="src\assets\" />
-    <Folder Include="src\components\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\main.ts" />
-    <None Include="src\shims-vue.d.ts" />
-    <None Include="src\shims-tsx.d.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="babel.config.js" />
-  </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
   <ProjectExtensions>
     <VisualStudio>
