@@ -31,5 +31,11 @@ namespace Luo.Core.IServices
         /// <param name="req"></param>
         /// <returns></returns>
         public CommonViewModel<JwtMemberInfoResult> JwtQueryMemberInfo(JwtMemberInfoQuery req);
+        /// <summary>
+        /// 删除会员信息
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        public CommonViewModel DeleteMemberByMemberId(List<int> req);
     }
 }

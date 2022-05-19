@@ -162,11 +162,11 @@
                             return;
                         }
                         layer.confirm('真的删除行么', function (index) {
-                            let userIds = [];
+                            let delIds = [];
                             checkStatus.data.forEach(function (item) {
-                                userIds.push(item.userId)
+                                delIds.push(item.memberId)
                             });
-                            if (deleteUser(userIds)) {
+                            if (deleteUser(delIds)) {
                                 let tableDT = table.cache.currentTable
                                 tableDT.filter(x => x.LAY_CHECKED).splice(1);
 
@@ -187,9 +187,9 @@
                 var data = obj.data;
                 if (obj.event === 'delete') {
                     layer.confirm('真的删除行么', function (index) {
-                        let userIds = [];
-                        userIds.push(data.userId)
-                        if (deleteUser(userIds)) {
+                        let delIds = [];
+                        delIds.push(data.memberId)
+                        if (deleteUser(delIds)) {
                             obj.del();
                         }
                         layer.close(index);
@@ -269,7 +269,7 @@
                 const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
                 $.ajax({
                     type: "Delete",
-                    url: "/SystemConfig/DeleteUser",
+                    url: "/Member/DeleteMemberByMemberIds",
                     data: { req: reqData },
                     async: false,
                     success: function (res) {

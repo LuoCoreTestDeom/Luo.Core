@@ -43,7 +43,7 @@ namespace Luo.Core.Common.SecurityEncryptDecrypt
             }
             catch(Exception ex)
             {
-                throw ex;
+                return input;
             }
         }
     }

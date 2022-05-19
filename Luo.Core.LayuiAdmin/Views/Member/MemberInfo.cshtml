@@ -41,7 +41,7 @@
                                 <i class="input-group-text  bi-eye-slash" style="font-size: 2rem;" title="显示密码" onclick="seePwdBootstrap(this)"></i>
                             </div>
                             <div class="mb-3" style="text-align: left !important; ">
-                                <label for="disabledSelect" class="form-label">确认密码</label>
+                                <label id="text_memberConfirmPassword" for="disabledSelect" class="form-label">确认密码</label>
                                 <div class="input-group">
                                     <input type="password"  style="line-height: 3;" class="form-control" id="memberConfirmPassword" placeholder="请确认您输入的密码">
                                     <i class="input-group-text  bi-eye-slash" style="font-size: 2rem;" title="显示密码" onclick="seePwdBootstrap(this)"></i>
@@ -77,13 +77,12 @@
                 var $ = layui.jquery;
                 var layer = layui.layer;
                 var form = layui.form;
-
+               
                 if (reqData != null) {
                     memberId = reqData.memberId;
                     document.getElementById("memberName").value = reqData.memberName;
                     document.getElementById("textPassword").innerHTML = "新密码";
-                    //document.getElementById("memberPassword").value = reqData.memberPassword
-                    //document.getElementById("memberConfirmPassword").value = reqData.memberPassword;
+                    document.getElementById("text_memberConfirmPassword").innerHTML = "原密码";
                     form.render();
                 }
 
@@ -115,7 +114,7 @@
                     debugger;
                     const msgDialogIndex = layer.msg('正在执行，请稍等.....', { shade: 0.3, icon: 16 });
                     $.ajax({
-                        type: "Post",
+                        type: "put",
                         url: "/Member/AddEditMemberInfo",
                         data: {
                             MemberId: memberId,
