@@ -16,6 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton(new Appsettings(builder.Configuration));
 
+builder.Services.AddCorsSetup();
 builder.Services.AddHttpPollySetup();
 
 
