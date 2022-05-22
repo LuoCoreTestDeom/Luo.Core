@@ -29,15 +29,14 @@ namespace Luo.Core.Utility.ServiceExtensions
                 else
                 {
                     //允许任意跨域请求
-                    c.AddPolicy(Appsettings.GetValue(new string[] { "Cors", "PolicyName" }),
-                        policy =>
-                        {
+                    c.AddDefaultPolicy(policy =>
+                    {
                             policy
                             .SetIsOriginAllowed((host) => true)
                             .AllowAnyMethod()
                             .AllowAnyHeader()
                             .AllowCredentials();
-                        });
+                    });
                 }
             });
         }

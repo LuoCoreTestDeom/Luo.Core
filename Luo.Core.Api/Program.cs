@@ -21,7 +21,6 @@ builder.Services.AddHttpPollySetup();
 
 
 builder.Services.AddSwaggerService<ApiVersionEnum>();
-builder.Services.AddCorsSetup();
 builder.Services.AddDistributedCacheSteup();
 builder.Services.AddSqlSugarSetup();
 builder.Services.AddBatchService("Luo.Core.Services");
@@ -48,7 +47,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 
 var app = builder.Build();
 app.UseSession();
-app.UseCors();
+app.UseCorsMiddleware();
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{

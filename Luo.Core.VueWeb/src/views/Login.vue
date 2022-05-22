@@ -1,4 +1,5 @@
 <template>
+    
     <div  class=" border-top-wide border-primary d-flex flex-column">
         <div class="page page-center">
           <div class="container-tight py-4">
@@ -46,30 +47,31 @@
         </div>
   
     </div>
+
 </template>
 
 <script setup lang="ts">
-  import axios from 'axios'
+  import Small from '@/components/SmallDialog.vue';
+  import axios from 'axios';
+
   function plusOne(){
+    debugger;
+   const reqData={account: 'zhangsan', password: '123456789'};
     axios({
       method:"post",
       headers:{
         "Content-Type":"application/json"
       },
-      url:"http://127.0.0.1:8882/token",
-      params:{
-          account:"test",
-          password:"123",
-          token:""
-      },
+      url:"https://localhost:7096/token",
+      data:reqData,
     })
     .then(res=>{
       debugger;
       console.log(res);
     })
-    .catch(resError=>{
+    .catch(result=>{
       debugger;
-        console.log("请求失败："+resError.status+","+resError.statusText);
+        console.log("请求失败："+result.response.status+","+result.response.statusText);
     })
     
   }

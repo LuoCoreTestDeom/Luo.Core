@@ -91,24 +91,7 @@
             //提交
             form.on('submit(LAY-user-login-submit)', function (obj) {
 
-                debugger;
-                $.ajax({
-                    type: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        'Access-Control-Allow-Origin': '*',
-                    },
-                    url: "http://localhost:8882/token",
-                    data: { "account": "123", "password": "222" },
-                    async: false,
-                    dataType:"json",
-                    success: function (res) {
-                        debugger;
-                    },
-                    error: function (jqXHR) {
-                        debugger;
-                    }
-                });
+        
 
 
                 let msgDialogIndex = layer.msg('正在登录，请稍等.....', { shade: 0.3, icon: 16 });
