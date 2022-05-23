@@ -1,10 +1,19 @@
+<script setup lang="ts">
+    import { ref, reactive, toRefs } from 'vue';
+    defineProps({
+        Title: String, // 提示信息内容
+        Content: String, // 提示信息内容
+        visibleDialog: Boolean
+    });
+    
+</script>
 <template>
-    <div class="modal modal-blur fade" id="modal-small" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal modal-blur fade show" tabindex="-1" role="dialog" aria-modal="true" v-show="visibleDialog">
         <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">
-                    <div class="modal-title">Are you sure?</div>
-                    <div>If you proceed, you will lose all your personal data.</div>
+                    <div class="modal-title">{{Title}}</div>
+                    <div>{{Content}}</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link link-secondary me-auto"

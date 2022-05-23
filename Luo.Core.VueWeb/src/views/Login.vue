@@ -43,6 +43,8 @@
             <div class="text-center text-muted mt-3">
               还没有账号? <a href="./sign-up.html" tabindex="-1">注册</a>
             </div>
+    <SmallModal :Title="啊手动阀" :Content="asfdasfasdf" :visibleDialog="showDialog"></SmallModal>
+
           </div>
         </div>
   
@@ -51,28 +53,31 @@
 </template>
 
 <script setup lang="ts">
-  import Small from '@/components/SmallDialog.vue';
+  import {ref} from 'vue'
+  import SmallModal from '@/components/SmallDialog.vue';
   import axios from 'axios';
-
+let showDialog=false;
   function plusOne(){
-    debugger;
-   const reqData={account: 'zhangsan', password: '123456789'};
-    axios({
-      method:"post",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      url:"https://localhost:7096/token",
-      data:reqData,
-    })
-    .then(res=>{
-      debugger;
-      console.log(res);
-    })
-    .catch(result=>{
-      debugger;
-        console.log("请求失败："+result.response.status+","+result.response.statusText);
-    })
+    showDialog=true;
+   
+    //debugger;
+  //  const reqData={account: 'zhangsan', password: '123456789'};
+  //   axios({
+  //     method:"post",
+  //     headers:{
+  //       "Content-Type":"application/json"
+  //     },
+  //     url:"https://localhost:7096/token",
+  //     data:reqData,
+  //   })
+  //   .then(res=>{
+  //     debugger;
+  //     console.log(res);
+  //   })
+  //   .catch(result=>{
+  //     debugger;
+  //       console.log("请求失败："+result.response.status+","+result.response.statusText);
+  //   })
     
   }
 </script>
