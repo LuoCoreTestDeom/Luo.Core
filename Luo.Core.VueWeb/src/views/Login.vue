@@ -4,7 +4,7 @@
         <div class="page page-center">
           <div class="container-tight py-4">
             <div class="text-center mb-4">
-              <a href="." class="navbar-brand navbar-brand-autodark"><img src="./static/logo.svg" height="36" alt=""></a>
+              <a href="." class="navbar-brand navbar-brand-autodark"><img src="../assets/logo.png" height="36" alt=""></a>
             </div>
             <form class="card card-md" action="." method="get" autocomplete="off">
               <div class="card-body">
@@ -41,10 +41,10 @@
               
             </form>
             <div class="text-center text-muted mt-3">
-              还没有账号? <a href="./sign-up.html" tabindex="-1">注册</a>
+              还没有账号? <a href="./sign-up.html" tabindex="-1">注册{{isShow}}</a>
             </div>
-    <SmallModal :Title="啊手动阀" :Content="asfdasfasdf" :visibleDialog="showDialog"></SmallModal>
-
+            <h1 v-show="v-show">是否展示</h1>
+           <SmallDialog :title="dialogTitle" :isShow="isShow"></SmallDialog>
           </div>
         </div>
   
@@ -53,13 +53,18 @@
 </template>
 
 <script setup lang="ts">
-  import {ref} from 'vue'
-  import SmallModal from '@/components/SmallDialog.vue';
+  import {ref,reactive} from 'vue'
+  
   import axios from 'axios';
-let showDialog=false;
+
+ import SmallDialog from '@/components/SmallDialog.vue'
+
+ let dialogTitle=ref<String>("传值");
+  let  isShow=ref<Boolean>(false);
+    
   function plusOne(){
-    showDialog=true;
-   
+    isShow.value=true;
+    dialogTitle.value="111阿斯弗";
     //debugger;
   //  const reqData={account: 'zhangsan', password: '123456789'};
   //   axios({
