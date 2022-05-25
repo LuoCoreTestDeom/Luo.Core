@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Luo.Core.Utility.JsonWebToken.Dto
+namespace Luo.Core.Models.ViewModels.Request
 {
-    public class SecretDto
+    public class MemberLogin
     {
         /// <summary>
         /// 账号名

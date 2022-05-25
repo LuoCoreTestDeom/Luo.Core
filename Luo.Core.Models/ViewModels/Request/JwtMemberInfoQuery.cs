@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Luo.Core.Models.ViewModels.Request
 {
-    public class JwtMemberInfoQuery
+    public class LoginMemberInfoQuery
     {
         public string MemberName { get; set; }
         public string MemberPassword { get; set; }

@@ -11,7 +11,7 @@
             <h2 class="card-title text-center mb-4">会员中心</h2>
             <div class="mb-3">
               <label class="form-label">用户名{{account}}</label>
-              <input type="email" class="form-control" v-model="account"  placeholder="用户名" autocomplete="off">
+              <input type="email" class="form-control" v-model="account" placeholder="用户名" autocomplete="off">
             </div>
             <div class="mb-2">
               <label class="form-label">
@@ -21,7 +21,7 @@
                 </span>
               </label>
               <div class="input-group input-group-flat">
-                <input type="密码" class="form-control" placeholder="密码" autocomplete="off">
+                <input type="密码" class="form-control" placeholder="密码" autocomplete="off" v-model="password">
                 <span class="input-group-text">
                   <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
                   </a>
@@ -46,10 +46,10 @@
         <h1 v-show="isShow">是否展示</h1>
 
 
-<!--确认消息弹框-->
+        <!--确认消息弹框-->
         <SmallDialog @CloseDialog="closeDialog" :title="dialogTitle" :msg="dialogMsg" :isShow="dialogIsShow">
         </SmallDialog>
-<!--加载框-->
+        <!--加载框-->
         <loadDialog :isShow="dialogLoadIsShow">
         </loadDialog>
       </div>
@@ -82,28 +82,39 @@
   let dialogLoadIsShow = ref < Boolean > (false);
 
 
-  let account=ref(185)
+  let account = ref("");
+  let password = ref("");
   //点击登录
   function BtnSubmit() {
 
-    dialogLoadIsShow.value=true;
+    dialogLoadIsShow.value = true;
+  
+    var reqData = JSON.stringify({
+      "account": account.value,
+      "password": password.value,
+      "token": "string"
+    });
     debugger;
-    const reqData = { account: 'zhangsan', password: '123456789' };
     axios({
       method: "post",
       headers: {
         "Content-Type": "application/json"
       },
-      url: "https://localhost:7096/token",
+      url: "https://localhost:7096/api/v1/Member/Login",
       data: reqData,
     })
       .then(res => {
-        dialogLoadIsShow.value=false;
+        debugger;
+        dialogLoadIsShow.value = false;
         console.log(res);
+        if(res.data.profile==null){
+          DialogFunction("请求失败", "错误消息：" + res.data.access, true);
+        }
       })
       .catch(result => {
-        dialogLoadIsShow.value=false;
-        DialogFunction("请求失败", result.response.status + "," + result.response.statusText, true);
+        debugger;
+        dialogLoadIsShow.value = false;
+        DialogFunction("请求失败", "错误消息：" + result.message + "，错误代码：" + result.response.status + ",返回错误信息：" + result.response.statusText, true);
       })
 
   }

@@ -30,7 +30,7 @@ namespace Luo.Core.IServices
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel<JwtMemberInfoResult> JwtQueryMemberInfo(JwtMemberInfoQuery req);
+        public CommonViewModel<MemberInfoResult> LoginMemberInfo(MemberLogin req);
         /// <summary>
         /// 删除会员信息
         /// </summary>

@@ -37,11 +37,10 @@ namespace Luo.Core.Api.Controllers
         /// <param name="dto">授权用户信息</param>
         [HttpPost("token")]
         [AllowAnonymous]
-        public IActionResult Login([FromBody] SecretDto req)
+        public IActionResult Login([FromBody]MemberLogin req)
         {
             JwtResponseDto res = new JwtResponseDto() { Type = "Bearer" };
-            var reqMap = _Mapper.Map<JwtMemberInfoQuery>(req);
-           var resData= _service.JwtQueryMemberInfo(reqMap);
+           var resData= _service.LoginMemberInfo(req);
             if (!resData.Status) 
             {
                 res.Access = "账号密码不正确，无权访问。" + resData.Msg;
@@ -69,48 +68,48 @@ namespace Luo.Core.Api.Controllers
         }
 
 
-        /// <summary>
-        /// 刷新 Jwt 授权数据
-        /// </summary>
-        /// <param name="dto">刷新授权用户信息</param>
-        /// <returns></returns>
-        [HttpPost("refresh")]
-        public async Task<IActionResult> RefreshAccessTokenAsync([FromBody]SecretDto dto)
-        {
-            //Todo：获取用户信息
-            var permission = new PermissionItem()
-            {
-                Role = "Luo",
-                Url = "luocore.com"
-            };
+        ///// <summary>
+        ///// 刷新 Jwt 授权数据
+        ///// </summary>
+        ///// <param name="dto">刷新授权用户信息</param>
+        ///// <returns></returns>
+        //[HttpPost("refresh")]
+        //public async Task<IActionResult> RefreshAccessTokenAsync([FromBody]SecretDto dto)
+        //{
+        //    //Todo：获取用户信息
+        //    var permission = new PermissionItem()
+        //    {
+        //        Role = "Luo",
+        //        Url = "luocore.com"
+        //    };
 
-            if (permission == null)
-                return Ok(new JwtResponseDto
-                {
-                    Access = "无权访问",
-                    Type = "Bearer",
-                    Profile = new JwtProfile
-                    {
-                        Name = dto.Account,
-                        Auths = 0,
-                        Expires = 0
-                    }
-                });
+        //    if (permission == null)
+        //        return Ok(new JwtResponseDto
+        //        {
+        //            Access = "无权访问",
+        //            Type = "Bearer",
+        //            Profile = new JwtProfile
+        //            {
+        //                Name = dto.Account,
+        //                Auths = 0,
+        //                Expires = 0
+        //            }
+        //        });
 
-            var jwt = await _jwtService.RefreshAsync(dto.Token, permission);
+        //    var jwt = await _jwtService.RefreshAsync(dto.Token, permission);
 
-            return Ok(new JwtResponseDto
-            {
-                Access = jwt.Token,
-                Type = "Bearer",
-                Profile = new JwtProfile
-                {
-                    Name = permission.Role,
-                    Auths = jwt.Success ? jwt.Auths : 0,
-                    Expires = jwt.Success ? jwt.Expires : 0
-                }
-            });
-        }
+        //    return Ok(new JwtResponseDto
+        //    {
+        //        Access = jwt.Token,
+        //        Type = "Bearer",
+        //        Profile = new JwtProfile
+        //        {
+        //            Name = permission.Role,
+        //            Auths = jwt.Success ? jwt.Auths : 0,
+        //            Expires = jwt.Success ? jwt.Expires : 0
+        //        }
+        //    });
+        //}
 
     }
 }

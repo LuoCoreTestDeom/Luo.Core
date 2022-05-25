@@ -29,7 +29,7 @@ namespace Luo.Core.IRepository
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        JwtLoginMemberInfoDto QueryJwtMemberInfo(JwtQueryMemberInfoDto req);
+        MemberInfoDto QueryJwtMemberInfo(LoginMemberDto req);
         /// <summary>
         /// 查询会员信息
         /// </summary>

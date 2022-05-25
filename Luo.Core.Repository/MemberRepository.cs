@@ -28,15 +28,15 @@ namespace Luo.Core.Repository
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public JwtLoginMemberInfoDto QueryJwtMemberInfo(JwtQueryMemberInfoDto req)
+        public MemberInfoDto QueryJwtMemberInfo(LoginMemberDto req)
         {
-            JwtLoginMemberInfoDto res = new JwtLoginMemberInfoDto();
+            MemberInfoDto res = new MemberInfoDto();
             Factory.GetDbContext((db) =>
             {
 
                 res= db.Queryable<MemberInfo>()
                 .Where(x => x.MemberName == req.MemberName && x.Password == req.MemberPassword)
-                .Select(x => new JwtLoginMemberInfoDto
+                .Select(x => new MemberInfoDto
                 {
                     MemberId=x.Id,
                     MemberName = x.MemberName

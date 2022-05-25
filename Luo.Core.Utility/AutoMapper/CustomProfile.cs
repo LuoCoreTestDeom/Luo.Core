@@ -76,9 +76,7 @@ namespace Luo.Core.Utility.AutoMapper
            .ForMember(dest => dest.Title, opts => opts.MapFrom(x => x.MenuName));
 
 
-            CreateMap<SecretDto, JwtMemberInfoQuery>()
-                 .ForMember(dest => dest.MemberName, opts => opts.MapFrom(x => x.Account))
-                 .ForMember(dest => dest.MemberPassword, opts => opts.MapFrom(x => CommonUtil.EncryptString(x.Password)));
+          
 
             //CreateMap<SecretDto, JwtMemberInfoQuery>()
             //     .ForMember(dest => dest.MemberName, opts => opts.MapFrom(x => x.Account))

@@ -24,7 +24,7 @@
   <div class="modal fade modal-blur show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
     role="dialog" :style="{'display':isShow?'block':'none'}">
     <div class="modal-dialog  modal-dialog-centered" role="document">
-      <div class="modal-content">
+      <div class="modal-content" style="box-shadow: 2px 2px 20px #888888;">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">{{title}}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"

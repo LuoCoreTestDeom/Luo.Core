@@ -114,15 +114,28 @@ namespace Luo.Core.Services
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public CommonViewModel<JwtMemberInfoResult> JwtQueryMemberInfo(JwtMemberInfoQuery req)
+        public CommonViewModel<MemberInfoResult> LoginMemberInfo(MemberLogin req)
         {
-            CommonViewModel<JwtMemberInfoResult> res = new CommonViewModel<JwtMemberInfoResult>();
+            CommonViewModel<MemberInfoResult> res = new CommonViewModel<MemberInfoResult>();
             try
             {
-                JwtLoginMemberInfoDto resData = _Rep.QueryJwtMemberInfo(req.AutoMapTo<JwtQueryMemberInfoDto>());
+                if(req==null||string.IsNullOrWhiteSpace(req.Account)|| string.IsNullOrWhiteSpace(req.Password)) 
+                {
+                    res.Msg = "请求必要的参数不能为空！";
+                    return res;
+                }
+                MemberInfoDto resData = _Rep.QueryJwtMemberInfo(new LoginMemberDto() 
+                {
+                    MemberName=req.Account,
+                    MemberPassword=req.Password
+                });
+                if (resData == null )
+                {
+                    return res;
+                }
                 if (resData.MemberId > 0) 
                 {
-                    res.ResultData = resData.MapTo<JwtMemberInfoResult>();
+                    res.ResultData = resData.MapTo<MemberInfoResult>();
                     res.Status = true;
                 }
                 else 
