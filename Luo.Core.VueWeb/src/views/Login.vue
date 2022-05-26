@@ -10,7 +10,7 @@
           <div class="card-body">
             <h2 class="card-title text-center mb-4">会员中心</h2>
             <div class="mb-3">
-              <label class="form-label">用户名{{account}}</label>
+              <label class="form-label">用户名</label>
               <input type="email" class="form-control" v-model="account" placeholder="用户名" autocomplete="off">
             </div>
             <div class="mb-2">
@@ -41,16 +41,16 @@
 
         </form>
         <div class="text-center text-muted mt-3">
-          还没有账号? <a href="./sign-up.html" tabindex="-1">注册{{ isShow }}</a>
+          还没有账号? <a href="./sign-up.html" tabindex="-1">注册</a>
         </div>
-        <h1 v-show="isShow">是否展示</h1>
+
 
 
         <!--确认消息弹框-->
-        <SmallDialog @CloseDialog="closeDialog" :title="dialogTitle" :msg="dialogMsg" :isShow="dialogIsShow">
-        </SmallDialog>
+        <confirmDialog @CloseDialog="closeDialog" :title="dialogTitle" :msg="dialogMsg" :isDialogShow="dialogIsShow">
+        </confirmDialog>
         <!--加载框-->
-        <loadDialog :isShow="dialogLoadIsShow">
+        <loadDialog :isDialogShow="dialogLoadIsShow">
         </loadDialog>
       </div>
     </div>
@@ -61,25 +61,33 @@
 
 <script setup lang="ts">
   import { ref, reactive } from 'vue'
-
+  import { useRoute, useRouter } from 'vue-router';
   import axios from 'axios';
+  import { useStore } from "vuex";
+  import confirmDialog from '@/components/ConfirmDialog.vue'
+  import loadDialog from '@/components/LoadDialog.vue'
 
-  import SmallDialog from '@/components/ConfirmDialog.vue'
-  let dialogTitle = ref < String > ("标题");
-  let dialogMsg = ref < String > ("内容")
-  let dialogIsShow = ref < Boolean > (false);
+
+  //获取当前路由
+  const route = useRoute();//获取路由参数
+  const router = useRouter();//跳转
+  const store = useStore();
+
+  let dialogLoadIsShow = ref(false);
+  let dialogTitle = ref("标题");
+  let dialogMsg = ref("内容")
+  let dialogIsShow = ref(false);
   //关闭弹框
   const closeDialog = (e) => {
     dialogIsShow.value = e;
   }
   //显示弹框
-  function DialogFunction(title, msg, isShow) {
+  function DialogFunction(title, msg, isDialogShow) {
     dialogTitle.value = title;
     dialogMsg.value = msg;
-    dialogIsShow.value = isShow;
+    dialogIsShow.value = isDialogShow;
   }
-  import loadDialog from '@/components/LoadDialog.vue'
-  let dialogLoadIsShow = ref < Boolean > (false);
+
 
 
   let account = ref("");
@@ -87,8 +95,12 @@
   //点击登录
   function BtnSubmit() {
 
+    debugger;
+
+    const tokenValue = localStorage.getItem('token')
+
     dialogLoadIsShow.value = true;
-  
+
     var reqData = JSON.stringify({
       "account": account.value,
       "password": password.value,
@@ -102,20 +114,23 @@
       },
       url: "https://localhost:7096/api/v1/Member/Login",
       data: reqData,
+    }).then(res => {
+
+      dialogLoadIsShow.value = false;
+      console.log(res);
+      if (res.data.profile == null) {
+        DialogFunction("请求失败", "错误消息：" + res.data.access, true);
+      }
+      else {
+        debugger;
+        store.commit('setToken', res.data.access);
+        router.push('/')
+      }
+    }).catch(result => {
+      debugger;
+      dialogLoadIsShow.value = false;
+      DialogFunction("请求失败", "错误消息：" + result.message + "，错误代码：" + result.response.status + ",返回错误信息：" + result.response.statusText, true);
     })
-      .then(res => {
-        debugger;
-        dialogLoadIsShow.value = false;
-        console.log(res);
-        if(res.data.profile==null){
-          DialogFunction("请求失败", "错误消息：" + res.data.access, true);
-        }
-      })
-      .catch(result => {
-        debugger;
-        dialogLoadIsShow.value = false;
-        DialogFunction("请求失败", "错误消息：" + result.message + "，错误代码：" + result.response.status + ",返回错误信息：" + result.response.statusText, true);
-      })
 
   }
 </script>

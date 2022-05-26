@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Luo.Core.Common.SecurityEncryptDecrypt;
 using Luo.Core.DatabaseFactory;
 using Luo.Core.IRepository;
 using Luo.Core.Models.Dtos;
@@ -127,7 +128,7 @@ namespace Luo.Core.Services
                 MemberInfoDto resData = _Rep.QueryJwtMemberInfo(new LoginMemberDto() 
                 {
                     MemberName=req.Account,
-                    MemberPassword=req.Password
+                    MemberPassword=CommonUtil.EncryptString(req.Password)
                 });
                 if (resData == null )
                 {

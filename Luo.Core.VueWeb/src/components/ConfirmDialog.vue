@@ -3,10 +3,10 @@
   const props = defineProps({
     title: String,
     msg: String,
-    isShow: Boolean
+    isDialogShow: Boolean
   });
-  const { title, msg, isShow } = toRefs(props);
-  watch(isShow, (newValue, oldValue) => {
+  const { title, msg, isDialogShow } = toRefs(props);
+  watch(isDialogShow, (newValue, oldValue) => {
     console.log(newValue, oldValue);
   });
 
@@ -22,7 +22,7 @@
 
 <template>
   <div class="modal fade modal-blur show" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-    role="dialog" :style="{'display':isShow?'block':'none'}">
+    role="dialog" :style="{'display':isDialogShow?'block':'none'}">
     <div class="modal-dialog  modal-dialog-centered" role="document">
       <div class="modal-content" style="box-shadow: 2px 2px 20px #888888;">
         <div class="modal-header">
