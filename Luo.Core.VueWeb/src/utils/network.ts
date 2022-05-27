@@ -1,5 +1,6 @@
+import {ref} from 'vue'
 import axios from 'axios'
-import confirmDialog from '@/components/ConfirmDialog.vue' 
+import userConfirmDialog from '@/utils/useConfirmDialog';
  
 export  const network =(options:any)=> {
   return new Promise((resolve, reject) => {
@@ -38,9 +39,17 @@ export  const network =(options:any)=> {
       error => {
         console.log('err' + error) // for debug
         if(error.response.status == 403){
-          //ElMessage.error('错了')
+          userConfirmDialog({
+            title:"响应代码"+error.response.status ,
+            msg:"发生了错误",
+            isDialogShow:ref(true)
+          });
         }else{
-          //ElMessage.error('服务器请求错误，请稍后再试')
+          userConfirmDialog({
+            title:"响应代码"+error.response.status ,
+            msg:"服务器请求错误，请稍后再试",
+            isDialogShow:ref(true)
+          });
         }
         return Promise.reject(error)
       }

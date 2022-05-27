@@ -15,7 +15,6 @@
   const emit = defineEmits(['CloseDialog'])
 
   function closeDialog() {
-
     emit('CloseDialog', false);
   }
 </script>

@@ -46,9 +46,7 @@
 
 
 
-        <!--确认消息弹框-->
-        <confirmDialog @CloseDialog="closeDialog" :title="dialogTitle" :msg="dialogMsg" :isDialogShow="dialogIsShow">
-        </confirmDialog>
+
         <!--加载框-->
         <loadDialog :isDialogShow="dialogLoadIsShow">
         </loadDialog>
@@ -60,77 +58,70 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, reactive } from 'vue'
-  import { useRoute, useRouter } from 'vue-router';
-  import axios from 'axios';
-  import { useStore } from "vuex";
-  import confirmDialog from '@/components/ConfirmDialog.vue'
-  import loadDialog from '@/components/LoadDialog.vue'
+import { ref, reactive } from 'vue'
+import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
+import { useStore } from "vuex";
+import loadDialog from '@/components/LoadDialog.vue'
 
+import userConfirmDialog from '@/utils/useConfirmDialog';
+import userLaodDialog from '@/utils/useLoadDialog';
 
-  //获取当前路由
-  const route = useRoute();//获取路由参数
-  const router = useRouter();//跳转
-  const store = useStore();
+//获取当前路由
+const route = useRoute();//获取路由参数
+const router = useRouter();//跳转
+const store = useStore();
 
-  let dialogLoadIsShow = ref(false);
-  let dialogTitle = ref("标题");
-  let dialogMsg = ref("内容")
-  let dialogIsShow = ref(false);
-  //关闭弹框
-  const closeDialog = (e) => {
-    dialogIsShow.value = e;
-  }
-  //显示弹框
-  function DialogFunction(title, msg, isDialogShow) {
-    dialogTitle.value = title;
-    dialogMsg.value = msg;
-    dialogIsShow.value = isDialogShow;
-  }
+let account = ref("");
+let password = ref("");
+//点击登录
+function BtnSubmit() {
 
 
 
-  let account = ref("");
-  let password = ref("");
-  //点击登录
-  function BtnSubmit() {
+  debugger;
 
-    debugger;
+  const tokenValue = localStorage.getItem('token')
 
-    const tokenValue = localStorage.getItem('token')
+  userLaodDialog.ShowLoad();
+  var reqData = JSON.stringify({
+    "account": account.value,
+    "password": password.value,
+    "token": "string"
+  });
+  debugger;
+  axios({
+    method: "post",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    url: "https://localhost:7096/api/v1/Member/Login",
+    data: reqData,
+  }).then(res => {
 
-    dialogLoadIsShow.value = true;
-
-    var reqData = JSON.stringify({
-      "account": account.value,
-      "password": password.value,
-      "token": "string"
-    });
-    debugger;
-    axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      url: "https://localhost:7096/api/v1/Member/Login",
-      data: reqData,
-    }).then(res => {
-
-      dialogLoadIsShow.value = false;
-      console.log(res);
-      if (res.data.profile == null) {
-        DialogFunction("请求失败", "错误消息：" + res.data.access, true);
-      }
-      else {
-        debugger;
-        store.commit('setToken', res.data.access);
-        router.push('/')
-      }
-    }).catch(result => {
+    userLaodDialog.CloseLoad();
+    console.log(res);
+    if (res.data.profile == null) {
+      userConfirmDialog({
+        title: "请求失败",
+        msg: "错误消息：" + res.data.access,
+        isDialogShow: ref(true)
+      });
+    }
+    else {
       debugger;
-      dialogLoadIsShow.value = false;
-      DialogFunction("请求失败", "错误消息：" + result.message + "，错误代码：" + result.response.status + ",返回错误信息：" + result.response.statusText, true);
-    })
+      store.commit('setToken', res.data.access);
+      router.push('/')
+    }
+  }).catch(result => {
+    debugger;
+    userLaodDialog.CloseLoad();
+    userConfirmDialog({
+      title: "请求失败",
+      msg: "错误消息：" + result.message + "，错误代码：" + result.response.status + ",返回错误信息：" + result.response.statusText,
+      isDialogShow: ref(true)
+    });
+  })
 
-  }
+}
 </script>
