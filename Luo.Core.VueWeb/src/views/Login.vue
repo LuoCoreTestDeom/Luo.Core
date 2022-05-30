@@ -47,9 +47,6 @@
 
 
 
-        <!--加载框-->
-        <loadDialog :isDialogShow="dialogLoadIsShow">
-        </loadDialog>
       </div>
     </div>
 
@@ -63,9 +60,9 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { useStore } from "vuex";
 import loadDialog from '@/components/LoadDialog.vue'
+import httpRequest from '@/network/httpRequest';
 
-import userConfirmDialog from '@/utils/useConfirmDialog';
-import userLaodDialog from '@/utils/useLoadDialog';
+
 
 //获取当前路由
 const route = useRoute();//获取路由参数
@@ -81,47 +78,75 @@ function BtnSubmit() {
 
   debugger;
 
+
   const tokenValue = localStorage.getItem('token')
 
-  userLaodDialog.ShowLoad();
+
   var reqData = JSON.stringify({
     "account": account.value,
     "password": password.value,
     "token": "string"
   });
   debugger;
-  axios({
-    method: "post",
+  httpRequest.request<object>({
+    url: 'https://localhost:7096/api/v1/Member/Login',
+    method: 'Post',
     headers: {
       "Content-Type": "application/json"
     },
-    url: "https://localhost:7096/api/v1/Member/Login",
     data: reqData,
-  }).then(res => {
-
-    userLaodDialog.CloseLoad();
-    console.log(res);
-    if (res.data.profile == null) {
-      userConfirmDialog({
-        title: "请求失败",
-        msg: "错误消息：" + res.data.access,
-        isDialogShow: ref(true)
-      });
-    }
-    else {
-      debugger;
-      store.commit('setToken', res.data.access);
-      router.push('/')
-    }
-  }).catch(result => {
-    debugger;
-    userLaodDialog.CloseLoad();
-    userConfirmDialog({
-      title: "请求失败",
-      msg: "错误消息：" + result.message + "，错误代码：" + result.response.status + ",返回错误信息：" + result.response.statusText,
-      isDialogShow: ref(true)
-    });
+    showLoading: true
+    // interceptors: {
+    //   requestInterceptor: (config) => {
+    //     console.log('单独的请求的config拦截')
+    //     return config
+    //   },
+    //   responseInterceptor: (res) => {
+    //     console.log('单独响应的response')
+    //     return res
+    //   }
+    // }
   })
+    .then((res) => {
+      console.log("成功：" + res);
+    }).catch(res => {
+      console.log("失败：" + res);
+    });
+
+
+
+  // axios({
+  //   method: "post",
+  //   headers: {
+  //     "Content-Type": "application/json"
+  //   },
+  //   url: "https://localhost:7096/api/v1/Member/Login",
+  //   data: reqData,
+  // }).then(res => {
+
+  //   userLaodDialog.CloseLoad();
+  //   console.log(res);
+  //   if (res.data.profile == null) {
+  //     userConfirmDialog({
+  //       title: "请求失败",
+  //       msg: "错误消息：" + res.data.access,
+  //       isDialogShow: ref(true)
+  //     });
+  //   }
+  //   else {
+  //     debugger;
+  //     store.commit('setToken', res.data.access);
+  //     router.push('/')
+  //   }
+  // }).catch(result => {
+  //   debugger;
+  //   userLaodDialog.CloseLoad();
+  //   userConfirmDialog({
+  //     title: "请求失败",
+  //     msg: "错误消息：" + result.message + "，错误代码：" + result.response.status + ",返回错误信息：" + result.response.statusText,
+  //     isDialogShow: ref(true)
+  //   });
+  // })
 
 }
 </script>

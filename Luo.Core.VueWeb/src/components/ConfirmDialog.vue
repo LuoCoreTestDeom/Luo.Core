@@ -1,10 +1,6 @@
 <script setup lang="ts">
-  import { ref, reactive, toRefs, watch, defineProps, defineEmits } from 'vue';
-  const props = defineProps({
-    title: String,
-    msg: String,
-    isDialogShow: Boolean
-  });
+  import {  Ref,toRefs, watch, defineEmits } from 'vue';
+  const props = defineProps<{title: Ref<String>,msg: Ref<String>,isDialogShow: Ref<Boolean>}>();
   const { title, msg, isDialogShow } = toRefs(props);
   watch(isDialogShow, (newValue, oldValue) => {
     console.log(newValue, oldValue);

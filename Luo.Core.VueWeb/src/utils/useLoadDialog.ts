@@ -1,19 +1,34 @@
-import LoadDialog from '@/components/LoadDialog.vue' 
-import { h, Ref,ref, render, VNode } from 'vue'
+import LoadDialog from '@/components/LoadDialog.vue';
+import { h, Ref,ref, render, VNode } from 'vue';
 
-let _isDialogShow:Ref<boolean>=ref(false);
+class LoadingFrame {
+   protected showLoading: Ref<Boolean>=ref(false);
 
-const renderMessage = (isState:boolean): VNode => {
-    _isDialogShow.value=isState;
-    const container = document.createElement('div')
-    // 创建 虚拟dom
-    const messageVNode = h(LoadDialog,{isDialogShow:_isDialogShow});
-    // 将虚拟dom渲染到 container dom 上
-    render(messageVNode, container)
-    // 最后将 container 追加到 body 上
-    document.body.appendChild(container)
-    return messageVNode
+    constructor(){
+        this.renderMessage()
+        this.ShowLoad();
+    }
+    renderMessage = (): VNode => {
+        const container = document.createElement('div')
+        container.id = "loading";
+        let ddd=ref(true);
+        // 创建 虚拟dom
+        const CreateVNode = h(LoadDialog,{isDialogShow: this.showLoading});
+        debugger;
+        // 将虚拟dom渲染到 container dom 上
+        render(CreateVNode, container)
+        // 最后将 container 追加到 body 上
+        document.body.appendChild(container)
+        return CreateVNode
+    }
+    ShowLoad = () => {
+        this.showLoading.value =true;
+    }
+    CloseLoad = () => {
+        this.showLoading.value=false;
+    }
 }
-renderMessage.ShowLoad=()=>renderMessage(true);
-renderMessage.CloseLoad=()=>renderMessage(false);
-export default renderMessage
+
+
+
+export default LoadingFrame;

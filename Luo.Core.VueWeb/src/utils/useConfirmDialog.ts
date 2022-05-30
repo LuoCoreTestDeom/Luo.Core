@@ -12,9 +12,11 @@ const renderMessage = (props: dialogProps): VNode => {
     container.id = "asd123";
     // 创建 虚拟dom
     const messageVNode = h(confirmDialog, {
-        title: props.title,
-        msg: props.msg,
-        isDialogShow: props.isDialogShow,
+        props:{
+            title: props.title,
+            msg: props.msg,
+            isDialogShow: props.isDialogShow,
+        },
         onCloseDialog:(e:boolean)=>{
             props.isDialogShow.value=e;
         }

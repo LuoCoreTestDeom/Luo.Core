@@ -1,11 +1,12 @@
 <script setup lang="ts">
-    import { ref, reactive, toRefs, watch, defineProps } from 'vue';
-    const props = defineProps({
-      isDialogShow: Boolean
-    });
+import {  Ref,toRefs, watch } from 'vue';
+  
+    const props = defineProps<{isDialogShow:Ref<Boolean>}>();
     const {  isDialogShow } = toRefs(props);
+    console.log("加載等待值："+isDialogShow.value);
     watch(isDialogShow, (newValue, oldValue) => {
-      console.log(newValue, oldValue);
+      debugger;
+      console.log("加載等待值：","新值："+newValue, "旧值："+oldValue);
     });
    
   </script>
@@ -15,7 +16,7 @@
         <div class="modal-dialog  modal-dialog-centered" role="document">
           <div class="box">
             <div class="spinner-grow box" style="width: 5rem; height: 5rem;" role="status">
-              <span class="visually-hidden">Loading...</span>
+              <span class="visually-hidden">Loading...+{{isDialogShow}}</span>
           </div>
           </div>
          
