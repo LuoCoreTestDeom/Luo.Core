@@ -1,6 +1,7 @@
 <script setup lang="ts">
-  import {  Ref,toRefs, watch, defineEmits } from 'vue';
-  const props = defineProps<{title: Ref<String>,msg: Ref<String>,isDialogShow: Ref<Boolean>}>();
+  import {  Ref,toRefs, watch } from 'vue';
+
+  const props = defineProps<{title:String,msg:String,isDialogShow: Ref<Boolean>}>();
   const { title, msg, isDialogShow } = toRefs(props);
   watch(isDialogShow, (newValue, oldValue) => {
     console.log(newValue, oldValue);
@@ -8,10 +9,11 @@
 
 
 
-  const emit = defineEmits(['CloseDialog'])
+  const emit = defineEmits<{(event:"CloseDialog",args:Boolean): void}>()
 
-  function closeDialog() {
-    emit('CloseDialog', false);
+  const CloseDialog = () => {
+   
+    emit('CloseDialog',false)
   }
 </script>
 
@@ -23,13 +25,13 @@
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">{{title}}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-            @click="closeDialog"></button>
+            @click="CloseDialog"></button>
         </div>
         <div class="modal-body">
           {{msg}}
         </div>
         <div class="modal-footer" style="justify-content: center;">
-          <button type="button" class="btn btn-primary btn-lg" @click="closeDialog">确认</button>
+          <button type="button" class="btn btn-primary btn-lg" @click="CloseDialog">确认</button>
         </div>
       </div>
     </div>

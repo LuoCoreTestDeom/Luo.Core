@@ -1,26 +1,28 @@
-import confirmDialog from '@/components/ConfirmDialog.vue' 
-import { h, Ref, render, VNode } from 'vue'
+import confirmDialog from '@/components/ConfirmDialog.vue'
+import { h,ref, Ref, render, VNode } from 'vue'
 
+type CloseDialogClick = (isShowState: Boolean) => void
 export type dialogProps = {
-    title: string
-    msg: string,
+    title: String
+    msg: String,
     isDialogShow: Ref<Boolean>
 }
 
-const renderMessage = (props: dialogProps): VNode => {
+
+const renderMessage = (args: dialogProps): VNode => {
     const container = document.createElement('div')
-    container.id = "asd123";
+    container.id = "confirm";
     // 创建 虚拟dom
-    const messageVNode = h(confirmDialog, {
-        props:{
-            title: props.title,
-            msg: props.msg,
-            isDialogShow: props.isDialogShow,
-        },
-        onCloseDialog:(e:boolean)=>{
-            props.isDialogShow.value=e;
-        }
-    });
+    const messageVNode = h(confirmDialog,
+        {
+            title:args.title,
+            msg:args.msg,
+            isDialogShow:args.isDialogShow,
+            onCloseDialog:(e:Boolean)=>{
+                args.isDialogShow.value=e;
+            }
+        });
+    debugger;
     // 将虚拟dom渲染到 container dom 上
     render(messageVNode, container)
     // 最后将 container 追加到 body 上

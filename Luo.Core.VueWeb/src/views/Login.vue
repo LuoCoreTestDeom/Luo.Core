@@ -59,7 +59,7 @@ import { ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { useStore } from "vuex";
-import loadDialog from '@/components/LoadDialog.vue'
+import confirmDialog from '@/utils/useConfirmDialog'
 import httpRequest from '@/network/httpRequest';
 
 
@@ -75,6 +75,11 @@ let password = ref("");
 function BtnSubmit() {
 
 
+confirmDialog({
+  title:"123",
+  msg:"sdfadfasdf",
+  isDialogShow:ref(true)
+});
 
   debugger;
 
@@ -88,30 +93,30 @@ function BtnSubmit() {
     "token": "string"
   });
   debugger;
-  httpRequest.request<object>({
-    url: 'https://localhost:7096/api/v1/Member/Login',
-    method: 'Post',
-    headers: {
-      "Content-Type": "application/json"
-    },
-    data: reqData,
-    showLoading: true
-    // interceptors: {
-    //   requestInterceptor: (config) => {
-    //     console.log('单独的请求的config拦截')
-    //     return config
-    //   },
-    //   responseInterceptor: (res) => {
-    //     console.log('单独响应的response')
-    //     return res
-    //   }
-    // }
-  })
-    .then((res) => {
-      console.log("成功：" + res);
-    }).catch(res => {
-      console.log("失败：" + res);
-    });
+  // httpRequest.request<object>({
+  //   url: 'https://localhost:7096/api/v1/Member/Login',
+  //   method: 'Post',
+  //   headers: {
+  //     "Content-Type": "application/json"
+  //   },
+  //   data: reqData,
+  //   showLoading: true
+  //   // interceptors: {
+  //   //   requestInterceptor: (config) => {
+  //   //     console.log('单独的请求的config拦截')
+  //   //     return config
+  //   //   },
+  //   //   responseInterceptor: (res) => {
+  //   //     console.log('单独响应的response')
+  //   //     return res
+  //   //   }
+  //   // }
+  // })
+  //   .then((res) => {
+  //     console.log("成功：" + res);
+  //   }).catch(res => {
+  //     console.log("失败：" + res);
+  //   });
 
 
 
