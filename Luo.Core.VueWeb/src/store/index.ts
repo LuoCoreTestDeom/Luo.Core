@@ -7,7 +7,7 @@ export default createStore({
     mutations:{
         setToken (state,token) {
             state.token =token;
-            localStorage.setItem("token",token.token);     //存储token
+            localStorage.setItem("token",state.token||"");     //存储token
         },
         delToken (state) {
             state.token = '';

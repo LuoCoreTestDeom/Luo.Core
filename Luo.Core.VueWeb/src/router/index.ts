@@ -31,6 +31,7 @@ router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token')
 
   if (to.meta.requireAuth) {
+    debugger;
     if (!token || token === "undefined") {
       if (to.path != "/login") {
         next("/login");

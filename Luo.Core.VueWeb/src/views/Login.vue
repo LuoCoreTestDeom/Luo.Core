@@ -64,7 +64,7 @@ import httpRequest from '@/network/httpRequest';
 import JwtResponseDto from '@/models/memberLogin'
 
 
-
+//显示弹框
 const ShowConfirmDialog = (msg: string, title: string = "温馨提示") => {
   confirmDialog({
     title: title,
@@ -84,7 +84,8 @@ let password = ref("");
 //点击登录
 function BtnSubmit() {
 
-  const tokenValue = localStorage.getItem('token')
+ var sss= store.state.token;
+
   var reqData = JSON.stringify({
     "account": account.value,
     "password": password.value,
@@ -118,6 +119,10 @@ function BtnSubmit() {
       debugger;
       if (!res.profile) {
         ShowConfirmDialog("请求失败：" + res.access);
+      }
+      else{
+         store.commit("setToken",res.access);
+        router.push('/');
       }
     }
   }).catch(res => {
