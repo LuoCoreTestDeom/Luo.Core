@@ -1,18 +1,58 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import Layout from '@/layouts/index.vue'
 const routes = [
-  {
-    path: '/',
-    name: "Home",
-    component: () => import('@/views/Index.vue'),
-    meta: {
-      requireAuth: true, // 判断是否需要登录
-    }
-  },
   {
     path: "/login",
     name: "Login",
     component: () => import('@/views/Login.vue'),
-  }
+  },
+  {
+    path: '/',
+    name: "首页",
+    component:Layout,
+    meta: {
+      requireAuth: true, // 判断是否需要登录
+    },
+    redirect:'/dashboard',
+    children:[
+      {
+        path:'/dashboard',
+        component: () => import('@/views/dashboard/index.vue'),
+        name:'dashboard',
+        meta:{
+            title:'首页',
+            icon:'ti-home',
+            requireAuth: true,
+        }
+      }
+    ]
+  },
+  {
+    component:Layout,
+    path:'/MyPackage',
+    name:'我的包裹',
+    meta:{
+        title:'我的包裹',
+        icon:'ti-package',
+        roles:['sys:manage'],
+        parentId:0,
+        requireAuth: true,
+    },
+    redirect:'/MyPackage',
+    children:[
+      {
+        path:'/MyPackage',
+        component: () => import('@/views/MyPackage.vue'),
+        name:'MyPackage',
+        meta:{
+            title:'我的包裹',
+            icon:'ti-package',
+            requireAuth: true,
+        }
+      }
+    ]
+}
+  
 ]
 
 // 3. 创建路由实例
