@@ -1,17 +1,17 @@
 import axios from 'axios'
 import type { AxiosInstance } from 'axios'
-import { CYRequestInterceptors, CYRequestConfig } from './type'
+import { RequestInterceptors, RequestConfig } from './type'
 import LoadingFrame from '@/utils/useLoadDialog';
 
 // import {LoadingOptionsResolved} from 'element-plus/lib/components/loading/src/types'
 const DEFAULT_LOADING = true
-class CYRequest {
+class ApiRequest {
     instance: AxiosInstance
-    interceptors?: CYRequestInterceptors
+    interceptors?: RequestInterceptors
     showLoading: boolean
     loading?: LoadingFrame
 
-    constructor(config: CYRequestConfig) {
+    constructor(config: RequestConfig) {
         //1.创建axios实例
         this.instance = axios.create(config)
         //2.保存基本信息
@@ -50,6 +50,10 @@ class CYRequest {
                 console.log('所有实例都有的拦截：请求响应成功')
                 this.loading?.CloseLoad()
                 const data = res.data
+   
+                if(data===undefined){
+                    return res
+                }
                 if (data.returnCode === '-1001') {
                     console.log('请求失败~, 错误信息')
                 } else {
@@ -67,7 +71,7 @@ class CYRequest {
             }
         )
     }
-    request<T>(config: CYRequestConfig<T>): Promise<T> {
+    request<T>(config: RequestConfig<T>): Promise<T> {
         return new Promise((resolve, reject) => {
             //1.判断是否需要显示loading
             if (config.showLoading === false) {
@@ -99,19 +103,19 @@ class CYRequest {
         })
     }
 
-    get<T>(config: CYRequestConfig<T>): Promise<T> {
+    get<T>(config: RequestConfig<T>): Promise<T> {
         return this.request<T>({ ...config, method: 'GET' })
     }
-    post<T>(config: CYRequestConfig<T>): Promise<T> {
+    post<T>(config: RequestConfig<T>): Promise<T> {
         return this.request<T>({ ...config, method: 'POST' })
     }
-    delete<T>(config: CYRequestConfig<T>): Promise<T> {
+    delete<T>(config: RequestConfig<T>): Promise<T> {
         return this.request<T>({ ...config, method: 'DELETE' })
     }
-    patch<T>(config: CYRequestConfig<T>): Promise<T> {
+    patch<T>(config: RequestConfig<T>): Promise<T> {
         return this.request<T>({ ...config, method: 'PATCH' })
     }
 }
 
-export default CYRequest
+export default ApiRequest
 

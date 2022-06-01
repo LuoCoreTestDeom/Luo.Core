@@ -14,7 +14,7 @@ class LoadingFrame {
         let ddd=ref(true);
         // 创建 虚拟dom
         const CreateVNode = h(LoadDialog,{isDialogShow: this.showLoading});
-        debugger;
+
         // 将虚拟dom渲染到 container dom 上
         render(CreateVNode, container)
         // 最后将 container 追加到 body 上

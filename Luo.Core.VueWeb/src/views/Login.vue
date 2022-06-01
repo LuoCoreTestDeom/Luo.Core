@@ -55,13 +55,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
+import { AxiosError } from 'axios';
 import { useStore } from "vuex";
 import confirmDialog from '@/utils/useConfirmDialog'
 import httpRequest from '@/network/httpRequest';
+import JwtResponseDto from '@/models/memberLogin'
 
+
+
+const ShowConfirmDialog = (msg: string, title: string = "温馨提示") => {
+  confirmDialog({
+    title: title,
+    msg: msg,
+    isDialogShow: ref(true)
+  });
+}
 
 
 //获取当前路由
@@ -74,84 +84,49 @@ let password = ref("");
 //点击登录
 function BtnSubmit() {
 
-
-confirmDialog({
-  title:"123",
-  msg:"sdfadfasdf",
-  isDialogShow:ref(true)
-});
-
-  debugger;
-
-
   const tokenValue = localStorage.getItem('token')
-
-
   var reqData = JSON.stringify({
     "account": account.value,
     "password": password.value,
     "token": "string"
   });
-  debugger;
-  // httpRequest.request<object>({
-  //   url: 'https://localhost:7096/api/v1/Member/Login',
-  //   method: 'Post',
-  //   headers: {
-  //     "Content-Type": "application/json"
-  //   },
-  //   data: reqData,
-  //   showLoading: true
-  //   // interceptors: {
-  //   //   requestInterceptor: (config) => {
-  //   //     console.log('单独的请求的config拦截')
-  //   //     return config
-  //   //   },
-  //   //   responseInterceptor: (res) => {
-  //   //     console.log('单独响应的response')
-  //   //     return res
-  //   //   }
-  //   // }
-  // })
-  //   .then((res) => {
-  //     console.log("成功：" + res);
-  //   }).catch(res => {
-  //     console.log("失败：" + res);
-  //   });
+
+  httpRequest.request<JwtResponseDto>({
+    url: 'https://localhost:7096/api/v1/Member/Login',
+    method: 'Post',
+    headers: {
+      "Content-Type": "application/json"
+    },
+    data: reqData,
+    showLoading: true,
+    interceptors: {
+      requestInterceptor: (config) => {
+        console.log('单独的请求的config拦截')
+        return config
+      },
+      responseInterceptor: (res) => {
+        console.log('单独响应的response')
+        return res
+      }
+    }
+  }).then((res) => {
+    console.log("成功：" + res);
+    if (res instanceof AxiosError) {
+      ShowConfirmDialog("请求发生异常：" + res.message);
+    }
+    else {
+      debugger;
+      if (!res.profile) {
+        ShowConfirmDialog("请求失败：" + res.access);
+      }
+    }
+  }).catch(res => {
+    console.log("失败：" + res);
+    ShowConfirmDialog("请求发生异常：" + res);
+  });
 
 
 
-  // axios({
-  //   method: "post",
-  //   headers: {
-  //     "Content-Type": "application/json"
-  //   },
-  //   url: "https://localhost:7096/api/v1/Member/Login",
-  //   data: reqData,
-  // }).then(res => {
-
-  //   userLaodDialog.CloseLoad();
-  //   console.log(res);
-  //   if (res.data.profile == null) {
-  //     userConfirmDialog({
-  //       title: "请求失败",
-  //       msg: "错误消息：" + res.data.access,
-  //       isDialogShow: ref(true)
-  //     });
-  //   }
-  //   else {
-  //     debugger;
-  //     store.commit('setToken', res.data.access);
-  //     router.push('/')
-  //   }
-  // }).catch(result => {
-  //   debugger;
-  //   userLaodDialog.CloseLoad();
-  //   userConfirmDialog({
-  //     title: "请求失败",
-  //     msg: "错误消息：" + result.message + "，错误代码：" + result.response.status + ",返回错误信息：" + result.response.statusText,
-  //     isDialogShow: ref(true)
-  //   });
-  // })
 
 }
 </script>

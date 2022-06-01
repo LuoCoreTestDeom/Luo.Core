@@ -24,11 +24,11 @@ namespace Luo.Core.Repository
         }
 
         /// <summary>
-        /// 获取JWT登录会员信息
+        /// 获取会员信息
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        public MemberInfoDto QueryJwtMemberInfo(LoginMemberDto req)
+        public MemberInfoDto QueryMemberInfo(LoginMemberDto req)
         {
             MemberInfoDto res = new MemberInfoDto();
             Factory.GetDbContext((db) =>

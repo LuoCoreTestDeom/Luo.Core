@@ -22,7 +22,6 @@ const renderMessage = (args: dialogProps): VNode => {
                 args.isDialogShow.value=e;
             }
         });
-    debugger;
     // 将虚拟dom渲染到 container dom 上
     render(messageVNode, container)
     // 最后将 container 追加到 body 上

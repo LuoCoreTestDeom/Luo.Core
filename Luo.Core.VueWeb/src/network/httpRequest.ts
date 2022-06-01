@@ -1,8 +1,8 @@
 // service统一出口
-import CYRequest from '@/network'
+import ApiRequest from '@/network'
 import { BASE_URL, TIME_OUT } from '@/network/config'
 
-const HttpRequest = new CYRequest({
+const HttpRequest = new ApiRequest({
   baseURL: BASE_URL,
   timeout: TIME_OUT,
   interceptors: {

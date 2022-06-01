@@ -5,7 +5,7 @@ import {  Ref,toRefs, watch } from 'vue';
     const {  isDialogShow } = toRefs(props);
     console.log("加載等待值："+isDialogShow.value);
     watch(isDialogShow, (newValue, oldValue) => {
-      debugger;
+
       console.log("加載等待值：","新值："+newValue, "旧值："+oldValue);
     });
    

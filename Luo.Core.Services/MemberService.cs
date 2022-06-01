@@ -125,7 +125,7 @@ namespace Luo.Core.Services
                     res.Msg = "请求必要的参数不能为空！";
                     return res;
                 }
-                MemberInfoDto resData = _Rep.QueryJwtMemberInfo(new LoginMemberDto() 
+                MemberInfoDto resData = _Rep.QueryMemberInfo(new LoginMemberDto() 
                 {
                     MemberName=req.Account,
                     MemberPassword=CommonUtil.EncryptString(req.Password)

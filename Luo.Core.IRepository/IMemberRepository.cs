@@ -25,11 +25,11 @@ namespace Luo.Core.IRepository
         /// <returns></returns>
         public CommonDto UpdateMemberInfo(UpdateMemberInfoDto req);
         /// <summary>
-        /// 获取JWT登录会员信息
+        /// 获取会员信息
         /// </summary>
         /// <param name="req"></param>
         /// <returns></returns>
-        MemberInfoDto QueryJwtMemberInfo(LoginMemberDto req);
+        public MemberInfoDto QueryMemberInfo(LoginMemberDto req);
         /// <summary>
         /// 查询会员信息
         /// </summary>
