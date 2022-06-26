@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+此文件由 Web 项目的发布/打包过程使用。可以通过编辑此 MSBuild 文件
+自定义此过程的行为。为了解与此相关的更多内容，请访问 https://go.microsoft.com/fwlink/?LinkID=208121。 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAdIEYo+ZaqUK2yvUNGcMTOQAAAAACAAAAAAAQZgAAAAEAACAAAADyUj+rpH4P56cdQ8SV/mcx60zQ8zCRMx2n0Df9F9vR6QAAAAAOgAAAAAIAACAAAAB34x3zs65x2Wub5oVvpE74JsziDGep/O/FjYl2O0jIoSAAAAC8GdpfgH065R5VAkSx4qpEDB76nwX6h9qEiSYXvnuTHEAAAABn1tZL2Xoqzh4wM9+nTSTJNoYj0J+JRg3d51yXYS2z1qu8Ms3uHzzcZPUJ153rxI9GuE9N0YK3wQbOk6rufTB8</EncryptedPassword>
+    <_PublishTargetUrl>ftp://47.105.32.224:21606/LuoCoreAdmin</_PublishTargetUrl>
+    <History>False|2022-06-25T04:36:54.4767564Z;False|2022-06-25T11:59:22.8057009+08:00;</History>
+  </PropertyGroup>
+</Project>
