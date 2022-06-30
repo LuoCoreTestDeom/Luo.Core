@@ -45,7 +45,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
             return File(result.CaptchaMemoryStream.ToArray(), "image/png");
         }
         [HttpPost]
-        public async Task<IActionResult> LoginAsync(LoginUserForm req, string callback)
+        public  IActionResult Login(LoginUserForm req, string callback)
         {
             CommonViewModel res = new CommonViewModel();
             if (string.IsNullOrWhiteSpace(req.UserName))
@@ -86,7 +86,7 @@ namespace Luo.Core.LayuiAdmin.Controllers
                         }
 
 
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity), new AuthenticationProperties()
+                         HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimIdentity), new AuthenticationProperties()
                         {
                             ExpiresUtc = DateTime.UtcNow.AddMinutes(Appsettings.GetValue("AuthCookieConfig", "ExpireTimeMinutes").ObjToMoney()),
                         });
